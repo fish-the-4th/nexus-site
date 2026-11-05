@@ -38,7 +38,6 @@ img { max-width: 100%; }
 .wrap { max-width: 1040px; margin: 0 auto; padding: 0 28px; }
 .wrap.narrow { max-width: 780px; }
 
-/* ===== NAV ===== */
 nav.site-nav {
   position: sticky; top: 0; z-index: 50;
   background: rgba(21, 22, 28, 0.92);
@@ -59,7 +58,6 @@ nav.site-nav .wrap { display: flex; align-items: center; justify-content: space-
   width: 40px; height: 40px; border-radius: 8px; font-size: 18px; cursor: pointer;
 }
 
-/* ===== BUTTONS ===== */
 .btn {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 12px 22px; border-radius: 8px; font-weight: 600; font-size: 14.5px;
@@ -73,7 +71,6 @@ nav.site-nav .wrap { display: flex; align-items: center; justify-content: space-
 .btn-outline:hover { border-color: var(--cyan); }
 .actions { display: flex; gap: 12px; flex-wrap: wrap; }
 
-/* ===== HERO ===== */
 .hero { padding: 88px 0 68px; position: relative; overflow: hidden; }
 .hero::before {
   content: ''; position: absolute; top: -180px; right: -160px; width: 520px; height: 520px;
@@ -92,7 +89,6 @@ nav.site-nav .wrap { display: flex; align-items: center; justify-content: space-
 .page-hero h1 { font-size: 36px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; }
 .page-hero p { margin-top: 10px; color: var(--muted); font-size: 16px; max-width: 56ch; }
 
-/* status pill (home page) */
 .status-pill {
   display: inline-flex; align-items: center; gap: 9px; margin-bottom: 22px;
   padding: 6px 14px 6px 12px; border: 1px solid var(--line); background: var(--bg-raised);
@@ -105,13 +101,11 @@ nav.site-nav .wrap { display: flex; align-items: center; justify-content: space-
 .dot.outage { background: var(--red); box-shadow: 0 0 0 3px rgba(237,66,69,.2); }
 .dot.maintenance { background: var(--blue); box-shadow: 0 0 0 3px rgba(90,169,255,.2); }
 
-/* ===== SECTIONS ===== */
 .section { padding: 56px 0; border-top: 1px solid var(--line); }
 .section-head { margin-bottom: 30px; }
 .section-head h2 { font-size: 24px; font-weight: 700; letter-spacing: -0.01em; }
 .section-head p { color: var(--muted); font-size: 14.5px; margin-top: 6px; max-width: 56ch; }
 
-/* feature list */
 .feature { display: grid; grid-template-columns: 44px 1fr; gap: 18px; padding: 20px 0; border-bottom: 1px solid var(--line); }
 .feature:last-child { border-bottom: none; }
 .hex {
@@ -124,7 +118,6 @@ nav.site-nav .wrap { display: flex; align-items: center; justify-content: space-
 .feature .cmds { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
 .feature .cmds code { font-size: 12px; }
 
-/* cards */
 .grid { display: grid; gap: 14px; }
 .grid.two { grid-template-columns: repeat(2, 1fr); }
 .grid.three { grid-template-columns: repeat(3, 1fr); }
@@ -137,7 +130,6 @@ a.card:hover { border-color: var(--cyan); transform: translateY(-2px); }
 .card p { font-size: 13.5px; color: var(--muted); }
 .card .icon { font-size: 20px; margin-bottom: 10px; display: block; }
 
-/* steps */
 .steps { counter-reset: step; display: grid; gap: 14px; }
 .step { display: grid; grid-template-columns: 36px 1fr; gap: 16px; align-items: start; }
 .step::before {
@@ -148,13 +140,11 @@ a.card:hover { border-color: var(--cyan); transform: translateY(-2px); }
 .step h4 { font-size: 15px; margin-bottom: 2px; }
 .step p { color: var(--muted); font-size: 14px; }
 
-/* CTA */
 .cta { padding: 64px 0 80px; border-top: 1px solid var(--line); }
 .cta h2 { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; }
 .cta p { color: var(--muted); margin-top: 8px; font-size: 15px; max-width: 46ch; }
 .cta .actions { margin-top: 24px; }
 
-/* prose (about, docs guides) */
 .prose h2 { font-size: 22px; font-weight: 700; margin: 40px 0 10px; letter-spacing: -0.01em; }
 .prose h3 { font-size: 16.5px; font-weight: 600; margin: 26px 0 6px; }
 .prose p { color: #c4c6d1; margin: 10px 0; font-size: 15px; }
@@ -169,7 +159,6 @@ a.card:hover { border-color: var(--cyan); transform: translateY(-2px); }
 .callout.warn { border-left-color: var(--yellow); }
 .callout strong { color: var(--text); }
 
-/* ===== DOCS ===== */
 .docs { display: grid; grid-template-columns: 220px 1fr; gap: 44px; padding: 20px 0 80px; align-items: start; }
 .docs-side { position: sticky; top: 84px; max-height: calc(100vh - 100px); overflow-y: auto; font-size: 14px; padding-bottom: 20px; }
 .docs-side h5 { font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 18px 0 6px; font-weight: 600; }
@@ -210,7 +199,6 @@ details.faq[open] summary::after { content: '\2212'; }
 details.faq .a { padding: 0 16px 14px; color: #c4c6d1; font-size: 14px; }
 details.faq .a p { margin: 8px 0; }
 
-/* ===== STATUS PAGE ===== */
 .banner {
   display: flex; align-items: center; gap: 14px; padding: 18px 20px; border-radius: 12px;
   border: 1px solid var(--line); background: var(--bg-raised); margin-bottom: 26px;
@@ -247,7 +235,6 @@ details.faq .a p { margin: 8px 0; }
 .updates .u-text { font-size: 13.5px; color: #c4c6d1; }
 .sub-title { font-size: 18px; font-weight: 700; margin: 38px 0 14px; }
 
-/* ===== STAFF PAGE ===== */
 .staff-section { padding: 34px 0 6px; }
 .staff-section h2 { font-size: 20px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
 .staff-section h2 span.count { font-size: 12px; color: var(--muted); font-weight: 500; border: 1px solid var(--line); padding: 2px 9px; border-radius: 99px; }
@@ -268,7 +255,6 @@ details.faq .a p { margin: 8px 0; }
 }
 .staff-empty { color: var(--muted); font-size: 14px; padding: 6px 0 14px; }
 
-/* ===== FOOTER ===== */
 footer.site-footer { border-top: 1px solid var(--line); padding: 36px 0 44px; }
 .footer-grid { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 30px; }
 .footer-grid h6 { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; font-weight: 600; }
@@ -279,7 +265,6 @@ footer.site-footer { border-top: 1px solid var(--line); padding: 36px 0 44px; }
 .footer-note { color: var(--muted); font-size: 13px; max-width: 30ch; }
 .footer-bottom { margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--muted); }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 860px) {
   .docs { grid-template-columns: 1fr; gap: 20px; }
   .docs-side { position: static; max-height: none; border: 1px solid var(--line); border-radius: 10px; padding: 14px; background: var(--bg-raised); }
