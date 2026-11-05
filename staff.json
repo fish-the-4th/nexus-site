@@ -4,11 +4,45 @@
       "id": "development",
       "title": "Development",
       "members": [
-        { "displayName": "Bins", "username": "", "avatar": "", "rank": "Founder & Developer", "color": "#5865F2" }
+        {
+          "displayName": "Fish The 4th",
+          "username": "fish98547",
+          "avatar": "fish.avatar.webp",
+          "rank": "Developer & Founder",
+          "color": "#3498db"
+        }
       ]
     },
-    { "id": "administration", "title": "Administration", "members": [] },
-    { "id": "moderation", "title": "Moderation Team", "members": [] },
-    { "id": "support", "title": "Support Staff", "members": [] }
+    {
+      "id": "administration",
+      "title": "Administration",
+      "members": [
+        {
+          "displayName": "Somebody",
+          "username": "slayer98547",
+          "avatar": "Somebody.avatar.webp",
+          "rank": "Administrator",
+          "color": "#ff0000"
+        }
+      ]
+    },
+    {
+      "id": "moderation",
+      "title": "Moderation Team",
+      "members": [
+        {
+          "displayName": "Lithium Hydroxide",
+          "username": "lithium_hydroxide",
+          "avatar": "lith.avatar/webp",
+          "rank": "Jr. Moderator",
+          "color": "#29937e"
+        }
+      ]
+    },
+    {
+      "id": "support",
+      "title": "Support Staff",
+      "members": []
+    }
   ]
 }
