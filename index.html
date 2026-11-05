@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus - Discord Bot</title>
+<meta name="description" content="Nexus is a Discord bot for moderation, protection, engagement and stats, all in one place.">
+<meta property="og:title" content="Nexus - Discord Bot">
+<meta property="og:description" content="Moderation, protection, engagement and stats, all in one bot.">
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="home">
+
+<div id="site-nav"></div>
+
+<header class="hero">
+  <div class="wrap">
+    <div><a id="status-pill" href="status.html" style="display:none"></a></div>
+    <img class="hero-logo" src="assets/logo.png" alt="Nexus logo">
+    <h1>One bot, everything your server needs.</h1>
+    <p class="lead">Nexus handles moderation, protection, engagement, and stats, so you're not stitching together six different bots to cover it all.</p>
+    <div class="actions">
+      <a class="btn btn-primary" data-link="invite" href="#">Add Nexus to your server</a>
+      <a class="btn btn-outline" href="docs.html">Read the docs</a>
+    </div>
+  </div>
+</header>
+
+<section class="section" id="features">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>What Nexus does</h2>
+      <p>These are the core systems your server will actually use, all built in from day one.</p>
+    </div>
+
+    <div class="feature">
+      <div class="hex">🛡️</div>
+      <div>
+        <h3>Moderation</h3>
+        <p>A case-based system that keeps a real record of everything. Every action gets its own case number, and members get a DM explaining exactly what happened and why. You can ban or mute someone by ID even if they haven't joined yet, and members can check their own history privately with one command.</p>
+        <div class="cmds"><code>kick</code><code>ban</code><code>mute</code><code>warn</code><code>purge</code><code>cases</code><code>myhistory</code></div>
+      </div>
+    </div>
+
+    <div class="feature">
+      <div class="hex">🚨</div>
+      <div>
+        <h3>AutoMod</h3>
+        <p>Works quietly in the background. It catches message spam, blocks known scam links, and can lock the whole server down automatically if it detects a raid. Every type has its own sensitivity, adjustable from 1 to 10.</p>
+        <div class="cmds"><code>automod setup</code><code>automod raidend</code><code>automods</code></div>
+      </div>
+    </div>
+
+    <div class="feature">
+      <div class="hex">🔐</div>
+      <div>
+        <h3>Autoroles</h3>
+        <p>Give new members a role automatically the moment they join, keep someone's roles intact if they leave and come back, or hand out a role that quietly removes itself once time's up.</p>
+        <div class="cmds"><code>joinroles</code><code>role persist</code><code>timed role</code></div>
+      </div>
+    </div>
+
+    <div class="feature">
+      <div class="hex">🎫</div>
+      <div>
+        <h3>Tickets</h3>
+        <p>Members open a private ticket channel with a single click. Staff can bring other people in or out, and close it once it's handled.</p>
+        <div class="cmds"><code>ticket setup</code><code>ticket panel</code><code>ticket close</code></div>
+      </div>
+    </div>
+
+    <div class="feature">
+      <div class="hex">📊</div>
+      <div>
+        <h3>Stats</h3>
+        <p>Find out who's actually active. Nexus tracks message and voice activity over the last 30 days and turns it into a graph, whether you're looking at one person, one channel, or the whole server. You can also see how many people joined or left, and which invite brought people in.</p>
+        <div class="cmds"><code>stats user</code><code>stats channel</code><code>stats server</code><code>stats members</code><code>stats invite</code><code>stats top</code></div>
+      </div>
+    </div>
+
+    <div class="feature">
+      <div class="hex">📋</div>
+      <div>
+        <h3>Logging</h3>
+        <p>Nine separate logging categories, from messages and users to moderation actions and role changes, each one routable to its own channel so nothing gets lost in one giant feed.</p>
+        <div class="cmds"><code>log</code><code>logs</code><code>logging ignore</code></div>
+      </div>
+    </div>
+
+    <div class="feature">
+      <div class="hex">🎮</div>
+      <div>
+        <h3>Games</h3>
+        <p>17 games are built right in, from trivia and blackjack to hangman, connect 4, and snake. One command pulls up the whole menu.</p>
+        <div class="cmds"><code>games</code></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="extras">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Everything else</h2>
+      <p>Smaller tools that round the bot out.</p>
+    </div>
+    <div class="grid two">
+      <div class="card"><h4>Reminders</h4><p>Set a reminder in plain time formats like <code>1h30m</code>.</p></div>
+      <div class="card"><h4>Translation</h4><p>Translate messages across 50+ languages without leaving Discord.</p></div>
+      <div class="card"><h4>Starboard</h4><p>React to pin community favorites to their own channel.</p></div>
+      <div class="card"><h4>Giveaways</h4><p>Host giveaways with custom durations, winner counts, and rerolls.</p></div>
+      <div class="card"><h4>Staff notes</h4><p>Leave private notes on a member for moderation context.</p></div>
+      <div class="card"><h4>Custom prefix</h4><p>Change the command prefix to whatever fits your server.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="start">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Up and running in a few minutes</h2>
+      <p>No account, no dashboard to log into. Everything happens in Discord.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div><h4>Add Nexus to your server</h4><p>Use the invite button and pick the server you manage. Make sure Nexus's role sits above the roles it will need to manage.</p></div></div>
+      <div class="step"><div><h4>Type <code>-commands</code></h4><p>It opens a menu with every command grouped by category, only visible to you.</p></div></div>
+      <div class="step"><div><h4>Set up what you need</h4><p>Start with a log channel, then switch on AutoMod or tickets when you're ready. The docs walk through each one.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="resources">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Resources</h2>
+      <p>Everything you might need once Nexus is in your server.</p>
+    </div>
+    <div class="grid three">
+      <a class="card" href="docs.html"><span class="icon">📖</span><h4>Documentation</h4><p>Every command, setup guides, and answers to common questions.</p></a>
+      <a class="card" href="status.html"><span class="icon">🟢</span><h4>Status</h4><p>See if Nexus is running smoothly or if something is going on.</p></a>
+      <a class="card" data-link="support" href="#"><span class="icon">💬</span><h4>Support server</h4><p>Ask a question, report a bug, or suggest a feature.</p></a>
+      <a class="card" href="staff.html"><span class="icon">👥</span><h4>Meet the team</h4><p>The people who build Nexus and look after the community.</p></a>
+      <a class="card" href="about.html"><span class="icon">✨</span><h4>About Nexus</h4><p>What Nexus is, how it works, and what it stores.</p></a>
+      <a class="card" data-link="topgg" href="#"><span class="icon">⭐</span><h4>Leave a review</h4><p>Enjoying Nexus? A review on top.gg helps other servers find it.</p></a>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <h2>Ready to add Nexus?</h2>
+    <p>It only takes one click, and you can start small with just moderation or AutoMod if you'd rather ease into it.</p>
+    <div class="actions">
+      <a class="btn btn-primary" data-link="invite" href="#">Add Nexus to your server</a>
+      <a class="btn btn-outline" data-link="support" href="#">Get support</a>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="site.js"></script>
+</body>
+</html>
