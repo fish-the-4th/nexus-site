@@ -1,14 +1,9 @@
-/* ==========================================================
-   Nexus website script
-   Links you might want to change are in the NEXUS object.
-   ========================================================== */
 const NEXUS = {
   invite:  'https://discord.com/oauth2/authorize?client_id=1516923666787602725&permissions=8&integration_type=0&scope=bot',
   support: 'https://discord.gg/grVrz6TrsY',
   topgg:   'https://top.gg/bot/1516923666787602725'
 };
 
-/* ---------- tiny helpers ---------- */
 function el(tag, attrs, kids) {
   const e = document.createElement(tag);
   for (const k in (attrs || {})) {
@@ -22,7 +17,6 @@ function el(tag, attrs, kids) {
 }
 
 async function loadJSON(path) {
-  // The minute-based suffix keeps GitHub's cache from showing stale data for long
   const res = await fetch(path + '?v=' + Math.floor(Date.now() / 60000), { cache: 'no-store' });
   if (!res.ok) throw new Error('Could not load ' + path);
   return res.json();
@@ -36,7 +30,7 @@ function fmtDate(str, withTime) {
   if (!str) return '';
   let d;
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(str);
-  if (m) d = new Date(+m[1], +m[2] - 1, +m[3]);   // date only, keep it in local time
+  if (m) d = new Date(+m[1], +m[2] - 1, +m[3]);
   else d = new Date(str);
   if (isNaN(d)) return str;
   const opts = { year: 'numeric', month: 'short', day: 'numeric' };
@@ -44,7 +38,6 @@ function fmtDate(str, withTime) {
   return d.toLocaleString(undefined, opts);
 }
 
-/* ---------- shared nav + footer ---------- */
 function buildChrome() {
   const page = document.body.dataset.page || '';
   const links = [
@@ -60,7 +53,7 @@ function buildChrome() {
     const nav = el('nav', { class: 'site-nav' });
     const wrap = el('div', { class: 'wrap' });
     const brand = el('a', { class: 'nav-brand', href: 'index.html' }, [
-      el('img', { src: 'assets/logo.png', alt: '', width: '28', height: '28' }), 'Nexus'
+      el('img', { src: 'logo.png', alt: '', width: '28', height: '28' }), 'Nexus'
     ]);
     const list = el('div', { class: 'nav-links', id: 'nav-links' });
     links.forEach(([id, href, label]) => {
@@ -81,7 +74,7 @@ function buildChrome() {
     f.innerHTML =
       '<div class="wrap">' +
         '<div class="footer-grid">' +
-          '<div><div class="footer-brand"><img src="assets/logo.png" alt="">Nexus</div>' +
+          '<div><div class="footer-brand"><img src="logo.png" alt="">Nexus</div>' +
           '<p class="footer-note">Built on logic, built for everyone.</p></div>' +
           '<div><h6>Nexus</h6><a href="index.html">Home</a><a href="about.html">About</a><a href="staff.html">Staff</a></div>' +
           '<div><h6>Help</h6><a href="docs.html">Documentation</a><a href="status.html">Status</a><a href="' + NEXUS.support + '">Support server</a></div>' +
@@ -98,7 +91,6 @@ function buildChrome() {
   });
 }
 
-/* ---------- status helpers ---------- */
 const STATE_LABEL = {
   operational: 'Operational',
   degraded: 'Degraded performance',
@@ -122,27 +114,25 @@ function overallState(components) {
   return worst;
 }
 
-/* ---------- home page: little status pill ---------- */
 async function initHome() {
   const host = document.getElementById('status-pill');
   if (!host) return;
   try {
-    const data = await loadJSON('data/status.json');
+    const data = await loadJSON('status.json');
     const o = overallState(data.components);
     host.className = 'status-pill';
     host.innerHTML = '';
     host.appendChild(el('span', { class: 'dot ' + o }));
     host.appendChild(document.createTextNode(OVERALL_TEXT[o]));
     host.style.display = 'inline-flex';
-  } catch (e) { /* no pill if the data isn't available */ }
+  } catch (e) {}
 }
 
-/* ---------- status page ---------- */
 async function initStatus() {
   const root = document.getElementById('status-root');
   if (!root) return;
   let data;
-  try { data = await loadJSON('data/status.json'); }
+  try { data = await loadJSON('status.json'); }
   catch (e) { root.appendChild(el('p', { class: 'empty', text: 'The status information could not be loaded right now. Try again in a minute.' })); return; }
 
   root.innerHTML = '';
@@ -201,7 +191,6 @@ async function initStatus() {
   else root.appendChild(el('p', { class: 'empty', text: 'No incidents reported.' }));
 }
 
-/* ---------- staff page ---------- */
 function initials(name) {
   const parts = String(name || '?').trim().split(/\s+/).slice(0, 2);
   return parts.map(p => p.charAt(0).toUpperCase()).join('') || '?';
@@ -211,7 +200,7 @@ async function initStaff() {
   const root = document.getElementById('staff-root');
   if (!root) return;
   let data;
-  try { data = await loadJSON('data/staff.json'); }
+  try { data = await loadJSON('staff.json'); }
   catch (e) { root.appendChild(el('p', { class: 'empty', text: 'The staff list could not be loaded right now. Try again in a minute.' })); return; }
 
   root.innerHTML = '';
@@ -251,13 +240,12 @@ async function initStaff() {
   });
 }
 
-/* ---------- docs page ---------- */
 async function initDocs() {
   const host = document.getElementById('cmd-root');
   if (!host) return;
   const sideHost = document.getElementById('side-cmds');
   let cats;
-  try { cats = await loadJSON('data/commands.json'); }
+  try { cats = await loadJSON('commands.json'); }
   catch (e) { host.appendChild(el('p', { class: 'empty', text: 'The command list could not be loaded right now.' })); return; }
 
   const catEls = [];
@@ -305,7 +293,6 @@ async function initDocs() {
     none.style.display = any ? 'none' : '';
   });
 
-  // highlight the section you are reading in the sidebar
   const links = Array.from(document.querySelectorAll('.docs-side a[href^="#"]'));
   const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
   if ('IntersectionObserver' in window) {
@@ -321,7 +308,6 @@ async function initDocs() {
   }
 }
 
-/* ---------- start ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   buildChrome();
   initHome();
