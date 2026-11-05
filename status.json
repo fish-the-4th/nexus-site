@@ -1,10 +1,23 @@
 {
-  "updated": "2026-11-04T22:30:00-05:00",
+  "updated": "2026-11-05T21:20:12.899Z",
   "components": [
-    { "name": "Nexus bot", "status": "operational", "note": "Online and responding to commands" },
-    { "name": "Moderation and AutoMod", "status": "operational", "note": "" },
-    { "name": "Stats and graphs", "status": "operational", "note": "" },
-    { "name": "Website", "status": "operational", "note": "" }
+    {
+      "name": "Main Bot",
+      "status": "operational",
+      "note": "Online and responding to commands"
+    },
+    {
+      "name": "Website",
+      "status": "operational",
+      "note": "Fully functional, all pages responsive "
+    }
   ],
-  "incidents": []
+  "incidents": [
+    {
+      "title": "Discord API Issue",
+      "status": "resolved",
+      "date": "2026-11-03",
+      "message": "Nexus was temporarily down to a problem with connecting to discord, a file failed to start up so the program kept trying to open it constantly. Discord rate limited Nexus for the amount of requests sent.\nNov. 3rd 2026-Nov 4th 2026"
+    }
+  ]
 }
