@@ -1,0 +1,14 @@
+{
+  "sections": [
+    {
+      "id": "development",
+      "title": "Development",
+      "members": [
+        { "displayName": "Bins", "username": "", "avatar": "", "rank": "Founder & Developer", "color": "#5865F2" }
+      ]
+    },
+    { "id": "administration", "title": "Administration", "members": [] },
+    { "id": "moderation", "title": "Moderation Team", "members": [] },
+    { "id": "support", "title": "Support Staff", "members": [] }
+  ]
+}
