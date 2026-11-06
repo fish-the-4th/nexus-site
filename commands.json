@@ -12,10 +12,10 @@
       {
         "usage": "-ban [user or ID] [duration] [reason]",
         "perms": "Ban Members",
-        "desc": "Bans a user, even if they are not in the server. Duration is optional (e.g. 7d)"
+        "desc": "Bans a user, even if they are not in the server. Duration is optional (Example: 7d)"
       },
       {
-        "usage": "-unban [user_id/username] [reason]",
+        "usage": "-unban [user_id] [reason]",
         "perms": "Ban Members",
         "desc": "Unbans a user from the server"
       },
