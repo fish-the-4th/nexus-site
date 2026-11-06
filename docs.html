@@ -49,13 +49,12 @@
         <li><strong style="color:var(--text)">Add Nexus</strong> with the invite button, and choose your server.</li>
         <li><strong style="color:var(--text)">Check the role order.</strong> In Server Settings, Roles, drag the Nexus role above any role it needs to manage (see <a class="inline" href="#permissions">Permissions and roles</a>).</li>
         <li><strong style="color:var(--text)">Type <code>-commands</code>.</strong> A menu appears with every category. Only you can see the results when you press a button.</li>
-        <li><strong style="color:var(--text)">Pick a log channel</strong> with <code>-log moderation #your-channel</code>, then turn on whatever else you want.</li>
       </ol>
       <div class="actions" style="margin-top:16px">
         <a class="btn btn-primary" data-link="invite" href="#">Add Nexus</a>
         <a class="btn btn-outline" data-link="support" href="#">Ask in the support server</a>
       </div>
-      <div class="callout"><strong>Changing the prefix:</strong> use <code>-prefix set [prefix]</code> (needs Manage Server). Use <code>-prefix</code> any time to see the current one.</div>
+      <div class="callout"><strong>Changing the prefix:</strong> use <code>-prefix set [prefix]</code> (Requires the Manage Server permission). Use <code>-prefix</code> to see the current one.</div>
     </section>
 
     <section id="permissions">
@@ -66,7 +65,7 @@
         <li><strong style="color:var(--text)">You can only use Nexus on people below you.</strong> Moderators can't kick, ban, mute or role someone who has the same or a higher role than they do. The server owner is exempt.</li>
       </ul>
       <p>When Nexus can't do something because of the role order, it says so in the channel instead of failing quietly.</p>
-      <p>Each command lists the permission you need to use it. The server owner and administrators can always use them.</p>
+      <p>Each command lists the permission you need to use it. The server owner and administrators have permission to every command.</p>
     </section>
 
     <section id="g-moderation">
@@ -84,7 +83,7 @@
         <li><code>-casedelete [number]</code> voids a case (needs Ban Members).</li>
         <li><code>-myhistory</code> lets any member get their own moderation history sent to their DMs. They can't see anyone else's.</li>
       </ul>
-      <div class="callout warn"><strong>Heads up:</strong> kick, warn and unwarn still need the person to be in the server. Case numbers and history are kept per server, so one server never sees another's cases.</div>
+      <div class="callout warn"><strong>Warning:</strong> kick, warn and unwarn still need the person to be in the server. Case numbers and history are kept per server, so one server never sees another's cases.</div>
       <h3>Cleaning up</h3>
       <p><code>-purge [user] [amount]</code> deletes recent messages from one person. Discord doesn't allow bots to bulk delete messages older than 14 days. Use <code>-lock</code> and <code>-unlock</code> to close and reopen a channel, <code>-locked</code> to list locked channels, and <code>-slowmode [seconds]</code> to slow a chat down.</p>
     </section>
@@ -131,7 +130,7 @@
     </section>
 
     <section id="g-roles">
-      <h2 class="d-title">Guide: Autoroles and timed roles</h2>
+      <h2 class="d-title">Guide: Autoroles & Timed Roles</h2>
       <h3>Join roles</h3>
       <p><code>-joinroles set [role1] [role2]...</code> gives those roles to everyone who joins. <code>-joinroles</code> shows them and <code>-joinroles remove</code> clears them.</p>
       <h3>Persistent roles</h3>
@@ -180,8 +179,8 @@
 
     <section id="faq">
       <h2 class="d-title">FAQ</h2>
-      <details class="faq"><summary>Why does Nexus say "slow down"?</summary><div class="a"><p>To keep the bot fast for everyone, you can't run two commands within about 2 seconds of each other, or repeat the same command within about 3 seconds. Wait a moment and try again.</p></div></details>
-      <details class="faq"><summary>Why can't I use commands in a DM?</summary><div class="a"><p>Commands only work in servers, so Nexus knows which server you mean. The exceptions are <code>-ping</code>, <code>-commands</code> and <code>-help</code>. The one thing Nexus does send you in DMs is your own moderation history when you run <code>-myhistory</code> in a server.</p></div></details>
+      <details class="faq"><summary>Why does Nexus say "slow down"?</summary><div class="a"><p>The servers Nexus runs on has a very limted amount of resources, to prevent bot abuse and to preserve resources, a timer is put to limit the amount of commands you can execute.</p></div></details>
+      <details class="faq"><summary>Why can't I use commands in a DM?</summary><div class="a"><p>Nexus is a server made bot, not built for personal use. The exceptions are <code>-ping</code>, <code>-commands</code> and <code>-help</code>. The one thing Nexus does send you in DMs is your own moderation history when you run <code>-myhistory</code> in a server.</p></div></details>
       <details class="faq"><summary>What permissions does Nexus need?</summary><div class="a"><p>It needs to read and send messages, and depending on what you use: Ban Members, Kick Members, Moderate Members, Manage Roles, Manage Channels, Manage Messages and Manage Server (to see invites for invite stats). The invite link asks for Administrator so every feature works without any permission puzzles. If you'd rather give it less, you can edit its permissions after it joins, but features that need a missing permission will tell you.</p></div></details>
       <details class="faq"><summary>Can I change the prefix?</summary><div class="a"><p>Yes, with <code>-prefix set [prefix]</code> if you have Manage Server. If anyone forgets it, mentioning the bot works as a prefix too.</p></div></details>
       <details class="faq"><summary>Why is my graph empty?</summary><div class="a"><p>Stats only count activity from when Nexus joined your server, and they only keep the last 30 days. Give it some time, and check that Nexus can see the channels you're asking about.</p></div></details>
