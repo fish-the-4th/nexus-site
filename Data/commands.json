@@ -1,0 +1,540 @@
+[
+  {
+    "id": "moderation",
+    "name": "Moderation",
+    "intro": "Actions for keeping your server in order. Every action creates a case and DMs the member.",
+    "commands": [
+      {
+        "usage": "-kick [user] [reason]",
+        "perms": "Kick Members",
+        "desc": "Kicks a user from the server"
+      },
+      {
+        "usage": "-ban [user or ID] [duration] [reason]",
+        "example": "-ban 123456789012345678 7d Repeated spam in general",
+        "perms": "Ban Members",
+        "desc": "Bans a user, even if they are not in the server. Duration is optional (Example: 7d)"
+      },
+      {
+        "usage": "-unban [user_id] [reason]",
+        "perms": "Ban Members",
+        "desc": "Unbans a user from the server"
+      },
+      {
+        "usage": "-mute [user or ID] [minutes] [reason]",
+        "example": "-mute @Sam 30 Arguing in chat",
+        "keywords": "timeout silence",
+        "perms": "Moderate Members",
+        "desc": "Times out a user for X minutes. If they are not in the server, it applies when they join"
+      },
+      {
+        "usage": "-unmute [user or ID] [reason]",
+        "perms": "Moderate Members",
+        "desc": "Removes a timeout, or cancels a saved mute"
+      },
+      {
+        "usage": "-warn [user] [reason]",
+        "example": "-warn @Sam Please keep off-topic talk in the right channels",
+        "keywords": "strike",
+        "perms": "Kick Members",
+        "desc": "Warns a user and logs the case"
+      },
+      {
+        "usage": "-unwarn [user] [reason]",
+        "perms": "Kick Members",
+        "desc": "Removes a warning from a user"
+      },
+      {
+        "usage": "-purge [user] [amount]",
+        "example": "-purge @Sam 50",
+        "keywords": "clear delete messages bulk",
+        "perms": "Manage Messages",
+        "desc": "Deletes messages from a specific user"
+      },
+      {
+        "usage": "-slowmode [seconds]",
+        "example": "-slowmode 10",
+        "keywords": "cooldown rate limit",
+        "perms": "Manage Channels",
+        "desc": "Sets slowmode in the current channel"
+      },
+      {
+        "usage": "-lock",
+        "perms": "Manage Channels",
+        "desc": "Locks the current channel"
+      },
+      {
+        "usage": "-unlock",
+        "perms": "Manage Channels",
+        "desc": "Unlocks the current channel"
+      },
+      {
+        "usage": "-locked",
+        "perms": "Manage Channels",
+        "desc": "Shows all locked channels"
+      }
+    ]
+  },
+  {
+    "id": "cases",
+    "name": "Cases",
+    "intro": "Look up the moderation history of a member, or review your own.",
+    "commands": [
+      {
+        "usage": "-cases [user] (alias: -inf)",
+        "perms": "Kick Members",
+        "desc": "Shows all cases for a user"
+      },
+      {
+        "usage": "-caseinfo [case_number]",
+        "perms": "Kick Members",
+        "desc": "Shows detailed info for a specific case"
+      },
+      {
+        "usage": "-myhistory",
+        "perms": "None",
+        "desc": "Sends your own moderation history for this server to your DMs"
+      },
+      {
+        "usage": "-casedelete [case_number] (alias: -void)",
+        "perms": "Ban Members",
+        "desc": "Deletes a case and voids the infraction"
+      }
+    ]
+  },
+  {
+    "id": "autoroles",
+    "name": "Autoroles",
+    "intro": "Roles on join, roles that persist, and roles that expire on their own.",
+    "commands": [
+      {
+        "usage": "-joinroles",
+        "perms": "None",
+        "desc": "Shows current join roles"
+      },
+      {
+        "usage": "-joinroles set [role1] [role2]...",
+        "perms": "Manage Roles",
+        "desc": "Sets join roles for new members"
+      },
+      {
+        "usage": "-joinroles remove",
+        "perms": "Manage Roles",
+        "desc": "Removes all join roles"
+      },
+      {
+        "usage": "-role add [user] [role1] [role2]...",
+        "keywords": "give assign",
+        "perms": "Manage Roles",
+        "desc": "Adds roles to a user"
+      },
+      {
+        "usage": "-role remove [user] [role1] [role2]...",
+        "perms": "Manage Roles",
+        "desc": "Removes roles from a user"
+      },
+      {
+        "usage": "-role removeall [user]",
+        "perms": "Manage Roles",
+        "desc": "Removes all roles from a user"
+      },
+      {
+        "usage": "-role toggle [user] [role1] [role2]...",
+        "perms": "Manage Roles",
+        "desc": "Toggles roles on a user"
+      },
+      {
+        "usage": "-role set [user] [role]",
+        "perms": "Manage Roles",
+        "desc": "Clears all roles and sets one role"
+      },
+      {
+        "usage": "-role persist add [user] [role1]...",
+        "perms": "Manage Roles",
+        "desc": "Keeps roles when the member leaves and rejoins"
+      },
+      {
+        "usage": "-role persist remove [user] [role1]...",
+        "perms": "Manage Roles",
+        "desc": "Stops keeping a role when the member rejoins"
+      },
+      {
+        "usage": "-role persist set [user] [role]",
+        "perms": "Manage Roles",
+        "desc": "Clears existing persisted roles and sets one"
+      },
+      {
+        "usage": "-role persist toggle [user] [role1]...",
+        "perms": "Manage Roles",
+        "desc": "Toggles persisted roles"
+      },
+      {
+        "usage": "-timed role add [user] [duration] [role]",
+        "example": "-timed role add @John 2h @Event",
+        "keywords": "temporary expire",
+        "perms": "Manage Roles",
+        "desc": "Gives a role that removes itself after the duration (e.g. 1m, 2h, 3d, 1w, 2mon, 1y)"
+      },
+      {
+        "usage": "-timed role remove [user] [role]",
+        "perms": "Manage Roles",
+        "desc": "Takes a timed role away early"
+      },
+      {
+        "usage": "-timed roles [user]",
+        "perms": "Manage Roles",
+        "desc": "Shows the active timed roles for a user"
+      }
+    ]
+  },
+  {
+    "id": "tickets",
+    "name": "Tickets",
+    "intro": "A private ticket system your members open with one click.",
+    "commands": [
+      {
+        "usage": "-ticket setup [role] [category] [log_channel]",
+        "perms": "Administrator",
+        "desc": "Sets up the ticket system"
+      },
+      {
+        "usage": "-ticket panel",
+        "perms": "Administrator",
+        "desc": "Posts the ticket creation panel with a button"
+      },
+      {
+        "usage": "-ticket add [user]",
+        "perms": "Manage Channels / Support Role",
+        "desc": "Adds a user to the current ticket"
+      },
+      {
+        "usage": "-ticket remove [user]",
+        "perms": "Manage Channels / Support Role",
+        "desc": "Removes a user from the current ticket"
+      },
+      {
+        "usage": "-ticket close",
+        "perms": "None (anyone in ticket)",
+        "desc": "Closes the current ticket"
+      }
+    ]
+  },
+  {
+    "id": "automod",
+    "name": "AutoMod",
+    "intro": "Automatic protection against spam, scam links and raids.",
+    "commands": [
+      {
+        "usage": "-automod setup [type] [level]",
+        "perms": "Manage Server",
+        "desc": "Configure an automod type (0 to disable). Types: spam, scam, raids"
+      },
+      {
+        "usage": "-automod logging [#channel]",
+        "perms": "Manage Server",
+        "desc": "Set the channel where automod actions are logged"
+      },
+      {
+        "usage": "-automod whitelist add [@user/@role]",
+        "perms": "Manage Server",
+        "desc": "Adds a user or role to the automod whitelist"
+      },
+      {
+        "usage": "-automod whitelist remove [@user/@role]",
+        "perms": "Manage Server",
+        "desc": "Removes a user or role from the whitelist"
+      },
+      {
+        "usage": "-automod raidend",
+        "perms": "Manage Server",
+        "desc": "Ends an active raid lockdown and unlocks all channels"
+      },
+      {
+        "usage": "-automods",
+        "perms": "Manage Server",
+        "desc": "Shows all current automod settings and levels"
+      }
+    ]
+  },
+  {
+    "id": "logging",
+    "name": "Logging",
+    "intro": "Send different kinds of events to different channels.",
+    "commands": [
+      {
+        "usage": "-log [type] [#channel]",
+        "perms": "Manage Server",
+        "desc": "Sets the log channel for a type. Types: messages, users, expressions, channels, voice, moderation, invites, applications, roles"
+      },
+      {
+        "usage": "-log remove [type]",
+        "perms": "Manage Server",
+        "desc": "Disables logging for that type"
+      },
+      {
+        "usage": "-logs",
+        "perms": "Manage Server",
+        "desc": "Shows all logging types and their assigned channels"
+      },
+      {
+        "usage": "-logging ignore add [user]",
+        "perms": "Manage Server",
+        "desc": "Ignores a user from all logging"
+      },
+      {
+        "usage": "-logging ignore remove [user]",
+        "perms": "Manage Server",
+        "desc": "Removes a user from the ignore list"
+      }
+    ]
+  },
+  {
+    "id": "stats",
+    "name": "Stats",
+    "intro": "Activity from the last 30 days, turned into graphs.",
+    "commands": [
+      {
+        "usage": "-stats user [user]",
+        "example": "-stats user @Sam",
+        "perms": "None",
+        "desc": "Shows a user's text and voice activity with a graph"
+      },
+      {
+        "usage": "-stats channel [channel]",
+        "perms": "None",
+        "desc": "Shows a channel's activity with a graph"
+      },
+      {
+        "usage": "-stats invite [invite_code]",
+        "perms": "None",
+        "desc": "Shows who made an invite, when, how many people joined through it, and a 30-day graph"
+      },
+      {
+        "usage": "-stats top",
+        "perms": "None",
+        "desc": "Shows server-wide top members and channels"
+      },
+      {
+        "usage": "-stats server",
+        "perms": "None",
+        "desc": "Shows total server messages and voice hours with a graph"
+      },
+      {
+        "usage": "-stats members",
+        "perms": "None",
+        "desc": "Shows how many members joined and left, with a graph"
+      }
+    ]
+  },
+  {
+    "id": "info",
+    "name": "Info",
+    "intro": "Look up details about users, channels, roles, emojis and the server.",
+    "commands": [
+      {
+        "usage": "-userinfo [user]",
+        "perms": "None",
+        "desc": "Shows info about a user"
+      },
+      {
+        "usage": "-avatarinfo [user]",
+        "perms": "None",
+        "desc": "Shows a user's avatar"
+      },
+      {
+        "usage": "-bannerinfo [user]",
+        "perms": "None",
+        "desc": "Shows a user's banner"
+      },
+      {
+        "usage": "-channelinfo [channel]",
+        "perms": "None",
+        "desc": "Shows info about a channel"
+      },
+      {
+        "usage": "-emojiinfo [emoji]",
+        "perms": "None",
+        "desc": "Shows info about an emoji"
+      },
+      {
+        "usage": "-serverinfo",
+        "perms": "None",
+        "desc": "Shows info about the server"
+      },
+      {
+        "usage": "-serverbannerinfo",
+        "perms": "None",
+        "desc": "Shows the server banner"
+      },
+      {
+        "usage": "-servericoninfo",
+        "perms": "None",
+        "desc": "Shows the server icon"
+      },
+      {
+        "usage": "-servermembercount",
+        "perms": "None",
+        "desc": "Shows member count breakdown"
+      },
+      {
+        "usage": "-serverchannelcount",
+        "perms": "None",
+        "desc": "Shows channel count breakdown"
+      },
+      {
+        "usage": "-roleinfo [role]",
+        "perms": "None",
+        "desc": "Shows info about a role including permissions"
+      },
+      {
+        "usage": "-rolelist",
+        "perms": "None",
+        "desc": "Shows all roles in the server"
+      },
+      {
+        "usage": "-stickerinfo [name]",
+        "perms": "None",
+        "desc": "Shows info about a sticker"
+      },
+      {
+        "usage": "-stickerpackinfo",
+        "perms": "None",
+        "desc": "Shows all stickers in the server"
+      }
+    ]
+  },
+  {
+    "id": "reminders",
+    "name": "Reminders",
+    "intro": "Personal reminders. Time formats look like 1h30m or 2d.",
+    "commands": [
+      {
+        "usage": "-reminder create [time] [text]",
+        "example": "-reminder create 1h30m Check the giveaway",
+        "keywords": "remind alarm",
+        "perms": "None",
+        "desc": "Creates a reminder (e.g. 1h30m, 2d)"
+      },
+      {
+        "usage": "-reminder list",
+        "perms": "None",
+        "desc": "Shows all your active reminders"
+      },
+      {
+        "usage": "-reminder delete",
+        "perms": "None",
+        "desc": "Shows a menu to delete a reminder"
+      }
+    ]
+  },
+  {
+    "id": "misc",
+    "name": "Misc",
+    "intro": "Everything that does not fit elsewhere: giveaways, notes, translation, starboard and more.",
+    "commands": [
+      {
+        "usage": "-say [channel] [message]",
+        "perms": "Manage Messages",
+        "desc": "Makes the bot say something in a channel"
+      },
+      {
+        "usage": "-ping",
+        "perms": "None",
+        "desc": "Shows the bot's latency (works in DMs)"
+      },
+      {
+        "usage": "-prefix",
+        "perms": "None",
+        "desc": "Shows the current server prefix"
+      },
+      {
+        "usage": "-prefix set [prefix]",
+        "perms": "Manage Server",
+        "desc": "Changes the server prefix"
+      },
+      {
+        "usage": "-note add [user] [text]",
+        "perms": "Kick Members",
+        "desc": "Adds a note to a user's profile"
+      },
+      {
+        "usage": "-note remove [user] [number]",
+        "perms": "Kick Members",
+        "desc": "Removes a note from a user"
+      },
+      {
+        "usage": "-notes [user]",
+        "perms": "Kick Members",
+        "desc": "Shows all notes for a user"
+      },
+      {
+        "usage": "-giveaway start [duration] [winners] [prize]",
+        "example": "-giveaway start 1d 2 Discord Nitro",
+        "keywords": "raffle contest",
+        "perms": "Manage Server",
+        "desc": "Starts a giveaway"
+      },
+      {
+        "usage": "-giveaway end [message_id]",
+        "perms": "Manage Server",
+        "desc": "Ends a giveaway early"
+      },
+      {
+        "usage": "-giveaway reroll [message_id]",
+        "perms": "Manage Server",
+        "desc": "Rerolls a giveaway winner"
+      },
+      {
+        "usage": "-search id [Discord ID]",
+        "perms": "None",
+        "desc": "Looks up a user by their Discord ID"
+      },
+      {
+        "usage": "-search username [username]",
+        "perms": "None",
+        "desc": "Looks up a user by their username"
+      },
+      {
+        "usage": "-starboard",
+        "perms": "None",
+        "desc": "Shows current starboard config"
+      },
+      {
+        "usage": "-starboard setup [emoji] [channel]",
+        "keywords": "pins highlight",
+        "perms": "Manage Server",
+        "desc": "Sets up the starboard system"
+      },
+      {
+        "usage": "-translate [from] [to] [message]",
+        "example": "-translate fr en Bonjour tout le monde",
+        "keywords": "language translation",
+        "perms": "None",
+        "desc": "Translates text between languages"
+      },
+      {
+        "usage": "-permission [command] [role, user or permission]",
+        "perms": "Administrator",
+        "desc": "Gives a role, user or permission access to a command, or changes the permission it needs. Run the same thing again to remove it"
+      },
+      {
+        "usage": "-help",
+        "perms": "None",
+        "desc": "Shows helpful tips and support options (works in DMs)"
+      }
+    ]
+  },
+  {
+    "id": "games",
+    "name": "Games",
+    "intro": "17 games, all picked from one menu.",
+    "commands": [
+      {
+        "usage": "-games",
+        "perms": "None",
+        "desc": "Opens the game menu"
+      }
+    ],
+    "note": "8Ball, Coinflip, Dice Roll, Random Joke, Trivia, Rock Paper Scissors, Number Guessing, Tic-Tac-Toe, Would You Rather, Random Quote, Blackjack, Hangman, Connect 4, Slots, Speed Test, Snake and Memory Match."
+  }
+]
