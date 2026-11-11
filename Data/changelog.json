@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Version 1.2",
+    "type": "new",
+    "date": "2026-11-06",
+    "text": "- To ensure user privacy, you may now request for server data to be deleted permanently\n  - Only the server owner can submit a data deletion request, requests take around 1-3 days to preform then all server data will be wiped\n  - Use the new \"wipe\" command to submit a data request\n- New command: \"permission [command] [User, role, or permission]\" This command now allows commands to have custom permissions for commands, using the command will add the subject to use the command though if you use it again the subject is removed from permission"
+  },
+  {
+    "title": "Version 1.1.1",
+    "type": "new",
+    "date": "2026-10-20",
+    "text": "- To stop resource abuse, there is now a cooldown on using the same command (5 Seconds)\n- New command: \"Stats server\" this command shows the total message of the whole server including voice hours\n- New command: \"Stats members\" this shows the joins and leaves in the server with the net gain"
+  },
+  {
+    "title": "Version 1.1",
+    "type": "new",
+    "date": "2026-10-19",
+    "text": "- You may now ban users that are not in the server, before you were only able to ban users in the server.\n- New command: \"myhistory\", this will send a copy of your moderation history into your DMs.\n- You can no longer use commands in DMs, only the \"ping, commands, help\" commands work there, all other commands must be preformed inside a server.\n- New command: \"Stats invite [Invite Code]\" this will show details about an invite code linked to the server **You use it in,** from details such as the number of people that joined though it, to a graph with the join counts."
+  },
+  {
+    "title": "Version 1.0",
+    "type": "new",
+    "date": "2026-10-19",
+    "text": "The first version of Nexus released to the public, the current version is built off this."
+  }
+]
