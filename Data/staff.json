@@ -7,7 +7,7 @@
         {
           "displayName": "Fish The 4th",
           "username": "fish98547",
-          "avatar": "Assets/fish.the.4th.avatar.webp",
+          "avatar": "fish.the.4th.avatar.webp",
           "rank": "Founder & Developer",
           "color": "#3498db"
         }
@@ -20,7 +20,7 @@
         {
           "displayName": "Somebody",
           "username": "slayer98547",
-          "avatar": "Assets/somebody.avatar.webp",
+          "avatar": "somebody.avatar.webp",
           "rank": "Administrator",
           "color": "#ff0000"
         }
@@ -33,7 +33,7 @@
         {
           "displayName": "Lithium Hydroxide",
           "username": "lithium_hydroxide",
-          "avatar": "Assets/lithium.hydroxide.avatar.webp",
+          "avatar": "lithium.hydroxide.avatar.webp",
           "rank": "Jr. Moderator",
           "color": "#29937e"
         }
