@@ -1,0 +1,58 @@
+[
+  {
+    "title": "Setting things up",
+    "items": [
+      {
+        "q": "Nexus is in my server but doesn't respond.",
+        "a": "Check that Nexus can view and send messages in that channel, and that its role is high enough. The <a class='inline' href='docs.html#troubleshooting'>troubleshooting section</a> covers the rest, and the <a class='inline' href='status.html'>status page</a> shows whether Nexus is running."
+      },
+      {
+        "q": "I want a moderator to use a command without giving them a role.",
+        "a": "Use <code>-permission [command] [role, user or permission]</code>. For example, <code>-permission kick @Moderators</code> lets anyone with that role kick, even if the command normally needs another permission. Run the same thing again to take it back off."
+      },
+      {
+        "q": "Where do I change the prefix?",
+        "a": "Run <code>-prefix set [prefix]</code>. You need Manage Server to do it. Mentioning the bot always works too."
+      }
+    ]
+  },
+  {
+    "title": "Moderation",
+    "items": [
+      {
+        "q": "How do I undo a mute or a ban?",
+        "a": "Use <code>-unmute</code> to remove a timeout or cancel a saved mute, and <code>-unban</code> to lift a ban. Each action creates a case, so you can see what happened in <code>-cases</code>."
+      },
+      {
+        "q": "A member says they didn't get a DM.",
+        "a": "They may have server DMs turned off. The action still goes through and is still logged as a case."
+      },
+      {
+        "q": "Can I delete a case I made by mistake?",
+        "a": "Yes, with <code>-casedelete [case_number]</code>, which needs Ban Members. It voids the infraction and removes it from the record."
+      }
+    ]
+  },
+  {
+    "title": "Data and privacy",
+    "items": [
+      {
+        "q": "How long does Nexus keep my data?",
+        "a": "Moderation cases and settings are kept until they're removed. Activity stats and join and leave records are removed after 30 days. The full breakdown is on the <a class='inline' href='privacy.html'>privacy page</a>."
+      },
+      {
+        "q": "How do I ask for my data to be wiped?",
+        "a": "Ask in the <a class='inline' data-link='support' href='#'>support server</a>. Wipes are reviewed by hand, so they aren't guaranteed, but they are sometimes possible."
+      }
+    ]
+  },
+  {
+    "title": "Still stuck?",
+    "items": [
+      {
+        "q": "I found a bug or have an idea.",
+        "a": "Post it in the <a class='inline' data-link='support' href='#'>support server</a>. Include what you typed and what Nexus replied, if you can."
+      }
+    ]
+  }
+]
