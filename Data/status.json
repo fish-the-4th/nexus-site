@@ -1,0 +1,23 @@
+{
+  "updated": "2026-11-11T03:01:00.000Z",
+  "components": [
+    {
+      "name": "Main Bot",
+      "status": "operational",
+      "note": "Online and responding to commands"
+    },
+    {
+      "name": "Website",
+      "status": "operational",
+      "note": "Fully functional, all pages responsive"
+    }
+  ],
+  "incidents": [
+    {
+      "title": "Discord API Issue",
+      "status": "resolved",
+      "date": "2026-11-03",
+      "message": "Nexus was temporarily down because of a problem connecting to Discord. A file failed to start up, so the program kept trying to open it constantly. Discord rate limited Nexus because of the number of requests sent.\nNov. 3, 2026 to Nov. 4, 2026"
+    }
+  ]
+}
