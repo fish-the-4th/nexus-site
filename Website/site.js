@@ -60,7 +60,7 @@ function buildChrome() {
     const nav = el('nav', { class: 'site-nav' });
     const wrap = el('div', { class: 'wrap' });
     const brand = el('a', { class: 'nav-brand', href: 'index.html' }, [
-      el('img', { src: ASSETS + 'logo.png', alt: '', width: '28', height: '28' }), 'Nexus'
+      el('img', { src: 'logo.png', alt: '', width: '28', height: '28' }), 'Nexus'
     ]);
     const list = el('div', { class: 'nav-links', id: 'nav-links' });
     links.forEach(([id, href, label]) => {
@@ -81,7 +81,7 @@ function buildChrome() {
     f.innerHTML =
       '<div class="wrap">' +
         '<div class="footer-grid">' +
-          '<div><div class="footer-brand"><img src="' + ASSETS + 'logo.png" alt="">Nexus</div>' +
+          '<div><div class="footer-brand"><img src="' 'logo.png" alt="">Nexus</div>' +
           '<p class="footer-note">Built on logic, built for everyone.</p></div>' +
           '<div><h6>Nexus</h6><a href="index.html">Home</a><a href="about.html">About</a><a href="staff.html">Staff</a><a href="retired.html">Retired staff</a></div>' +
           '<div><h6>Help</h6><a href="docs.html">Documentation</a><a href="status.html">Status</a><a href="faq.html">FAQ</a><a href="privacy.html">Privacy</a><a href="changelog.html">Changelog</a><a href="permissions.html">Permissions</a><a href="' + NEXUS.support + '">Support server</a></div>' +
