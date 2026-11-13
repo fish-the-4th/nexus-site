@@ -52,7 +52,13 @@ function buildChrome() {
     ['about', 'about.html', 'About'],
     ['docs', 'docs.html', 'Docs'],
     ['status', 'status.html', 'Status'],
-    ['staff', 'staff.html', 'Staff']
+    ['staff', 'staff.html', 'Staff'],
+    ['privacy', 'privacy.html', 'Privacy']
+  ];
+  const moreLinks = [
+    ['changelog', 'changelog.html', 'Changelog'],
+    ['permissions', 'permissions.html', 'Permissions'],
+    ['faq', 'faq.html', 'FAQ']
   ];
 
   const navHost = document.getElementById('site-nav');
@@ -66,6 +72,26 @@ function buildChrome() {
     links.forEach(([id, href, label]) => {
       list.appendChild(el('a', { href, class: id === page ? 'active' : '', text: label }));
     });
+    const more = el('div', { class: 'nav-more' });
+    const moreBtn = el('button', {
+      class: 'nav-more-btn' + (moreLinks.some(l => l[0] === page) ? ' active' : ''),
+      type: 'button', 'aria-haspopup': 'true', 'aria-expanded': 'false', text: 'More ▾'
+    });
+    const menu = el('div', { class: 'nav-more-menu' });
+    moreLinks.forEach(([id, href, label]) => {
+      menu.appendChild(el('a', { href, class: id === page ? 'active' : '', text: label }));
+    });
+    const closeMore = () => { more.classList.remove('open'); moreBtn.setAttribute('aria-expanded', 'false'); };
+    moreBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = more.classList.toggle('open');
+      moreBtn.setAttribute('aria-expanded', String(open));
+    });
+    document.addEventListener('click', closeMore);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMore(); });
+    more.appendChild(moreBtn);
+    more.appendChild(menu);
+    list.appendChild(more);
     list.appendChild(el('a', { href: NEXUS.support, text: 'Support' }));
     list.appendChild(el('a', { href: NEXUS.invite, class: 'nav-cta', text: 'Add Nexus' }));
     const toggle = el('button', { class: 'nav-toggle', 'aria-label': 'Menu', text: '☰' });
