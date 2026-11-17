@@ -1,0 +1,35 @@
+[
+  {
+    "title": "FAQ",
+    "items": [
+      {
+        "q": "Who works on Nexus?",
+        "a": "Nexus is solely developed by fish98547, I do not plan on adding any other developers to this project."
+      },
+      {
+        "q": "Will Nexus soon become paid?",
+        "a": "No! Nexus will stay free as long I`m in charge. While Nexus may have a paid plan in the future it will only be for extensive features, other than that I want Nexus to stay free for anyone to use."
+      },
+      {
+        "q": "When was Nexus created",
+        "a": "The Nexus account was made June 17 2026, though the code was first started to be worked on in April 18 2026."
+      },
+      {
+        "q": "How long did it take to make Nexus?",
+        "a": "The base 1.0 version took around 5 months, starting April 18 2026 and releasing September 8 2026"
+      },
+      {
+        "q": "Is Nexus discontinued?",
+        "a": "No, Nexus is not discontinued and is still being worked on till this day. There is no plan to shutdown/discontinue Nexus for the far future."
+      },
+      {
+        "q": "Which library is used to code Nexus?",
+        "a": "Discord.py is used for Nexus"
+      },
+      {
+        "q": "Is Nexus open source?",
+        "a": "No, none of Nexus`s code will be open to the public. Though the website is open source on GitHub.."
+      }
+    ]
+  }
+]
