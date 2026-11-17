@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compare - Nexus</title>
+<meta name="description" content="What a server usually needs separate bots for, and which of it Nexus covers in one.">
+<link rel="icon" type="image/png" href="../logo.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="compare">
+
+<div id="site-nav"></div>
+
+<header class="page-hero">
+  <div class="wrap">
+    <h1>One bot or a stack of them?</h1>
+    <p>Most servers end up running a different bot for each job. This is what Nexus covers in one, and what it doesn't cover yet.</p>
+  </div>
+</header>
+
+<main class="wrap" style="padding-bottom:70px">
+  <h2 class="sub-title" style="margin-top:8px">What do you run today?</h2>
+  <p style="font-size:14px;color:var(--muted)">Tap the bots your server uses now.</p>
+  <div class="cmp-picker" id="cmp-picker"></div>
+  <div class="cmp-result" id="cmp-result" aria-live="polite">Loading...</div>
+
+  <div class="cmp-list" id="cmp-list"></div>
+  <p class="cmp-foot" id="cmp-foot"></p>
+</main>
+
+<div id="site-footer"></div>
+<script src="site.js"></script>
+</body>
+</html>
