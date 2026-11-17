@@ -1,0 +1,22 @@
+{
+  "sections": [
+    {
+      "id": "retired",
+      "title": "Retired Staff",
+      "members": []
+    },
+    {
+      "id": "former",
+      "title": "Former Staff",
+      "members": [
+        {
+          "displayName": "RedOne_Pro",
+          "username": "red_gamingpro",
+          "avatar": "redone.pro.avatar.webp",
+          "rank": "Former Jr. Support Team",
+          "color": "#808080"
+        }
+      ]
+    }
+  ]
+}
