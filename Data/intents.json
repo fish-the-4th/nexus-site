@@ -1,0 +1,606 @@
+[
+  {
+    "commands": [
+      "-kick",
+      "-ban",
+      "-mute",
+      "-warn"
+    ],
+    "phrases": [
+      "punish someone",
+      "punish a member",
+      "discipline a user",
+      "deal with a troublemaker",
+      "someone is breaking the rules",
+      "take action on a user",
+      "moderate a member",
+      "handle a problem user"
+    ]
+  },
+  {
+    "commands": [
+      "-kick"
+    ],
+    "phrases": [
+      "remove someone from the server",
+      "kick someone out",
+      "boot a member",
+      "throw someone out",
+      "kick a user"
+    ]
+  },
+  {
+    "commands": [
+      "-ban"
+    ],
+    "phrases": [
+      "ban someone",
+      "block a user permanently",
+      "permanently remove a member",
+      "stop someone coming back",
+      "temporary ban",
+      "ban for a week",
+      "ban someone who left",
+      "ban by id",
+      "ban a user who is not in the server"
+    ]
+  },
+  {
+    "commands": [
+      "-unban"
+    ],
+    "phrases": [
+      "undo a ban",
+      "unban someone",
+      "let someone back in",
+      "lift a ban",
+      "remove a ban"
+    ]
+  },
+  {
+    "commands": [
+      "-mute",
+      "-unmute"
+    ],
+    "phrases": [
+      "silence someone",
+      "stop someone talking",
+      "timeout a member",
+      "time out a user",
+      "cool down a member",
+      "mute someone",
+      "remove a timeout",
+      "unmute someone",
+      "shut someone up temporarily"
+    ]
+  },
+  {
+    "commands": [
+      "-warn",
+      "-unwarn"
+    ],
+    "phrases": [
+      "warn someone",
+      "give a warning",
+      "strike a user",
+      "remove a warning",
+      "take back a warning"
+    ]
+  },
+  {
+    "commands": [
+      "-purge"
+    ],
+    "phrases": [
+      "delete messages",
+      "clear messages",
+      "clean up chat",
+      "remove someone's messages",
+      "wipe messages",
+      "delete spam",
+      "bulk delete",
+      "clear a user's messages"
+    ]
+  },
+  {
+    "commands": [
+      "-slowmode"
+    ],
+    "phrases": [
+      "slow down chat",
+      "limit how fast people post",
+      "cooldown in a channel",
+      "slow chat",
+      "slow mode",
+      "stop people posting so fast"
+    ]
+  },
+  {
+    "commands": [
+      "-lock",
+      "-unlock",
+      "-locked"
+    ],
+    "phrases": [
+      "close a channel",
+      "stop people talking in a channel",
+      "freeze chat",
+      "lock a channel",
+      "unlock a channel",
+      "reopen a channel",
+      "see locked channels",
+      "channel lockdown",
+      "stop everyone sending messages"
+    ]
+  },
+  {
+    "commands": [
+      "-cases",
+      "-caseinfo"
+    ],
+    "phrases": [
+      "see someone's history",
+      "past punishments",
+      "moderation history",
+      "what has this user done",
+      "look up a case",
+      "infractions",
+      "a user's record",
+      "previous bans and warnings",
+      "find a case"
+    ]
+  },
+  {
+    "commands": [
+      "-myhistory"
+    ],
+    "phrases": [
+      "my own punishments",
+      "check my record",
+      "why was i banned",
+      "my warnings",
+      "see my moderation history",
+      "what have i been warned for"
+    ]
+  },
+  {
+    "commands": [
+      "-casedelete"
+    ],
+    "phrases": [
+      "delete a case",
+      "undo a punishment",
+      "remove a warning permanently",
+      "void an infraction",
+      "wrongly banned",
+      "reverse a case",
+      "remove a case"
+    ]
+  },
+  {
+    "commands": [
+      "-note",
+      "-notes"
+    ],
+    "phrases": [
+      "write a note about a member",
+      "private staff comment",
+      "remember something about a user",
+      "staff notes",
+      "leave a note on a user",
+      "note about someone"
+    ]
+  },
+  {
+    "commands": [
+      "-automod",
+      "-automods"
+    ],
+    "phrases": [
+      "stop spam",
+      "block spam",
+      "anti spam",
+      "stop scam links",
+      "stop raids",
+      "raid protection",
+      "protect the server",
+      "auto moderation",
+      "block malicious links",
+      "anti raid",
+      "stop scammers",
+      "see automod settings",
+      "turn on automod",
+      "turn off automod"
+    ]
+  },
+  {
+    "commands": [
+      "-automod raidend"
+    ],
+    "phrases": [
+      "end a lockdown",
+      "unlock after a raid",
+      "server is locked down",
+      "finish raid mode",
+      "stop raid lockdown"
+    ]
+  },
+  {
+    "commands": [
+      "-automod whitelist"
+    ],
+    "phrases": [
+      "exempt someone from automod",
+      "allow links",
+      "trusted users",
+      "let staff post links",
+      "ignore a role",
+      "whitelist a user"
+    ]
+  },
+  {
+    "commands": [
+      "-automod logging"
+    ],
+    "phrases": [
+      "see what automod caught",
+      "automod log channel",
+      "where automod reports"
+    ]
+  },
+  {
+    "commands": [
+      "-joinroles"
+    ],
+    "phrases": [
+      "give new members a role",
+      "welcome role",
+      "auto role on join",
+      "default role",
+      "member role for new people",
+      "autorole",
+      "role for everyone who joins"
+    ]
+  },
+  {
+    "commands": [
+      "-role add",
+      "-role remove",
+      "-role toggle",
+      "-role set",
+      "-role removeall"
+    ],
+    "phrases": [
+      "give someone a role",
+      "take a role away",
+      "change a user's roles",
+      "add a role to a user",
+      "remove all roles",
+      "manage roles",
+      "swap a role",
+      "assign a role",
+      "remove a role from a user"
+    ]
+  },
+  {
+    "commands": [
+      "-role persist"
+    ],
+    "phrases": [
+      "keep roles when someone leaves",
+      "roles come back",
+      "restore roles after rejoin",
+      "role persistence",
+      "stop role dodging",
+      "sticky roles",
+      "save roles for returning members"
+    ]
+  },
+  {
+    "commands": [
+      "-timed role",
+      "-timed roles"
+    ],
+    "phrases": [
+      "temporary role",
+      "role that expires",
+      "give a role for a day",
+      "time limited role",
+      "remove a role automatically",
+      "event role",
+      "role for a set time",
+      "role that removes itself"
+    ]
+  },
+  {
+    "commands": [
+      "-ticket"
+    ],
+    "phrases": [
+      "support tickets",
+      "help desk",
+      "private support channel",
+      "open a ticket",
+      "modmail",
+      "contact staff",
+      "set up tickets",
+      "close a ticket",
+      "add someone to a ticket",
+      "ticket panel",
+      "let members ask for help privately"
+    ]
+  },
+  {
+    "commands": [
+      "-log",
+      "-logs",
+      "-logging"
+    ],
+    "phrases": [
+      "log deleted messages",
+      "audit log",
+      "track changes",
+      "see who joined",
+      "record events",
+      "logging channel",
+      "who deleted a message",
+      "edited messages",
+      "stop logging",
+      "ignore a user in logs",
+      "where logs go",
+      "set up logs"
+    ]
+  },
+  {
+    "commands": [
+      "-stats"
+    ],
+    "phrases": [
+      "server activity",
+      "how active is the server",
+      "graphs",
+      "most active members",
+      "message counts",
+      "voice time",
+      "who joined",
+      "member growth",
+      "invite tracking",
+      "which invite did people use",
+      "channel activity",
+      "leaderboard",
+      "joins and leaves",
+      "who invited people"
+    ]
+  },
+  {
+    "commands": [
+      "-userinfo",
+      "-avatarinfo",
+      "-bannerinfo",
+      "-search"
+    ],
+    "phrases": [
+      "who is this user",
+      "profile picture",
+      "avatar",
+      "banner",
+      "account age",
+      "when did they join",
+      "look up a user",
+      "find someone by id",
+      "find a user",
+      "user details"
+    ]
+  },
+  {
+    "commands": [
+      "-serverinfo",
+      "-servermembercount",
+      "-serverchannelcount",
+      "-servericoninfo",
+      "-serverbannerinfo"
+    ],
+    "phrases": [
+      "server details",
+      "member count",
+      "how many members",
+      "server icon",
+      "server banner",
+      "channel count",
+      "server information",
+      "how many channels"
+    ]
+  },
+  {
+    "commands": [
+      "-roleinfo",
+      "-rolelist"
+    ],
+    "phrases": [
+      "role permissions",
+      "list all roles",
+      "what can a role do",
+      "role details",
+      "see every role"
+    ]
+  },
+  {
+    "commands": [
+      "-channelinfo"
+    ],
+    "phrases": [
+      "channel details",
+      "channel topic",
+      "channel id",
+      "channel information"
+    ]
+  },
+  {
+    "commands": [
+      "-emojiinfo",
+      "-stickerinfo",
+      "-stickerpackinfo"
+    ],
+    "phrases": [
+      "emoji details",
+      "emoji id",
+      "sticker info",
+      "list stickers",
+      "custom emoji",
+      "server emojis",
+      "sticker details"
+    ]
+  },
+  {
+    "commands": [
+      "-reminder"
+    ],
+    "phrases": [
+      "remind me",
+      "set a timer",
+      "reminder",
+      "alarm",
+      "don't forget",
+      "schedule a reminder",
+      "delete a reminder",
+      "list my reminders",
+      "ping me later"
+    ]
+  },
+  {
+    "commands": [
+      "-giveaway"
+    ],
+    "phrases": [
+      "run a giveaway",
+      "raffle",
+      "pick a winner",
+      "prize draw",
+      "reroll a winner",
+      "end a giveaway early",
+      "contest",
+      "start a giveaway",
+      "choose a random winner"
+    ]
+  },
+  {
+    "commands": [
+      "-starboard"
+    ],
+    "phrases": [
+      "highlight the best messages",
+      "pin popular messages",
+      "star reactions",
+      "hall of fame",
+      "repost good messages",
+      "starboard channel",
+      "best of channel"
+    ]
+  },
+  {
+    "commands": [
+      "-translate"
+    ],
+    "phrases": [
+      "translate text",
+      "convert a language",
+      "what does this mean in english",
+      "language translation",
+      "foreign language",
+      "translate a message"
+    ]
+  },
+  {
+    "commands": [
+      "-say"
+    ],
+    "phrases": [
+      "make the bot talk",
+      "send a message as the bot",
+      "announcement",
+      "post as the bot",
+      "bot says something",
+      "speak as the bot"
+    ]
+  },
+  {
+    "commands": [
+      "-ping"
+    ],
+    "phrases": [
+      "is the bot online",
+      "bot latency",
+      "check if the bot is working",
+      "bot speed",
+      "lag",
+      "bot response time"
+    ]
+  },
+  {
+    "commands": [
+      "-prefix"
+    ],
+    "phrases": [
+      "change the prefix",
+      "bot prefix",
+      "what is the prefix",
+      "command symbol",
+      "change the command character"
+    ]
+  },
+  {
+    "commands": [
+      "-help"
+    ],
+    "phrases": [
+      "get help",
+      "contact support",
+      "how do i use the bot",
+      "tips",
+      "support server",
+      "need help"
+    ]
+  },
+  {
+    "commands": [
+      "-permission"
+    ],
+    "phrases": [
+      "who can use a command",
+      "restrict a command",
+      "let a role use a command",
+      "command access",
+      "change command permissions",
+      "allow moderators to use a command",
+      "lock a command to staff",
+      "give a role access to a command",
+      "custom command permissions"
+    ]
+  },
+  {
+    "commands": [
+      "-games"
+    ],
+    "phrases": [
+      "play a game",
+      "play with friends",
+      "i'm bored",
+      "tic tac toe",
+      "connect four",
+      "rock paper scissors",
+      "blackjack",
+      "trivia quiz",
+      "hangman",
+      "2048",
+      "word scramble",
+      "number guessing",
+      "card battle",
+      "challenge a friend",
+      "game stats",
+      "wins and losses",
+      "games leaderboard",
+      "fun commands",
+      "mini games"
+    ]
+  }
+]
