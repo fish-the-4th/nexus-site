@@ -15,7 +15,7 @@
 <header class="page-hero">
   <div class="wrap narrow">
     <h1>Privacy</h1>
-    <p>What Nexus keeps, why it keeps it, how long it stays, and how to ask for it to be removed. Last updated 16 November 2026.</p>
+    <p>What Nexus keeps, why it keeps it, how long it stays, and how to ask for it to be removed. Last updated 18 November 2026.</p>
   </div>
 </header>
 
@@ -58,7 +58,8 @@
       <tr><td>Giveaways</td><td>The giveaway message, channel, server, host, prize, number of winners and end time. Entries are not stored. Nexus reads the reactions from Discord when it picks winners.</td><td>Kept after the giveaway ends so it can be rerolled, until a wipe</td></tr>
       <tr><td>Starboard</td><td>The IDs of messages already posted, so the same message is not posted twice.</td><td>While the server uses Nexus, until a wipe</td></tr>
       <tr><td>Games</td><td>Per user and per game: wins, losses, draws, current streak, best streak and best score. This is not tied to any server.</td><td>Until removal is requested</td></tr>
-      <tr><td>Blacklist</td><td>User ID, the reason and the time. Added by the bot owner only.</td><td>Until the owner removes it</td></tr>
+      <tr><td>Blacklist</td><td>User ID, the reason and the time. Added by the bot owner only. A blacklisted user can't use Nexus or its dashboard in servers they own.</td><td>Until the owner removes it</td></tr>
+      <tr><td>Dashboard changes</td><td>When someone changes a setting on the dashboard: the server, their user ID, what changed and the time.</td><td>Until a wipe</td></tr>
       <tr><td>Data wipe requests</td><td>Server ID and name, the server owner, who ran the request, its status and the times.</td><td>Until the request is deleted</td></tr>
     </tbody>
   </table>
@@ -69,7 +70,8 @@
     <li><strong style="color:var(--text)">The text of messages.</strong> Activity stats count messages, they don't save them. AutoMod reads a message as it arrives to check for spam and scam links, then moves on.</li>
     <li><strong style="color:var(--text)">Direct messages.</strong> Nexus only answers three commands in DMs (<code>-ping</code>, <code>-commands</code> and <code>-help</code>). Nothing from those is saved.</li>
     <li><strong style="color:var(--text)">Voice audio, files, images or attachments.</strong></li>
-    <li><strong style="color:var(--text)">Emails, passwords, payment details or IP addresses.</strong> Nexus never asks for any of these.</li>
+    <li><strong style="color:var(--text)">Emails, passwords or payment details.</strong> Nexus never asks for any of these.</li>
+    <li><strong style="color:var(--text)">IP addresses.</strong> The dashboard uses your IP address for a minute or two to stop people spamming it. It is held in memory only and never saved.</li>
     <li><strong style="color:var(--text)">Who reacted to a giveaway.</strong> The list of entries lives on Discord.</li>
   </ul>
   <p>Some features do put copies of messages <em>into your server</em>, because that is what they are for. If message logging is on, deleted and edited messages are posted to the log channel your staff chose. The starboard copies a starred message into its channel. Moderation reasons appear in case records. Those copies are Discord messages in your server, so your server's own rules and Discord's terms apply to them, not this page.</p>
@@ -81,6 +83,7 @@
     <li><strong style="color:var(--text)">Wispbyte.</strong> The bot and its database file run on a Wispbyte server.</li>
     <li><strong style="color:var(--text)">Google Translate.</strong> When someone runs <code>-translate</code>, the text they typed in that command is sent to Google Translate to get the result. Nothing else is sent, and Nexus doesn't save it.</li>
     <li><strong style="color:var(--text)">GitHub.</strong> The website you're reading is hosted on GitHub Pages.</li>
+    <li><strong style="color:var(--text)">Cloudflare.</strong> Traffic to the dashboard passes through Cloudflare, which keeps the connection encrypted and protects the bot's server.</li>
   </ul>
 
   <h2 id="who-sees-it">Who can see it</h2>
@@ -117,8 +120,16 @@
   </ul>
 
   <h2 id="the-website">The website</h2>
-  <p>This site is static. It has no accounts, forms or comments. It does not set cookies, use browser storage or run analytics, and it loads no scripts from other sites. The pages fetch a few small data files (the command list, status, staff and changelog) from the same place they are hosted. GitHub, which hosts the site, may keep ordinary server logs under its own policy.</p>
+  <p>Apart from the dashboard, this site is static. It has no forms or comments, doesn't run analytics, and loads no scripts from other sites. The pages fetch a few small data files (the command list, status, staff and changelog) from the same place they are hosted. GitHub, which hosts the site, may keep ordinary server logs under its own policy.</p>
   <p>Links to Discord, Top.gg and the support server take you to those sites, and they follow their own privacy policies.</p>
+
+  <h3>The dashboard</h3>
+  <p>The dashboard is the one part of the site with a login. When you log in with Discord, Nexus only asks for your user ID, username and avatar. It never sees your password, email or server list. Discord's login token is thrown away straight after, so Nexus can't act as you.</p>
+  <ul>
+    <li>Your user ID, name and avatar are kept in the bot's memory while you're logged in, for up to 8 hours. They are never written to the database, and a bot restart clears them.</li>
+    <li>Your browser keeps a random login key in session storage until you log out or close the tab. It is not a cookie and isn't shared with other sites.</li>
+    <li>Every change you make is checked against your permissions in that server, and saved in the dashboard changes record shown above.</li>
+  </ul>
 
   <h2 id="security">Security</h2>
   <p>The bot's token is kept out of the code and set as a secret on the host. The database is a single file on the host. No system is perfectly secure, and Nexus is run by one person, so there are limits to what it can promise. If you think something is wrong, tell the team in the support server straight away.</p>
