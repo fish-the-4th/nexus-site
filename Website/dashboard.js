@@ -181,6 +181,7 @@ async function initDashboard() {
       state: 'That login attempt expired or did not match. Please try again.',
       denied: 'Login was cancelled.',
       rate: 'Too many attempts. Wait a minute and try again.',
+      busy: 'Too many people are logging in right now. Try again in a few minutes.',
       discord: 'Discord could not confirm your login. Please try again.'
     };
     return showLogin(reasons[error] || 'Login failed. Please try again.', true);
