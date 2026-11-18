@@ -1,4 +1,4 @@
-const DASH_API = 'https://nexus-bot.wispbyte.org:15870';
+const DASH_API = 'https://nexus-bot.wispbyte.org';
 const TOKEN_KEY = 'nexus_dash_token';
 
 function dashRoot() { return document.getElementById('dash-root'); }
