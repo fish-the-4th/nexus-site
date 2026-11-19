@@ -4,7 +4,8 @@ const DATA = '../Data/';
 const NEXUS = {
   invite:  'https://discord.com/oauth2/authorize?client_id=1516923666787602725&permissions=8&integration_type=0&scope=bot',
   support: 'https://discord.gg/grVrz6TrsY',
-  topgg:   'https://top.gg/bot/1516923666787602725'
+  topgg:   'https://top.gg/bot/1516923666787602725',
+  api:     'https://nexus-bot.wispbyte.org'
 };
 
 const REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -27,8 +28,24 @@ async function loadJSON(path) {
   return res.json();
 }
 
+async function loadAPI(path) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 8000);
+  try {
+    const res = await fetch(NEXUS.api + path, { cache: 'no-store', signal: ctrl.signal });
+    if (!res.ok) throw new Error('Nexus answered with ' + res.status);
+    return await res.json();
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 function safeColor(c, fallback) {
   return (typeof c === 'string' && /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(c.trim())) ? c.trim() : (fallback || '#5865F2');
+}
+
+function safeLink(url) {
+  return typeof url === 'string' && /^https:\/\/[^\s"'<>]+$/i.test(url.trim()) ? url.trim() : null;
 }
 
 function fmtDate(str, withTime) {
@@ -43,15 +60,18 @@ function fmtDate(str, withTime) {
   return d.toLocaleString(undefined, opts);
 }
 
-function fmtAgo(str) {
-  const d = new Date(str);
-  if (isNaN(d)) return '';
-  const s = Math.max(0, (Date.now() - d.getTime()) / 1000);
-  if (s < 90) return 'just now';
-  if (s < 3600) return Math.round(s / 60) + ' minutes ago';
-  if (s < 86400) { const h = Math.round(s / 3600); return h + (h === 1 ? ' hour ago' : ' hours ago'); }
-  const days = Math.round(s / 86400);
-  return days + (days === 1 ? ' day ago' : ' days ago');
+function fmtUptime(ms) {
+  const mins = Math.max(0, Math.floor(ms / 60000));
+  const d = Math.floor(mins / 1440), h = Math.floor((mins % 1440) / 60), m = mins % 60;
+  if (d > 0) return d + 'd ' + h + 'h';
+  if (h > 0) return h + 'h ' + m + 'm';
+  return m + 'm';
+}
+
+function fmtMinutes(m) {
+  if (m < 60) return m + (m === 1 ? ' minute' : ' minutes');
+  const h = Math.floor(m / 60), r = m % 60;
+  return h + (h === 1 ? ' hour' : ' hours') + (r ? ' ' + r + ' min' : '');
 }
 
 function skeleton(n) {
@@ -62,111 +82,165 @@ function skeleton(n) {
 
 const ICONS = {
   home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-6h4v6"/></svg>',
+  about: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.5h.01"/></svg>',
   docs: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5"/></svg>',
-  status: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>',
-  about: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>',
+  community: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>',
+  info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>',
   dash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="9" rx="2"/><rect x="13.5" y="3" width="7.5" height="5.5" rx="2"/><rect x="13.5" y="11.5" width="7.5" height="9.5" rx="2"/><rect x="3" y="15" width="7.5" height="6" rx="2"/></svg>',
-  up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>'
+  link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg>',
+  star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>',
+  chat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>',
+  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  caret: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
+  up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>',
+  left: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>',
+  right: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>'
 };
 
-function svgIcon(name) {
-  const s = el('span', { 'aria-hidden': 'true', style: 'display:inline-flex' });
+function svgIcon(name, cls) {
+  const s = el('span', { 'aria-hidden': 'true', class: 'svg-i' + (cls ? ' ' + cls : '') });
   s.innerHTML = ICONS[name];
   return s;
 }
 
-const MEGA = [
-  { title: 'Nexus', items: [
-    ['home', 'index.html', 'Home', 'Everything Nexus does, at a glance.'],
-    ['', 'index.html#compare', 'Compare', 'How Nexus stacks up against the popular bots.'],
-    ['', 'invite', 'Add to your server', 'One click, free forever.', true]
+const NAV = [
+  { id: 'about', label: 'About', icon: 'about', items: [
+    ['about', 'about.html', 'About Nexus', 'What it is, why it exists and how it works.'],
+    ['faq', 'faq.html', 'FAQ', 'Common questions, answered once.'],
+    ['compare', 'compare.html', 'Compare', 'How Nexus stacks up against the popular bots.']
   ] },
-  { title: 'Learn', items: [
+  { id: 'docs', label: 'Docs', icon: 'docs', items: [
     ['docs', 'docs.html', 'Documentation', 'Guides for every feature, step by step.'],
-    ['', 'docs.html#/commands', 'Command list', 'Search every command, or describe what you need.'],
     ['', 'docs.html#/getting-started', 'Getting started', 'Your first five minutes with Nexus.'],
-    ['', 'docs.html#/troubleshooting', 'Troubleshooting', 'Fixes for the common problems.']
+    ['', 'docs.html#/troubleshooting', 'Troubleshooting', 'Fixes for the usual problems.']
   ] },
-  { title: 'Community', items: [
-    ['about', 'about.html', 'About', 'Why Nexus exists and who builds it.'],
-    ['', 'about.html#team', 'The team', 'The people behind the bot.'],
-    ['', 'about.html#faq', 'FAQ', 'Common questions, answered once.'],
-    ['', 'support', 'Support server', 'Ask questions and report bugs.', true],
-    ['', 'topgg', 'Leave a review', 'Help other servers find Nexus.', true]
+  { id: 'community', label: 'Community', icon: 'community', items: [
+    ['staff', 'staff.html', 'Staff team', 'The people behind the bot.'],
+    ['support', 'support.html', 'Support', 'Quick fixes, and where to get help.'],
+    ['projects', 'projects.html', 'Projects', 'What has launched and what is coming.'],
+    ['apply', 'apply.html', 'Apply', 'Open positions on the team.']
   ] },
-  { title: 'Updates', items: [
-    ['status', 'status.html', 'Status', 'Is everything running right now?'],
-    ['', 'status.html#changelog', 'Changelog', 'What changed, and when.'],
-    ['dashboard', 'dashboard.html', 'Dashboard', 'Your stats, or your server settings.'],
-    ['privacy', 'privacy.html', 'Privacy', 'What Nexus keeps, and why.']
+  { id: 'info', label: 'Information', icon: 'info', items: [
+    ['status', 'status.html', 'Status', 'Live status and a calendar of uptime.'],
+    ['', 'docs.html#/commands', 'Command list', 'Every command, searchable.'],
+    ['changelog', 'changelog.html', 'Changelog', 'What changed, and when.']
   ] }
 ];
 
+const LINKS = [
+  ['topgg', 'Leave a review', 'Rate Nexus on top.gg', 'star'],
+  ['support', 'Support server', 'Ask questions, report bugs', 'chat'],
+  ['invite', 'Add Nexus', 'Invite it to your server', 'plus']
+];
+
+function groupOf(page) {
+  const g = NAV.find(group => group.items.some(i => i[0] && i[0] === page));
+  return g ? g.id : '';
+}
+
+function closeAllMenus(except) {
+  document.querySelectorAll('.dd.open').forEach(d => {
+    if (d !== except) {
+      d.classList.remove('open');
+      const b = d.querySelector('.dd-btn');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
+function dropdown(label, items, opts) {
+  const wrap = el('div', { class: 'dd' + (opts.cls ? ' ' + opts.cls : '') });
+  const btn = el('button', { class: 'dd-btn' + (opts.active ? ' active' : ''), type: 'button', 'aria-haspopup': 'true', 'aria-expanded': 'false' });
+  if (opts.icon) btn.appendChild(svgIcon(opts.icon));
+  if (label) btn.appendChild(el('span', { class: 'dd-label', text: label }));
+  if (opts.ariaLabel) btn.setAttribute('aria-label', opts.ariaLabel);
+  if (opts.caret !== false) btn.appendChild(svgIcon('caret', 'caret'));
+  const menu = el('div', { class: 'dd-menu', role: 'menu' });
+  items.forEach((it, i) => {
+    const a = el('a', { href: it.href, role: 'menuitem', class: it.active ? 'active' : '', style: '--i:' + i });
+    if (it.icon) a.appendChild(svgIcon(it.icon, 'dd-ico'));
+    a.appendChild(el('span', {}, [el('b', { text: it.label }), el('small', { text: it.desc })]));
+    if (it.external) { a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener'); }
+    menu.appendChild(a);
+  });
+  const set = open => {
+    if (open) closeAllMenus(wrap);
+    wrap.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  };
+  btn.addEventListener('click', e => { e.stopPropagation(); set(!wrap.classList.contains('open')); });
+  let hoverTimer = null;
+  const fine = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (fine) {
+    wrap.addEventListener('mouseenter', () => { clearTimeout(hoverTimer); set(true); });
+    wrap.addEventListener('mouseleave', () => { hoverTimer = setTimeout(() => set(false), 160); });
+  }
+  menu.addEventListener('click', e => { if (e.target.closest('a')) set(false); });
+  wrap.appendChild(btn);
+  wrap.appendChild(menu);
+  return wrap;
+}
+
 function buildChrome() {
   const page = document.body.dataset.page || '';
-  const links = [
-    ['home', 'index.html', 'Home'],
-    ['docs', 'docs.html', 'Docs'],
-    ['status', 'status.html', 'Status'],
-    ['about', 'about.html', 'About']
-  ];
+  const activeGroup = groupOf(page);
 
   const navHost = document.getElementById('site-nav');
   if (navHost) {
     const nav = el('nav', { class: 'site-nav', 'aria-label': 'Main' });
-    const brand = el('a', { class: 'nav-brand', href: 'index.html' }, [
-      el('img', { src: ROOT + 'logo.png', alt: '', width: '30', height: '30' }), el('span', { text: 'Nexus' })
+    const dot = el('span', { class: 'dot brand-dot', id: 'brand-dot', title: 'Checking status', 'aria-hidden': 'true' });
+    const brand = el('a', { class: 'nav-brand', href: 'index.html', 'aria-label': 'Nexus home' }, [
+      el('img', { src: ROOT + 'logo.png', alt: '', width: '30', height: '30' }), el('span', { text: 'Nexus' }), dot
     ]);
     const list = el('div', { class: 'nav-links' });
-    const pill = el('span', { class: 'nav-pill', 'aria-hidden': 'true' });
-    list.appendChild(pill);
-    links.forEach(([id, href, label]) => list.appendChild(el('a', { href, class: id === page ? 'active' : '', text: label })));
-    list.querySelectorAll('a').forEach(a => {
-      a.addEventListener('mouseenter', () => {
-        pill.style.width = a.offsetWidth + 'px';
-        pill.style.transform = 'translateX(' + a.offsetLeft + 'px)';
-        pill.style.opacity = '1';
-      });
+    NAV.forEach(group => {
+      list.appendChild(dropdown(group.label, group.items.map(([id, href, label, desc]) => ({
+        href, label, desc, active: id && id === page
+      })), { active: group.id === activeGroup }));
     });
-    list.addEventListener('mouseleave', () => { pill.style.opacity = '0'; });
 
     const cta = el('a', { class: 'nav-cta' + (page === 'dashboard' ? ' active' : ''), href: 'dashboard.html' }, [svgIcon('dash'), el('span', { class: 'lbl', text: 'Dashboard' })]);
-    const burger = el('button', { class: 'icon-btn burger', type: 'button', 'aria-label': 'Open menu', 'aria-expanded': 'false', 'aria-controls': 'mega' }, [el('span'), el('span'), el('span')]);
+    const linkMenu = dropdown('', LINKS.map(([key, label, desc, icon]) => ({
+      href: NEXUS[key], label, desc, icon, external: true
+    })), { icon: 'link', caret: false, cls: 'dd-links', ariaLabel: 'Quick links' });
+    linkMenu.querySelector('.dd-btn').classList.add('icon-btn');
+
     nav.appendChild(brand);
     nav.appendChild(list);
-    nav.appendChild(el('div', { class: 'nav-actions' }, [cta, burger]));
-
-    const mega = el('div', { class: 'mega', id: 'mega', role: 'menu' });
-    let i = 0;
-    MEGA.forEach(group => {
-      const col = el('div', {}, [el('h6', { text: group.title })]);
-      group.items.forEach(([id, href, label, desc, ext]) => {
-        const a = el('a', { href: ext ? NEXUS[href] : href, class: id && id === page ? 'active' : '', style: '--i:' + (i++), role: 'menuitem' }, [el('b', { text: label }), el('small', { text: desc })]);
-        if (ext) { a.setAttribute('data-ext', ''); a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener'); }
-        col.appendChild(a);
-      });
-      mega.appendChild(col);
-    });
-    const scrim = el('div', { class: 'mega-scrim' });
-
-    const setMenu = open => {
-      document.body.classList.toggle('menu-open', open);
-      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-    };
-    burger.addEventListener('click', e => { e.stopPropagation(); setMenu(!document.body.classList.contains('menu-open')); });
-    scrim.addEventListener('click', () => setMenu(false));
-    mega.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
-
+    nav.appendChild(el('div', { class: 'nav-actions' }, [cta, linkMenu]));
     navHost.replaceWith(nav);
-    nav.after(scrim);
-    scrim.after(mega);
 
-    const dock = el('nav', { class: 'dock', 'aria-label': 'Quick links' });
-    [['home', 'index.html', 'Home', 'home'], ['docs', 'docs.html', 'Docs', 'docs'], ['status', 'status.html', 'Status', 'status'], ['about', 'about.html', 'About', 'about'], ['dashboard', 'dashboard.html', 'Dashboard', 'dash']]
-      .forEach(([id, href, label, icon]) => dock.appendChild(el('a', { href, class: id === page ? 'active' : '' }, [svgIcon(icon), el('span', { text: label })])));
+    const dock = el('nav', { class: 'dock', 'aria-label': 'Quick navigation' });
+    const sheet = el('div', { class: 'dock-sheet', role: 'menu' });
+    dock.appendChild(el('a', { href: 'index.html', class: page === 'home' ? 'active' : '' }, [svgIcon('home'), el('span', { text: 'Home' })]));
+    NAV.forEach(group => {
+      const b = el('button', { type: 'button', class: group.id === activeGroup ? 'active' : '', 'aria-expanded': 'false' }, [svgIcon(group.icon), el('span', { text: group.id === 'info' ? 'Info' : group.label })]);
+      b.addEventListener('click', e => {
+        e.stopPropagation();
+        const open = sheet.dataset.group === group.id && sheet.classList.contains('open');
+        dock.querySelectorAll('button').forEach(x => x.setAttribute('aria-expanded', 'false'));
+        if (open) { sheet.classList.remove('open'); return; }
+        sheet.replaceChildren(el('h6', { text: group.label }));
+        group.items.forEach(([id, href, label, desc], i) => sheet.appendChild(el('a', { href, class: id && id === page ? 'active' : '', style: '--i:' + i }, [el('b', { text: label }), el('small', { text: desc })])));
+        sheet.dataset.group = group.id;
+        sheet.classList.add('open');
+        b.setAttribute('aria-expanded', 'true');
+      });
+      dock.appendChild(b);
+    });
+    document.body.appendChild(sheet);
     document.body.appendChild(dock);
+
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.dd')) closeAllMenus();
+      if (!e.target.closest('.dock-sheet, .dock')) {
+        sheet.classList.remove('open');
+        dock.querySelectorAll('button').forEach(x => x.setAttribute('aria-expanded', 'false'));
+      }
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { closeAllMenus(); sheet.classList.remove('open'); }
+    });
 
     const bar = el('div', { class: 'scroll-bar', 'aria-hidden': 'true' });
     const top = el('button', { class: 'icon-btn to-top', type: 'button', 'aria-label': 'Back to top' }, [svgIcon('up')]);
@@ -196,14 +270,15 @@ function buildChrome() {
       return a;
     })));
     const wrap = el('div', { class: 'wrap' }, [
-      el('div', { class: 'footer-grid' }, [
+      el('div', { class: 'footer-grid footer-grid-5' }, [
         el('div', {}, [
           el('div', { class: 'footer-brand' }, [el('img', { src: ROOT + 'logo.png', alt: '' }), 'Nexus']),
           el('p', { class: 'footer-note', text: 'Built on logic, built for everyone.' })
         ]),
-        col('Nexus', [['index.html', 'Home'], ['index.html#compare', 'Compare'], ['about.html', 'About'], ['about.html#team', 'The team']]),
-        col('Help', [['docs.html', 'Documentation'], ['docs.html#/commands', 'Commands'], ['status.html', 'Status'], ['support', 'Support server', true]]),
-        col('More', [['invite', 'Add to your server', true], ['dashboard.html', 'Dashboard'], ['status.html#changelog', 'Changelog'], ['privacy.html', 'Privacy']])
+        col('About', [['about.html', 'About Nexus'], ['faq.html', 'FAQ'], ['compare.html', 'Compare']]),
+        col('Docs', [['docs.html', 'Documentation'], ['docs.html#/getting-started', 'Getting started'], ['docs.html#/troubleshooting', 'Troubleshooting']]),
+        col('Community', [['staff.html', 'Staff team'], ['support.html', 'Support'], ['projects.html', 'Projects'], ['apply.html', 'Apply']]),
+        col('Information', [['status.html', 'Status'], ['docs.html#/commands', 'Command list'], ['changelog.html', 'Changelog'], ['privacy.html', 'Privacy']])
       ]),
       el('div', { class: 'footer-bottom' }, [
         el('span', { text: 'Nexus is an independent project and is not affiliated with Discord Inc.' }),
@@ -221,12 +296,12 @@ function buildChrome() {
   });
 }
 
-const REVEAL_SELECTOR = '.section-head, .tile, .card, .member, .component, .incident, .tl-item, details.faq, .cmp-scroll, .cmp-verdict, .cta-band, .quote, .marquee, .staff-section > h2, .reveal-me';
+const REVEAL_SELECTOR = '.section-head, .tile, .card, .member, .component, .incident, .tl-item, details.faq, .cmp-scroll, .cmp-verdict, .cta-band, .quote, .marquee, .staff-section > h2, .reveal-me, .project, .app-card, .cal-wrap';
 let revealObserver = null;
 
 function reveal(scope) {
   const nodes = Array.from((scope || document).querySelectorAll(REVEAL_SELECTOR))
-    .filter(n => !n.closest('.doc-page, #dash-root, .mega') && !n.classList.contains('reveal'));
+    .filter(n => !n.closest('.doc-page, #dash-root, .dd-menu') && !n.classList.contains('reveal'));
   if (scope && scope.matches && scope.matches(REVEAL_SELECTOR) && !scope.classList.contains('reveal')) nodes.unshift(scope);
   if (!nodes.length) return;
   const counts = new Map();
@@ -236,7 +311,7 @@ function reveal(scope) {
     counts.set(parent, k + 1);
     n.style.setProperty('--d', Math.min(k, 8) * 70 + 'ms');
     n.classList.add('reveal');
-    if (n.matches('.tile, .card, .member, .component')) n.classList.add('spot');
+    if (n.matches('.tile, .card, .member, .component, .project, .app-card')) n.classList.add('spot');
   });
   if (REDUCED || !('IntersectionObserver' in window)) { nodes.forEach(n => n.classList.add('in')); return; }
   if (!revealObserver) {
@@ -259,23 +334,23 @@ function initSpotlight() {
   }, { passive: true });
 }
 
-function countUp(node, target, suffix) {
-  const fmt = v => Math.round(v).toLocaleString() + (suffix || '');
-  if (REDUCED) { node.textContent = fmt(target); return; }
-  const run = () => {
-    const start = performance.now();
-    const dur = 1400;
-    const step = now => {
-      const p = Math.min(1, (now - start) / dur);
-      node.textContent = fmt(target * (1 - Math.pow(1 - p, 4)));
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
+function animateNumber(node, to) {
+  const from = typeof node._val === 'number' ? node._val : 0;
+  node._val = to;
+  const fmt = v => Math.round(v).toLocaleString();
+  if (REDUCED || from === to) { node.textContent = fmt(to); return; }
+  const start = performance.now();
+  const dur = from === 0 ? 1400 : 700;
+  const token = (node._anim = (node._anim || 0) + 1);
+  const step = now => {
+    if (node._anim !== token) return;
+    const p = Math.min(1, (now - start) / dur);
+    node.textContent = fmt(from + (to - from) * (1 - Math.pow(1 - p, 4)));
+    if (p < 1) requestAnimationFrame(step);
   };
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver(es => { if (es[0].isIntersecting) { io.disconnect(); run(); } });
-    io.observe(node);
-  } else run();
+  requestAnimationFrame(step);
+  setTimeout(() => { if (node._anim === token) { node._anim++; node.textContent = fmt(to); } }, dur + 150);
+  if (from !== 0) { node.classList.remove('bump'); void node.offsetWidth; node.classList.add('bump'); }
 }
 
 function initMarquee() {
@@ -286,10 +361,6 @@ function initMarquee() {
   });
 }
 
-function initCounters() {
-  document.querySelectorAll('[data-count]').forEach(n => countUp(n, Number(n.dataset.count), n.dataset.suffix || ''));
-}
-
 const STATE_LABEL = {
   operational: 'Operational',
   degraded: 'Degraded performance',
@@ -297,62 +368,133 @@ const STATE_LABEL = {
   maintenance: 'Under maintenance'
 };
 const STATE_RANK = { operational: 0, maintenance: 1, degraded: 2, outage: 3 };
-const STATE_COLOR = { operational: 'var(--green)', maintenance: 'var(--blue)', degraded: 'var(--yellow)', outage: 'var(--red)' };
 const OVERALL_TEXT = {
   operational: 'All systems operational',
   maintenance: 'Scheduled maintenance in progress',
   degraded: 'Some systems are running slower than usual',
-  outage: 'Some systems are down right now'
+  outage: 'Nexus is not responding right now'
 };
 function normState(s) { return STATE_RANK.hasOwnProperty(s) ? s : 'operational'; }
-function overallState(components) {
-  let worst = 'operational';
-  (components || []).forEach(c => {
-    const s = normState(c.status);
-    if (STATE_RANK[s] > STATE_RANK[worst]) worst = s;
+function worst(states) {
+  return states.reduce((w, s) => STATE_RANK[s] > STATE_RANK[w] ? s : w, 'operational');
+}
+
+const Live = {
+  stats: null,
+  error: null,
+  incidents: [],
+  listeners: [],
+  timer: null,
+  subscribe(fn) { this.listeners.push(fn); if (this.stats || this.error) fn(this); },
+  emit() { this.listeners.forEach(fn => { try { fn(this); } catch (e) {} }); },
+  async refresh() {
+    try { this.stats = await loadAPI('/public/stats'); this.error = null; }
+    catch (e) { this.error = e; }
+    this.emit();
+  },
+  async start() {
+    try {
+      const data = await loadJSON('status.json');
+      this.incidents = (data.incidents || []).filter(i => i && i.status !== 'resolved');
+    } catch (e) {}
+    await this.refresh();
+    const tick = () => { if (!document.hidden) this.refresh(); };
+    this.timer = setInterval(tick, 30000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) this.refresh(); });
+  },
+  state() {
+    if (this.error || !this.stats) return this.error ? 'outage' : 'operational';
+    const base = this.stats.online ? 'operational' : 'degraded';
+    const extra = this.incidents.map(i => i.status === 'maintenance' ? 'maintenance' : 'degraded');
+    return worst([base].concat(extra));
+  }
+};
+
+function initBrandDot() {
+  const dot = document.getElementById('brand-dot');
+  if (!dot) return;
+  Live.subscribe(live => {
+    const s = live.state();
+    dot.className = 'dot brand-dot ' + s;
+    dot.title = OVERALL_TEXT[s];
   });
-  return worst;
 }
 
-function fmtUptime(ms) {
-  const mins = Math.floor(ms / 60000);
-  const d = Math.floor(mins / 1440), h = Math.floor((mins % 1440) / 60), m = mins % 60;
-  if (d > 0) return d + 'd ' + h + 'h';
-  if (h > 0) return h + 'h ' + m + 'm';
-  return m + 'm';
-}
-
-function statPill(value, label, count) {
-  const b = el('b', { text: count ? '0' : value });
-  if (count) countUp(b, count.value, count.suffix);
-  return el('div', { class: 'stat-pill rise', style: '--d:' + (400 + 0) + 'ms' }, [b, el('span', { text: label })]);
+function statPill(label) {
+  const b = el('b', { text: '–' });
+  const span = el('span', { text: label });
+  const pill = el('div', { class: 'stat-pill rise' }, [b, span]);
+  pill.value = b;
+  pill.label = span;
+  return pill;
 }
 
 async function initHomeStats() {
   const host = document.getElementById('home-stats');
   if (!host) return;
-  const pills = [];
-  try {
-    const stats = await loadJSON('stats.json');
-    const servers = Number(stats.servers);
-    if (isFinite(servers) && servers > 0) pills.push(statPill('', servers === 1 ? 'server' : 'servers', { value: servers }));
-    const pct = Number(stats.uptime_percent);
-    if (stats.uptime_percent !== null && stats.uptime_percent !== undefined && stats.uptime_percent !== '' && isFinite(pct) && pct >= 0 && pct <= 100) {
-      pills.push(statPill(pct + '%', 'uptime' + (stats.uptime_period ? ', ' + stats.uptime_period : '')));
-    } else if (stats.online_since) {
-      const since = new Date(stats.online_since);
-      if (!isNaN(since) && since <= new Date()) pills.push(statPill(fmtUptime(Date.now() - since.getTime()), 'online since last restart'));
-    }
-  } catch (e) {}
+  const servers = statPill('servers');
+  const users = statPill('users');
+  const cmds = statPill('commands');
+  const up = statPill('online since restart');
+  const live = el('span', { class: 'live-tag', title: 'Numbers come straight from the bot and update every 30 seconds' }, [el('i'), 'LIVE']);
+  [servers, users, cmds, up].forEach((p, i) => { p.style.setProperty('--d', 350 + i * 90 + 'ms'); host.appendChild(p); });
+  host.appendChild(live);
+  host.style.display = 'flex';
+
   try {
     const cats = await loadJSON('commands.json');
-    const total = cats.reduce((n, c) => n + (c.commands || []).length, 0);
-    if (total) pills.push(statPill('', 'commands', { value: total }));
-  } catch (e) {}
-  pills.push(statPill('', 'built-in games', { value: 10 }));
-  host.replaceChildren.apply(host, pills);
-  pills.forEach((p, i) => p.style.setProperty('--d', 350 + i * 90 + 'ms'));
-  host.style.display = 'flex';
+    animateNumber(cmds.value, cats.reduce((n, c) => n + (c.commands || []).length, 0));
+  } catch (e) { cmds.remove(); }
+
+  let fallbackDone = false;
+  Live.subscribe(async liveData => {
+    const s = liveData.stats;
+    if (s && !liveData.error) {
+      animateNumber(servers.value, s.servers);
+      servers.label.textContent = s.servers === 1 ? 'server' : 'servers';
+      animateNumber(users.value, s.users);
+      users.label.textContent = s.users === 1 ? 'user' : 'users';
+      up.value.textContent = fmtUptime((s.now - s.online_since) * 1000);
+      up.hidden = false;
+      users.hidden = false;
+      live.classList.remove('off');
+      live.lastChild.textContent = 'LIVE';
+    } else {
+      live.classList.add('off');
+      live.lastChild.textContent = 'OFFLINE';
+      up.hidden = true;
+      if (!fallbackDone) {
+        fallbackDone = true;
+        try {
+          const st = await loadJSON('stats.json');
+          if (Number(st.servers) > 0 && !servers.value._val) animateNumber(servers.value, Number(st.servers));
+        } catch (e) {}
+      }
+      if (!users.value._val) users.hidden = true;
+    }
+  });
+}
+
+function initStatusPill() {
+  const host = document.getElementById('status-pill');
+  if (!host) return;
+  Live.subscribe(live => {
+    const s = live.state();
+    host.className = 'status-pill rise';
+    host.replaceChildren(el('span', { class: 'dot ' + s }), document.createTextNode(OVERALL_TEXT[s]));
+    host.style.display = 'inline-flex';
+  });
+}
+
+function initLiveNumbers() {
+  const nodes = document.querySelectorAll('[data-live]');
+  if (!nodes.length) return;
+  Live.subscribe(live => {
+    nodes.forEach(n => {
+      const key = n.dataset.live;
+      if (live.stats && typeof live.stats[key] === 'number') animateNumber(n, live.stats[key]);
+    });
+  });
 }
 
 async function initCompare() {
@@ -404,19 +546,6 @@ async function initCompare() {
   reveal(root);
 }
 
-async function initHome() {
-  initHomeStats();
-  const host = document.getElementById('status-pill');
-  if (!host) return;
-  try {
-    const data = await loadJSON('status.json');
-    const o = overallState(data.components);
-    host.className = 'status-pill rise';
-    host.replaceChildren(el('span', { class: 'dot ' + o }), document.createTextNode(OVERALL_TEXT[o]));
-    host.style.display = 'inline-flex';
-  } catch (e) {}
-}
-
 function renderIncident(i) {
   const live = i.status !== 'resolved';
   const box = el('div', { class: 'incident ' + (live ? 'live' : 'done') });
@@ -424,7 +553,7 @@ function renderIncident(i) {
     el('h3', { text: i.title || 'Incident' }),
     el('span', { class: 'tag ' + (i.status || ''), text: i.status || 'update' })
   ]));
-  box.appendChild(el('div', { class: 'date', text: fmtDate(i.date) }));
+  if (i.date) box.appendChild(el('div', { class: 'date', text: fmtDate(i.date) }));
   if (i.message) box.appendChild(el('p', { text: i.message }));
   if (Array.isArray(i.updates) && i.updates.length) {
     const u = el('div', { class: 'updates' });
@@ -437,65 +566,201 @@ function renderIncident(i) {
   return box;
 }
 
+function dayLevel(d) {
+  if (!d || !d.tracked) return 'none';
+  if (d.down <= 0) return 'green';
+  if (d.down <= 30) return 'yellow';
+  if (d.down <= 240) return 'orange';
+  return 'red';
+}
+
+const LEVEL_TEXT = {
+  green: 'Online all day',
+  yellow: 'Down for 30 minutes or less',
+  orange: 'Down for 30 minutes to 4 hours',
+  red: 'Down for more than 4 hours',
+  none: 'Not tracked yet'
+};
+
+function utcKey(y, m, d) {
+  return y + '-' + String(m + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+}
+
 async function initStatus() {
   const root = document.getElementById('status-root');
   if (!root) return;
-  root.replaceChildren(skeleton(2));
-  let data;
-  try { data = await loadJSON('status.json'); }
-  catch (e) { root.replaceChildren(el('p', { class: 'empty', text: 'The status information could not be loaded right now. Try again in a minute.' })); return; }
-
-  const o = overallState(data.components);
   const head = document.getElementById('status-headline');
   const dot = document.getElementById('status-dot');
   const meta = document.getElementById('status-meta');
-  if (head) head.textContent = OVERALL_TEXT[o];
-  if (dot) dot.className = 'dot ' + o;
-  if (meta) {
-    meta.replaceChildren();
-    const comps = (data.components || []).length;
-    meta.appendChild(el('span', { text: comps + (comps === 1 ? ' SYSTEM' : ' SYSTEMS') + ' WATCHED' }));
-    if (data.updated) meta.appendChild(el('span', { text: 'UPDATED ' + fmtAgo(data.updated).toUpperCase(), title: fmtDate(data.updated, true) }));
-  }
-
-  root.replaceChildren();
   const comps = el('div', { class: 'components' });
-  (data.components || []).forEach(c => {
-    const s = normState(c.status);
-    const card = el('div', { class: 'component' }, [
-      el('div', { class: 'top' }, [
-        el('div', { class: 'name', text: c.name || 'Unnamed' }),
-        el('span', { class: 'state ' + s }, [el('span', { class: 'dot ' + s }), STATE_LABEL[s]])
-      ])
-    ]);
-    if (c.note) card.appendChild(el('div', { class: 'note', text: c.note }));
-    if (Array.isArray(c.history) && c.history.length) {
-      const days = c.history.slice(-45);
-      const meter = el('div', { class: 'meter', role: 'img', 'aria-label': 'Last ' + days.length + ' days' });
-      days.forEach((h, i) => {
-        const st = normState(h);
-        meter.appendChild(el('i', { style: '--i:' + i + ';--c:' + STATE_COLOR[st], title: STATE_LABEL[st] }));
-      });
-      card.appendChild(meter);
-      card.appendChild(el('div', { class: 'meter-axis' }, [el('span', { text: days.length + ' days ago' }), el('span', { text: 'Today' })]));
-    }
-    comps.appendChild(card);
+  const calHost = document.getElementById('status-calendar');
+  const incHost = document.getElementById('status-incidents');
+  root.replaceChildren(comps);
+  comps.appendChild(skeleton(1));
+
+  let incidents = [];
+  try { incidents = ((await loadJSON('status.json')).incidents || []).filter(Boolean); } catch (e) {}
+  const notes = {};
+  incidents.forEach(i => {
+    const key = String(i.date || '').slice(0, 10);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(key)) (notes[key] = notes[key] || []).push(i);
   });
-  root.appendChild(comps);
 
-  const incidents = (data.incidents || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
   const active = incidents.filter(i => i.status !== 'resolved');
-  const past = incidents.filter(i => i.status === 'resolved');
-
-  root.appendChild(el('h2', { class: 'sub-title', text: 'Current incidents' }));
-  if (active.length) active.forEach(i => root.appendChild(renderIncident(i)));
-  else root.appendChild(el('div', { class: 'incident done' }, [el('div', { class: 'incident-head' }, [el('h3', { text: 'Nothing going on' }), el('span', { class: 'tag resolved', text: 'all clear' })]), el('p', { text: 'There are no open incidents right now.' })]));
-
-  if (past.length) {
-    root.appendChild(el('h2', { class: 'sub-title', text: 'Past incidents' }));
-    past.slice(0, 10).forEach(i => root.appendChild(renderIncident(i)));
+  if (incHost) {
+    incHost.replaceChildren();
+    if (active.length) active.forEach(i => incHost.appendChild(renderIncident(i)));
+    else incHost.appendChild(el('div', { class: 'incident done' }, [el('div', { class: 'incident-head' }, [el('h3', { text: 'Nothing going on' }), el('span', { class: 'tag resolved', text: 'all clear' })]), el('p', { text: 'There are no open incidents right now.' })]));
   }
-  reveal(root);
+
+  let days = {};
+  let calendar = null;
+
+  function component(name, state, note) {
+    return el('div', { class: 'component' }, [
+      el('div', { class: 'top' }, [
+        el('div', { class: 'name', text: name }),
+        el('span', { class: 'state ' + state }, [el('span', { class: 'dot ' + state }), STATE_LABEL[state]])
+      ]),
+      el('div', { class: 'note', text: note })
+    ]);
+  }
+
+  function paint(data, error) {
+    const botState = error ? 'outage' : (data.online ? 'operational' : 'degraded');
+    const extra = active.map(i => i.status === 'maintenance' ? 'maintenance' : 'degraded');
+    const overall = worst([botState].concat(extra));
+    if (head) head.textContent = OVERALL_TEXT[overall];
+    if (dot) dot.className = 'dot ' + overall;
+
+    comps.replaceChildren(
+      component('Discord bot', botState, error ? 'Not responding. The team is notified when Nexus goes quiet.' : (data.online ? 'Online and responding' + (data.latency_ms ? ' in ' + data.latency_ms + ' ms' : '') : 'Reconnecting to Discord')),
+      component('Dashboard and API', error ? 'outage' : 'operational', error ? 'Could not be reached' : 'Reachable, logins and settings work'),
+      component('Website', 'operational', 'You are looking at it')
+    );
+    reveal(comps);
+
+    if (meta) {
+      meta.replaceChildren();
+      if (!error) {
+        meta.appendChild(el('span', { text: 'ONLINE FOR ' + fmtUptime((data.now - data.online_since) * 1000).toUpperCase() }));
+        const recent = Object.values(days).filter(d => d.tracked).slice(-30);
+        const exp = recent.reduce((n, d) => n + d.expected, 0);
+        const down = recent.reduce((n, d) => n + d.down, 0);
+        if (exp > 0) meta.appendChild(el('span', { text: (Math.floor((1 - down / exp) * 10000) / 100) + '% UPTIME, LAST 30 DAYS' }));
+      } else {
+        meta.appendChild(el('span', { text: 'CAN\'T REACH NEXUS' }));
+      }
+      meta.appendChild(el('span', { class: 'live-tag' + (error ? ' off' : ''), text: '' }, [el('i'), error ? 'OFFLINE' : 'LIVE']));
+    }
+  }
+
+  async function load() {
+    try {
+      const data = await loadAPI('/public/status');
+      days = {};
+      (data.days || []).forEach(d => { days[d.date] = d; });
+      paint(data, null);
+      if (calendar) calendar.update(days, false); else calendar = buildCalendar(calHost, days, notes, false);
+    } catch (e) {
+      paint(null, e);
+      if (calendar) calendar.update(days, true); else calendar = buildCalendar(calHost, days, notes, true);
+    }
+  }
+  await load();
+  setInterval(() => { if (!document.hidden) load(); }, 60000);
+}
+
+function buildCalendar(host, days, notes, offline) {
+  if (!host) return null;
+  const now = new Date();
+  const todayKey = utcKey(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  let view = { y: now.getUTCFullYear(), m: now.getUTCMonth() };
+  let selected = todayKey;
+
+  function earliestMonth() {
+    const keys = Object.keys(days).filter(k => days[k].tracked).concat(Object.keys(notes)).sort();
+    if (!keys.length) return { y: view.y, m: view.m };
+    const [y, m] = keys[0].split('-').map(Number);
+    return { y, m: m - 1 };
+  }
+
+  const title = el('h3', { class: 'cal-title' });
+  const prev = el('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Previous month' }, [svgIcon('left')]);
+  const next = el('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Next month' }, [svgIcon('right')]);
+  const grid = el('div', { class: 'cal-grid', role: 'grid' });
+  const detail = el('div', { class: 'cal-detail', 'aria-live': 'polite' });
+  const warn = el('div', { class: 'callout warn', hidden: '' }, [el('strong', { text: 'Uptime history is unavailable. ' }), 'Nexus could not be reached, so only the notes the team wrote are shown.']);
+  const legend = el('div', { class: 'cal-legend' });
+  ['green', 'yellow', 'orange', 'red', 'none'].forEach(l => legend.appendChild(el('span', {}, [el('i', { class: 'lvl-' + l }), LEVEL_TEXT[l]])));
+
+  host.replaceChildren(el('div', { class: 'cal-wrap' }, [
+    el('div', { class: 'cal-main' }, [
+      el('div', { class: 'cal-head' }, [prev, title, next]),
+      el('div', { class: 'cal-week' }, ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => el('span', { text: d }))),
+      grid,
+      legend
+    ]),
+    detail
+  ]));
+  host.prepend(warn);
+
+  function showDetail(key) {
+    selected = key;
+    grid.querySelectorAll('.cal-day').forEach(b => b.classList.toggle('sel', b.dataset.key === key));
+    const d = days[key];
+    const lvl = dayLevel(d);
+    const [y, m, dd] = key.split('-').map(Number);
+    const date = new Date(Date.UTC(y, m - 1, dd));
+    detail.replaceChildren(
+      el('div', { class: 'cal-detail-date', text: date.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }) + (key === todayKey ? ' (today)' : '') }),
+      el('div', { class: 'cal-detail-state' }, [el('i', { class: 'lvl-' + lvl }), el('b', { text: lvl === 'green' ? (key === todayKey ? 'Online all day so far' : 'Online all day') : lvl === 'none' ? 'Not tracked' : 'Down for about ' + fmtMinutes(d.down) })])
+    );
+    if (lvl === 'none') detail.appendChild(el('p', { class: 'hint', text: offline ? 'Nexus could not be reached, so this day\'s uptime can\'t be shown right now.' : 'Uptime tracking had not started yet on this day.' }));
+    const list = notes[key] || [];
+    if (list.length) list.forEach(i => detail.appendChild(renderIncident(i)));
+    else if (lvl !== 'green' && lvl !== 'none') detail.appendChild(el('p', { class: 'hint', text: 'No explanation has been written for this day yet.' }));
+    else detail.appendChild(el('p', { class: 'hint', text: 'Nothing was reported on this day.' }));
+  }
+
+  function render() {
+    const first = earliestMonth();
+    const cur = { y: now.getUTCFullYear(), m: now.getUTCMonth() };
+    prev.disabled = view.y * 12 + view.m <= first.y * 12 + first.m;
+    next.disabled = view.y * 12 + view.m >= cur.y * 12 + cur.m;
+    title.textContent = new Date(Date.UTC(view.y, view.m, 1)).toLocaleDateString(undefined, { month: 'long', year: 'numeric', timeZone: 'UTC' });
+    grid.replaceChildren();
+    const lead = (new Date(Date.UTC(view.y, view.m, 1)).getUTCDay() + 6) % 7;
+    for (let i = 0; i < lead; i++) grid.appendChild(el('span', { class: 'cal-blank' }));
+    const count = new Date(Date.UTC(view.y, view.m + 1, 0)).getUTCDate();
+    for (let d = 1; d <= count; d++) {
+      const key = utcKey(view.y, view.m, d);
+      const future = key > todayKey;
+      const lvl = future ? 'future' : dayLevel(days[key]);
+      const b = el('button', { type: 'button', class: 'cal-day lvl-' + lvl + (key === todayKey ? ' today' : '') + (key === selected ? ' sel' : ''), 'data-key': key, style: '--i:' + (lead + d) }, [el('span', { text: String(d) })]);
+      if (notes[key]) b.appendChild(el('i', { class: 'cal-note', 'aria-hidden': 'true' }));
+      b.setAttribute('aria-label', key + ': ' + (future ? 'upcoming' : LEVEL_TEXT[lvl]) + (notes[key] ? ', has a note' : ''));
+      if (future) b.disabled = true;
+      else b.addEventListener('click', () => showDetail(key));
+      grid.appendChild(b);
+    }
+  }
+
+  prev.addEventListener('click', () => { view.m--; if (view.m < 0) { view.m = 11; view.y--; } render(); });
+  next.addEventListener('click', () => { view.m++; if (view.m > 11) { view.m = 0; view.y++; } render(); });
+
+  render();
+  showDetail(selected);
+  warn.hidden = !offline;
+  return {
+    update(newDays, isOffline) {
+      days = newDays;
+      offline = isOffline;
+      warn.hidden = !offline;
+      render();
+      showDetail(selected);
+    }
+  };
 }
 
 function slugify(text) {
@@ -622,6 +887,7 @@ function changelogCard(entry) {
 async function initChangelog() {
   const root = document.getElementById('changelog-root');
   if (!root) return;
+  const limit = Number(root.dataset.limit) || 0;
   root.replaceChildren(skeleton(3));
   let entries;
   try { entries = await loadJSON('changelog.json'); }
@@ -633,14 +899,13 @@ async function initChangelog() {
     return;
   }
   const line = el('div', { class: 'timeline' });
-  const FIRST = 5;
+  const FIRST = limit || 6;
   entries.slice(0, FIRST).forEach(e => line.appendChild(changelogCard(e)));
   root.appendChild(line);
-  if (entries.length > FIRST) {
+  if (!limit && entries.length > FIRST) {
     const more = el('button', { class: 'btn btn-outline tl-more', type: 'button', text: 'Show ' + (entries.length - FIRST) + ' older updates' });
     more.addEventListener('click', () => {
-      const added = entries.slice(FIRST).map(changelogCard);
-      added.forEach(n => line.appendChild(n));
+      entries.slice(FIRST).map(changelogCard).forEach(n => line.appendChild(n));
       more.remove();
       reveal(line);
     });
@@ -659,7 +924,7 @@ async function initFaq() {
 
   root.replaceChildren();
   (Array.isArray(groups) ? groups : []).forEach(group => {
-    if (group.title && !(root.dataset.heading && groups.length === 1)) root.appendChild(el(root.dataset.heading || 'h2', { text: group.title }));
+    if (group.title && !(root.dataset.heading && groups.length === 1)) root.appendChild(el(root.dataset.heading || 'h2', { class: 'faq-group', text: group.title }));
     (group.items || []).forEach(item => {
       root.appendChild(el('details', { class: 'faq' }, [
         el('summary', { text: item.q || '' }),
@@ -671,6 +936,30 @@ async function initFaq() {
   reveal(root);
 }
 
+function initFilter() {
+  document.querySelectorAll('[data-filter-for]').forEach(input => {
+    const scope = document.getElementById(input.dataset.filterFor);
+    if (!scope) return;
+    const none = el('p', { class: 'empty', text: 'Nothing matches that. Try other words, or ask in the support server.', hidden: '' });
+    scope.appendChild(none);
+    input.addEventListener('input', () => {
+      const terms = input.value.toLowerCase().split(/\s+/).filter(Boolean);
+      let shown = 0;
+      scope.querySelectorAll('details.faq').forEach(d => {
+        const ok = !terms.length || terms.every(t => d.textContent.toLowerCase().includes(t));
+        d.hidden = !ok;
+        if (ok) shown++;
+      });
+      scope.querySelectorAll('.faq-group').forEach(h => {
+        let n = h.nextElementSibling, any = false;
+        while (n && !n.classList.contains('faq-group')) { if (n.matches('details.faq') && !n.hidden) any = true; n = n.nextElementSibling; }
+        h.hidden = !any;
+      });
+      none.hidden = shown > 0;
+    });
+  });
+}
+
 function initials(name) {
   const parts = String(name || '?').trim().split(/\s+/).slice(0, 2);
   return parts.map(p => p.charAt(0).toUpperCase()).join('') || '?';
@@ -679,7 +968,7 @@ function initials(name) {
 async function renderStaff(root) {
   root.replaceChildren(skeleton(2));
   let data;
-  try { data = await loadJSON(root.dataset.source || 'staff.json'); }
+  try { data = await loadJSON(root.dataset.staff || 'staff.json'); }
   catch (e) { root.replaceChildren(el('p', { class: 'empty', text: 'The staff list could not be loaded right now. Try again in a minute.' })); return; }
 
   root.replaceChildren();
@@ -734,7 +1023,7 @@ function initTabs() {
     const ind = el('span', { class: 'tab-ind', 'aria-hidden': 'true' });
     tabs.prepend(ind);
     const place = b => { ind.style.width = b.offsetWidth + 'px'; ind.style.transform = 'translateX(' + (b.offsetLeft - 5) + 'px)'; };
-    const select = (b, focus) => {
+    const select = b => {
       buttons.forEach(x => {
         const on = x === b;
         x.classList.toggle('on', on);
@@ -745,7 +1034,6 @@ function initTabs() {
       place(b);
       const panel = document.getElementById(b.dataset.tab);
       if (panel) panel.querySelectorAll('[data-staff]').forEach(r => { if (r._lazy) { r._lazy = false; renderStaff(r); } });
-      if (focus) b.focus();
     };
     buttons.forEach(b => b.addEventListener('click', () => select(b)));
     tabs._select = name => { const b = buttons.find(x => x.dataset.tab === name); if (b) select(b); };
@@ -755,9 +1043,106 @@ function initTabs() {
   if (location.hash === '#retired') {
     const tabs = document.querySelector('.tabs');
     if (tabs && tabs._select) tabs._select('panel-retired');
-    const team = document.getElementById('team');
-    if (team) setTimeout(() => team.scrollIntoView(), 50);
   }
+}
+
+const PROJECT_GROUPS = [
+  ['launched', 'Launched', 'Live and ready to use.'],
+  ['development', 'In development', 'Being built right now.'],
+  ['planned', 'Planned', 'Decided on, coming later.'],
+  ['consideration', 'In consideration', 'Ideas being weighed up.']
+];
+
+async function initProjects() {
+  const root = document.getElementById('projects-root');
+  if (!root) return;
+  root.replaceChildren(skeleton(3));
+  let data;
+  try { data = await loadJSON('projects.json'); }
+  catch (e) { root.replaceChildren(el('p', { class: 'empty', text: 'Projects could not be loaded right now. Try again in a minute.' })); return; }
+  const projects = Array.isArray(data.projects) ? data.projects : [];
+  const board = el('div', { class: 'board' });
+  PROJECT_GROUPS.forEach(([key, title, hint]) => {
+    const items = projects.filter(p => p && p.status === key);
+    const col = el('section', { class: 'board-col col-' + key, id: 'projects-' + key }, [
+      el('div', { class: 'board-head' }, [el('span', { class: 'board-dot' }), el('h2', { text: title }), el('span', { class: 'count', text: String(items.length) })]),
+      el('p', { class: 'hint', text: hint })
+    ]);
+    if (!items.length) col.appendChild(el('p', { class: 'board-empty', text: 'Nothing here right now.' }));
+    items.forEach(p => {
+      const card = el('article', { class: 'project' }, [el('h3', { text: String(p.name || 'Untitled') })]);
+      if (p.description) card.appendChild(el('p', { text: String(p.description) }));
+      const meta = el('div', { class: 'project-meta' });
+      if (p.date) meta.appendChild(el('span', { text: fmtDate(String(p.date)) }));
+      (Array.isArray(p.tags) ? p.tags : []).slice(0, 4).forEach(t => meta.appendChild(el('span', { class: 'chip-tag', text: String(t) })));
+      if (meta.children.length) card.appendChild(meta);
+      col.appendChild(card);
+    });
+    board.appendChild(col);
+  });
+  root.replaceChildren(board);
+  reveal(root);
+}
+
+async function initApply() {
+  const root = document.getElementById('apply-root');
+  if (!root) return;
+  root.replaceChildren(skeleton(2));
+  let data;
+  try { data = await loadJSON('applications.json'); }
+  catch (e) { root.replaceChildren(el('p', { class: 'empty', text: 'Applications could not be loaded right now. Try again in a minute.' })); return; }
+  const apps = (Array.isArray(data.applications) ? data.applications : []).filter(Boolean);
+  const open = apps.filter(a => a.status === 'open');
+  const closed = apps.filter(a => a.status !== 'open');
+  root.replaceChildren();
+
+  root.appendChild(el('h2', { class: 'sub-title', text: 'Open applications' }));
+  if (!open.length) root.appendChild(el('div', { class: 'callout' }, ['Nothing is open right now. Check back later, or keep an eye on announcements in the ', el('a', { href: NEXUS.support, class: 'inline', target: '_blank', rel: 'noopener', text: 'support server' }), '.']));
+  const openGrid = el('div', { class: 'app-grid' });
+  open.forEach(a => openGrid.appendChild(appCard(a, true)));
+  root.appendChild(openGrid);
+
+  if (closed.length) {
+    root.appendChild(el('h2', { class: 'sub-title', text: 'Closed applications' }));
+    const closedGrid = el('div', { class: 'app-grid' });
+    closed.forEach(a => closedGrid.appendChild(appCard(a, false)));
+    root.appendChild(closedGrid);
+  }
+  reveal(root);
+}
+
+function appCard(a, isOpen) {
+  const card = el('article', { class: 'app-card' + (isOpen ? '' : ' closed') });
+  card.appendChild(el('div', { class: 'app-head' }, [
+    el('h3', { text: String(a.title || 'Position') }),
+    el('span', { class: 'tag ' + (isOpen ? 'resolved' : ''), text: isOpen ? 'Open' : 'Closed' })
+  ]));
+  if (a.description) card.appendChild(el('p', { class: 'app-desc', text: String(a.description) }));
+  const facts = el('div', { class: 'project-meta' });
+  if (isOpen && a.closes) facts.appendChild(el('span', { text: 'Closes ' + fmtDate(String(a.closes)) }));
+  if (!isOpen && a.reopens) facts.appendChild(el('span', { text: 'Expected to reopen ' + fmtDate(String(a.reopens)) }));
+  if (facts.children.length) card.appendChild(facts);
+
+  if (isOpen) {
+    if (Array.isArray(a.requirements) && a.requirements.length) {
+      card.appendChild(el('h4', { text: 'Requirements' }));
+      card.appendChild(el('ul', { class: 'app-list' }, a.requirements.map(r => el('li', { text: String(r) }))));
+    }
+    if (Array.isArray(a.questions) && a.questions.length) {
+      const qs = el('details', { class: 'faq app-qs' }, [
+        el('summary', { text: a.questions.length + (a.questions.length === 1 ? ' question' : ' questions') + ' you will be asked' }),
+        el('div', { class: 'a' }, [el('ol', { class: 'app-list' }, a.questions.map(q => el('li', { text: String(q) })))])
+      ]);
+      card.appendChild(qs);
+    }
+    const link = safeLink(a.link);
+    card.appendChild(el('div', { class: 'actions', style: 'margin-top:16px' }, [
+      el('a', { class: 'btn btn-primary', href: link || NEXUS.support, target: '_blank', rel: 'noopener', text: link ? 'Apply now' : 'Apply in the support server' })
+    ]));
+  } else if (a.note) {
+    card.appendChild(el('p', { class: 'hint', text: String(a.note) }));
+  }
+  return card;
 }
 
 const INTENT_STOP = new Set(['the', 'a', 'an', 'to', 'of', 'how', 'do', 'i', 'can', 'my', 'me', 'someone', 'somebody', 'in', 'on', 'for', 'with', 'is', 'it', 'and', 'or', 'what', 'who', 'want', 'need', 'that', 'this', 'you', 'your', 'we', 'our', 'please', 'from', 'up']);
@@ -921,28 +1306,15 @@ async function initCommands() {
   apply();
 }
 
-function initSideSpy() {
-  const links = Array.from(document.querySelectorAll('.docs-side a[href^="#"]'));
-  if (!links.length) return;
-  const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(en => {
-        if (en.isIntersecting && map.has(en.target.id)) {
-          links.forEach(l => l.classList.remove('active'));
-          map.get(en.target.id).classList.add('active');
-        }
-      });
-    }, { rootMargin: '-90px 0px -70% 0px' });
-    map.forEach((_, id) => { const t = document.getElementById(id); if (t) io.observe(t); });
-  }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   buildChrome();
   initSpotlight();
   initTabs();
-  initHome();
+  initBrandDot();
+  initStatusPill();
+  initHomeStats();
+  initLiveNumbers();
+  Live.start();
   initCompare();
   initStatus();
   initStaff();
@@ -950,8 +1322,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initDocs();
   initChangelog();
   initFaq();
+  initFilter();
+  initProjects();
+  initApply();
   initMarquee();
-  initCounters();
   reveal(document);
-  if (!document.getElementById('doc-root')) initSideSpy();
 });
