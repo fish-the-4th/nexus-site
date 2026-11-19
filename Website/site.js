@@ -7,6 +7,8 @@ const NEXUS = {
   topgg:   'https://top.gg/bot/1516923666787602725'
 };
 
+const REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 function el(tag, attrs, kids) {
   const e = document.createElement(tag);
   for (const k in (attrs || {})) {
@@ -41,77 +43,175 @@ function fmtDate(str, withTime) {
   return d.toLocaleString(undefined, opts);
 }
 
+function fmtAgo(str) {
+  const d = new Date(str);
+  if (isNaN(d)) return '';
+  const s = Math.max(0, (Date.now() - d.getTime()) / 1000);
+  if (s < 90) return 'just now';
+  if (s < 3600) return Math.round(s / 60) + ' minutes ago';
+  if (s < 86400) { const h = Math.round(s / 3600); return h + (h === 1 ? ' hour ago' : ' hours ago'); }
+  const days = Math.round(s / 86400);
+  return days + (days === 1 ? ' day ago' : ' days ago');
+}
+
+function skeleton(n) {
+  const s = el('div', { class: 'skeleton', 'aria-label': 'Loading' });
+  for (let i = 0; i < (n || 3); i++) s.appendChild(el('i'));
+  return s;
+}
+
+const ICONS = {
+  home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-6h4v6"/></svg>',
+  docs: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5"/></svg>',
+  status: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>',
+  about: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>',
+  dash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="9" rx="2"/><rect x="13.5" y="3" width="7.5" height="5.5" rx="2"/><rect x="13.5" y="11.5" width="7.5" height="9.5" rx="2"/><rect x="3" y="15" width="7.5" height="6" rx="2"/></svg>',
+  up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>'
+};
+
+function svgIcon(name) {
+  const s = el('span', { 'aria-hidden': 'true', style: 'display:inline-flex' });
+  s.innerHTML = ICONS[name];
+  return s;
+}
+
+const MEGA = [
+  { title: 'Nexus', items: [
+    ['home', 'index.html', 'Home', 'Everything Nexus does, at a glance.'],
+    ['', 'index.html#compare', 'Compare', 'How Nexus stacks up against the popular bots.'],
+    ['', 'invite', 'Add to your server', 'One click, free forever.', true]
+  ] },
+  { title: 'Learn', items: [
+    ['docs', 'docs.html', 'Documentation', 'Guides for every feature, step by step.'],
+    ['', 'docs.html#/commands', 'Command list', 'Search every command, or describe what you need.'],
+    ['', 'docs.html#/getting-started', 'Getting started', 'Your first five minutes with Nexus.'],
+    ['', 'docs.html#/troubleshooting', 'Troubleshooting', 'Fixes for the common problems.']
+  ] },
+  { title: 'Community', items: [
+    ['about', 'about.html', 'About', 'Why Nexus exists and who builds it.'],
+    ['', 'about.html#team', 'The team', 'The people behind the bot.'],
+    ['', 'about.html#faq', 'FAQ', 'Common questions, answered once.'],
+    ['', 'support', 'Support server', 'Ask questions and report bugs.', true],
+    ['', 'topgg', 'Leave a review', 'Help other servers find Nexus.', true]
+  ] },
+  { title: 'Updates', items: [
+    ['status', 'status.html', 'Status', 'Is everything running right now?'],
+    ['', 'status.html#changelog', 'Changelog', 'What changed, and when.'],
+    ['dashboard', 'dashboard.html', 'Dashboard', 'Your stats, or your server settings.'],
+    ['privacy', 'privacy.html', 'Privacy', 'What Nexus keeps, and why.']
+  ] }
+];
+
 function buildChrome() {
   const page = document.body.dataset.page || '';
   const links = [
     ['home', 'index.html', 'Home'],
-    ['about', 'about.html', 'About'],
     ['docs', 'docs.html', 'Docs'],
-    ['commands', 'commands.html', 'Commands'],
     ['status', 'status.html', 'Status'],
-    ['staff', 'staff.html', 'Staff']
-  ];
-  const moreLinks = [
-    ['compare', 'compare.html', 'Compare'],
-    ['changelog', 'changelog.html', 'Changelog'],
-    ['privacy', 'privacy.html', 'Privacy']
+    ['about', 'about.html', 'About']
   ];
 
   const navHost = document.getElementById('site-nav');
   if (navHost) {
-    const nav = el('nav', { class: 'site-nav' });
-    const wrap = el('div', { class: 'wrap' });
+    const nav = el('nav', { class: 'site-nav', 'aria-label': 'Main' });
     const brand = el('a', { class: 'nav-brand', href: 'index.html' }, [
-      el('img', { src: ROOT + 'logo.png', alt: '', width: '28', height: '28' }), 'Nexus'
+      el('img', { src: ROOT + 'logo.png', alt: '', width: '30', height: '30' }), el('span', { text: 'Nexus' })
     ]);
-    const list = el('div', { class: 'nav-links', id: 'nav-links' });
-    links.forEach(([id, href, label]) => {
-      list.appendChild(el('a', { href, class: id === page ? 'active' : '', text: label }));
+    const list = el('div', { class: 'nav-links' });
+    const pill = el('span', { class: 'nav-pill', 'aria-hidden': 'true' });
+    list.appendChild(pill);
+    links.forEach(([id, href, label]) => list.appendChild(el('a', { href, class: id === page ? 'active' : '', text: label })));
+    list.querySelectorAll('a').forEach(a => {
+      a.addEventListener('mouseenter', () => {
+        pill.style.width = a.offsetWidth + 'px';
+        pill.style.transform = 'translateX(' + a.offsetLeft + 'px)';
+        pill.style.opacity = '1';
+      });
     });
+    list.addEventListener('mouseleave', () => { pill.style.opacity = '0'; });
 
-    const more = el('div', { class: 'nav-more' });
-    const moreBtn = el('button', {
-      class: 'nav-more-btn' + (moreLinks.some(l => l[0] === page) ? ' active' : ''),
-      type: 'button', 'aria-haspopup': 'true', 'aria-expanded': 'false'
-    }, ['More ', el('span', { class: 'caret', text: '▾' })]);
-    const menu = el('div', { class: 'nav-menu' });
-    moreLinks.forEach(([id, href, label]) => {
-      menu.appendChild(el('a', { href, class: id === page ? 'active' : '', text: label }));
-    });
-    const closeMore = () => { more.classList.remove('open'); moreBtn.setAttribute('aria-expanded', 'false'); };
-    moreBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      const open = more.classList.toggle('open');
-      moreBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
-    document.addEventListener('click', e => { if (!more.contains(e.target)) closeMore(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMore(); });
-    more.appendChild(moreBtn); more.appendChild(menu);
-    list.appendChild(more);
+    const cta = el('a', { class: 'nav-cta' + (page === 'dashboard' ? ' active' : ''), href: 'dashboard.html' }, [svgIcon('dash'), el('span', { class: 'lbl', text: 'Dashboard' })]);
+    const burger = el('button', { class: 'icon-btn burger', type: 'button', 'aria-label': 'Open menu', 'aria-expanded': 'false', 'aria-controls': 'mega' }, [el('span'), el('span'), el('span')]);
+    nav.appendChild(brand);
+    nav.appendChild(list);
+    nav.appendChild(el('div', { class: 'nav-actions' }, [cta, burger]));
 
-    list.appendChild(el('a', { href: NEXUS.support, text: 'Support' }));
-    list.appendChild(el('a', { href: 'dashboard.html', class: 'nav-cta' + (page === 'dashboard' ? ' active' : ''), text: 'Dashboard' }));
-    const toggle = el('button', { class: 'nav-toggle', 'aria-label': 'Menu', text: '☰' });
-    toggle.addEventListener('click', () => list.classList.toggle('open'));
-    wrap.appendChild(brand); wrap.appendChild(list); wrap.appendChild(toggle);
-    nav.appendChild(wrap);
+    const mega = el('div', { class: 'mega', id: 'mega', role: 'menu' });
+    let i = 0;
+    MEGA.forEach(group => {
+      const col = el('div', {}, [el('h6', { text: group.title })]);
+      group.items.forEach(([id, href, label, desc, ext]) => {
+        const a = el('a', { href: ext ? NEXUS[href] : href, class: id && id === page ? 'active' : '', style: '--i:' + (i++), role: 'menuitem' }, [el('b', { text: label }), el('small', { text: desc })]);
+        if (ext) { a.setAttribute('data-ext', ''); a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener'); }
+        col.appendChild(a);
+      });
+      mega.appendChild(col);
+    });
+    const scrim = el('div', { class: 'mega-scrim' });
+
+    const setMenu = open => {
+      document.body.classList.toggle('menu-open', open);
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    };
+    burger.addEventListener('click', e => { e.stopPropagation(); setMenu(!document.body.classList.contains('menu-open')); });
+    scrim.addEventListener('click', () => setMenu(false));
+    mega.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+
     navHost.replaceWith(nav);
+    nav.after(scrim);
+    scrim.after(mega);
+
+    const dock = el('nav', { class: 'dock', 'aria-label': 'Quick links' });
+    [['home', 'index.html', 'Home', 'home'], ['docs', 'docs.html', 'Docs', 'docs'], ['status', 'status.html', 'Status', 'status'], ['about', 'about.html', 'About', 'about'], ['dashboard', 'dashboard.html', 'Dashboard', 'dash']]
+      .forEach(([id, href, label, icon]) => dock.appendChild(el('a', { href, class: id === page ? 'active' : '' }, [svgIcon(icon), el('span', { text: label })])));
+    document.body.appendChild(dock);
+
+    const bar = el('div', { class: 'scroll-bar', 'aria-hidden': 'true' });
+    const top = el('button', { class: 'icon-btn to-top', type: 'button', 'aria-label': 'Back to top' }, [svgIcon('up')]);
+    top.addEventListener('click', () => window.scrollTo({ top: 0, behavior: REDUCED ? 'auto' : 'smooth' }));
+    document.body.appendChild(bar);
+    document.body.appendChild(top);
+
+    let ticking = false;
+    const onScroll = () => {
+      ticking = false;
+      const y = window.scrollY;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      nav.classList.toggle('scrolled', y > 20);
+      bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, y / max) : 0) + ')';
+      top.classList.toggle('show', y > 700);
+    };
+    window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+    onScroll();
   }
 
   const footHost = document.getElementById('site-footer');
   if (footHost) {
     const f = el('footer', { class: 'site-footer' });
-    f.innerHTML =
-      '<div class="wrap">' +
-        '<div class="footer-grid">' +
-          '<div><div class="footer-brand"><img src="' + ROOT + 'logo.png" alt="">Nexus</div>' +
-          '<p class="footer-note">Built on logic, built for everyone.</p></div>' +
-          '<div><h6>Nexus</h6><a href="index.html">Home</a><a href="about.html">About</a><a href="staff.html">Staff</a></div>' +
-          '<div><h6>Help</h6><a href="docs.html">Documentation</a><a href="commands.html">Commands</a><a href="status.html">Status</a><a href="' + NEXUS.support + '">Support server</a></div>' +
-          '<div><h6>Get Nexus</h6><a href="' + NEXUS.invite + '">Add to your server</a><a href="' + NEXUS.topgg + '">top.gg listing</a></div>' +
-        '</div>' +
-        '<div class="footer-bottom">Nexus is an independent project and is not affiliated with Discord Inc.</div>' +
-      '</div>';
+    const col = (title, items) => el('div', {}, [el('h6', { text: title })].concat(items.map(([href, label, ext]) => {
+      const a = el('a', { href: ext ? NEXUS[href] : href, text: label });
+      if (ext) { a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener'); }
+      return a;
+    })));
+    const wrap = el('div', { class: 'wrap' }, [
+      el('div', { class: 'footer-grid' }, [
+        el('div', {}, [
+          el('div', { class: 'footer-brand' }, [el('img', { src: ROOT + 'logo.png', alt: '' }), 'Nexus']),
+          el('p', { class: 'footer-note', text: 'Built on logic, built for everyone.' })
+        ]),
+        col('Nexus', [['index.html', 'Home'], ['index.html#compare', 'Compare'], ['about.html', 'About'], ['about.html#team', 'The team']]),
+        col('Help', [['docs.html', 'Documentation'], ['docs.html#/commands', 'Commands'], ['status.html', 'Status'], ['support', 'Support server', true]]),
+        col('More', [['invite', 'Add to your server', true], ['dashboard.html', 'Dashboard'], ['status.html#changelog', 'Changelog'], ['privacy.html', 'Privacy']])
+      ]),
+      el('div', { class: 'footer-bottom' }, [
+        el('span', { text: 'Nexus is an independent project and is not affiliated with Discord Inc.' }),
+        el('span', { text: '© ' + new Date().getFullYear() + ' Nexus' })
+      ])
+    ]);
+    f.appendChild(wrap);
+    f.appendChild(el('div', { class: 'footer-word', 'aria-hidden': 'true', text: 'Nexus' }));
     footHost.replaceWith(f);
   }
 
@@ -121,6 +221,75 @@ function buildChrome() {
   });
 }
 
+const REVEAL_SELECTOR = '.section-head, .tile, .card, .member, .component, .incident, .tl-item, details.faq, .cmp-scroll, .cmp-verdict, .cta-band, .quote, .marquee, .staff-section > h2, .reveal-me';
+let revealObserver = null;
+
+function reveal(scope) {
+  const nodes = Array.from((scope || document).querySelectorAll(REVEAL_SELECTOR))
+    .filter(n => !n.closest('.doc-page, #dash-root, .mega') && !n.classList.contains('reveal'));
+  if (scope && scope.matches && scope.matches(REVEAL_SELECTOR) && !scope.classList.contains('reveal')) nodes.unshift(scope);
+  if (!nodes.length) return;
+  const counts = new Map();
+  nodes.forEach(n => {
+    const parent = n.parentElement;
+    const k = counts.get(parent) || 0;
+    counts.set(parent, k + 1);
+    n.style.setProperty('--d', Math.min(k, 8) * 70 + 'ms');
+    n.classList.add('reveal');
+    if (n.matches('.tile, .card, .member, .component')) n.classList.add('spot');
+  });
+  if (REDUCED || !('IntersectionObserver' in window)) { nodes.forEach(n => n.classList.add('in')); return; }
+  if (!revealObserver) {
+    revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (en.isIntersecting) { en.target.classList.add('in'); revealObserver.unobserve(en.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  }
+  nodes.forEach(n => revealObserver.observe(n));
+}
+
+function initSpotlight() {
+  document.addEventListener('pointermove', e => {
+    const t = e.target.closest && e.target.closest('.spot');
+    if (!t) return;
+    const r = t.getBoundingClientRect();
+    t.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+    t.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  }, { passive: true });
+}
+
+function countUp(node, target, suffix) {
+  const fmt = v => Math.round(v).toLocaleString() + (suffix || '');
+  if (REDUCED) { node.textContent = fmt(target); return; }
+  const run = () => {
+    const start = performance.now();
+    const dur = 1400;
+    const step = now => {
+      const p = Math.min(1, (now - start) / dur);
+      node.textContent = fmt(target * (1 - Math.pow(1 - p, 4)));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => { if (es[0].isIntersecting) { io.disconnect(); run(); } });
+    io.observe(node);
+  } else run();
+}
+
+function initMarquee() {
+  document.querySelectorAll('.marquee-track').forEach(track => {
+    if (track.dataset.cloned) return;
+    track.dataset.cloned = '1';
+    Array.from(track.children).forEach(c => { const k = c.cloneNode(true); k.setAttribute('aria-hidden', 'true'); track.appendChild(k); });
+  });
+}
+
+function initCounters() {
+  document.querySelectorAll('[data-count]').forEach(n => countUp(n, Number(n.dataset.count), n.dataset.suffix || ''));
+}
+
 const STATE_LABEL = {
   operational: 'Operational',
   degraded: 'Degraded performance',
@@ -128,6 +297,7 @@ const STATE_LABEL = {
   maintenance: 'Under maintenance'
 };
 const STATE_RANK = { operational: 0, maintenance: 1, degraded: 2, outage: 3 };
+const STATE_COLOR = { operational: 'var(--green)', maintenance: 'var(--blue)', degraded: 'var(--yellow)', outage: 'var(--red)' };
 const OVERALL_TEXT = {
   operational: 'All systems operational',
   maintenance: 'Scheduled maintenance in progress',
@@ -152,24 +322,36 @@ function fmtUptime(ms) {
   return m + 'm';
 }
 
+function statPill(value, label, count) {
+  const b = el('b', { text: count ? '0' : value });
+  if (count) countUp(b, count.value, count.suffix);
+  return el('div', { class: 'stat-pill rise', style: '--d:' + (400 + 0) + 'ms' }, [b, el('span', { text: label })]);
+}
+
 async function initHomeStats() {
   const host = document.getElementById('home-stats');
   if (!host) return;
-  let stats;
-  try { stats = await loadJSON('stats.json'); } catch (e) { return; }
   const pills = [];
-  const servers = Number(stats.servers);
-  if (isFinite(servers) && servers > 0) pills.push([servers.toLocaleString(), servers === 1 ? 'server' : 'servers']);
-  const pct = Number(stats.uptime_percent);
-  if (stats.uptime_percent !== null && stats.uptime_percent !== undefined && stats.uptime_percent !== '' && isFinite(pct) && pct >= 0 && pct <= 100) {
-    pills.push([pct + '%', 'uptime' + (stats.uptime_period ? ', ' + stats.uptime_period : '')]);
-  } else if (stats.online_since) {
-    const since = new Date(stats.online_since);
-    if (!isNaN(since) && since <= new Date()) pills.push([fmtUptime(Date.now() - since.getTime()), 'online since last restart']);
-  }
-  if (!pills.length) return;
-  host.innerHTML = '';
-  pills.forEach(([value, label]) => host.appendChild(el('div', { class: 'stat-pill' }, [el('b', { text: value }), el('span', { text: label })])));
+  try {
+    const stats = await loadJSON('stats.json');
+    const servers = Number(stats.servers);
+    if (isFinite(servers) && servers > 0) pills.push(statPill('', servers === 1 ? 'server' : 'servers', { value: servers }));
+    const pct = Number(stats.uptime_percent);
+    if (stats.uptime_percent !== null && stats.uptime_percent !== undefined && stats.uptime_percent !== '' && isFinite(pct) && pct >= 0 && pct <= 100) {
+      pills.push(statPill(pct + '%', 'uptime' + (stats.uptime_period ? ', ' + stats.uptime_period : '')));
+    } else if (stats.online_since) {
+      const since = new Date(stats.online_since);
+      if (!isNaN(since) && since <= new Date()) pills.push(statPill(fmtUptime(Date.now() - since.getTime()), 'online since last restart'));
+    }
+  } catch (e) {}
+  try {
+    const cats = await loadJSON('commands.json');
+    const total = cats.reduce((n, c) => n + (c.commands || []).length, 0);
+    if (total) pills.push(statPill('', 'commands', { value: total }));
+  } catch (e) {}
+  pills.push(statPill('', 'built-in games', { value: 10 }));
+  host.replaceChildren.apply(host, pills);
+  pills.forEach((p, i) => p.style.setProperty('--d', 350 + i * 90 + 'ms'));
   host.style.display = 'flex';
 }
 
@@ -219,6 +401,7 @@ async function initCompare() {
   root.replaceChildren(el('div', { class: 'cmp-scroll' }, [table]));
   if (data.verdict) root.appendChild(el('div', { class: 'callout cmp-verdict' }, [el('strong', { text: 'The verdict. ' }), data.verdict]));
   if (data.note) root.appendChild(el('p', { class: 'cmp-note', text: data.note }));
+  reveal(root);
 }
 
 async function initHome() {
@@ -228,72 +411,91 @@ async function initHome() {
   try {
     const data = await loadJSON('status.json');
     const o = overallState(data.components);
-    host.className = 'status-pill';
-    host.innerHTML = '';
-    host.appendChild(el('span', { class: 'dot ' + o }));
-    host.appendChild(document.createTextNode(OVERALL_TEXT[o]));
+    host.className = 'status-pill rise';
+    host.replaceChildren(el('span', { class: 'dot ' + o }), document.createTextNode(OVERALL_TEXT[o]));
     host.style.display = 'inline-flex';
   } catch (e) {}
+}
+
+function renderIncident(i) {
+  const live = i.status !== 'resolved';
+  const box = el('div', { class: 'incident ' + (live ? 'live' : 'done') });
+  box.appendChild(el('div', { class: 'incident-head' }, [
+    el('h3', { text: i.title || 'Incident' }),
+    el('span', { class: 'tag ' + (i.status || ''), text: i.status || 'update' })
+  ]));
+  box.appendChild(el('div', { class: 'date', text: fmtDate(i.date) }));
+  if (i.message) box.appendChild(el('p', { text: i.message }));
+  if (Array.isArray(i.updates) && i.updates.length) {
+    const u = el('div', { class: 'updates' });
+    i.updates.forEach(x => u.appendChild(el('div', {}, [
+      el('div', { class: 'u-date', text: fmtDate(x.date, true) }),
+      el('div', { class: 'u-text', text: x.text || '' })
+    ])));
+    box.appendChild(u);
+  }
+  return box;
 }
 
 async function initStatus() {
   const root = document.getElementById('status-root');
   if (!root) return;
+  root.replaceChildren(skeleton(2));
   let data;
   try { data = await loadJSON('status.json'); }
-  catch (e) { root.appendChild(el('p', { class: 'empty', text: 'The status information could not be loaded right now. Try again in a minute.' })); return; }
+  catch (e) { root.replaceChildren(el('p', { class: 'empty', text: 'The status information could not be loaded right now. Try again in a minute.' })); return; }
 
-  root.innerHTML = '';
   const o = overallState(data.components);
-  const banner = el('div', { class: 'banner ' + o }, [
-    el('span', { class: 'dot ' + o }),
-    el('div', {}, [
-      el('h2', { text: OVERALL_TEXT[o] }),
-      el('small', { text: data.updated ? 'Last updated ' + fmtDate(data.updated, true) : '' })
-    ])
-  ]);
-  root.appendChild(banner);
+  const head = document.getElementById('status-headline');
+  const dot = document.getElementById('status-dot');
+  const meta = document.getElementById('status-meta');
+  if (head) head.textContent = OVERALL_TEXT[o];
+  if (dot) dot.className = 'dot ' + o;
+  if (meta) {
+    meta.replaceChildren();
+    const comps = (data.components || []).length;
+    meta.appendChild(el('span', { text: comps + (comps === 1 ? ' SYSTEM' : ' SYSTEMS') + ' WATCHED' }));
+    if (data.updated) meta.appendChild(el('span', { text: 'UPDATED ' + fmtAgo(data.updated).toUpperCase(), title: fmtDate(data.updated, true) }));
+  }
 
+  root.replaceChildren();
   const comps = el('div', { class: 'components' });
   (data.components || []).forEach(c => {
     const s = normState(c.status);
-    comps.appendChild(el('div', { class: 'component' }, [
-      el('div', {}, [
+    const card = el('div', { class: 'component' }, [
+      el('div', { class: 'top' }, [
         el('div', { class: 'name', text: c.name || 'Unnamed' }),
-        c.note ? el('div', { class: 'note', text: c.note }) : ''
-      ].filter(Boolean)),
-      el('span', { class: 'state ' + s }, [el('span', { class: 'dot ' + s }), STATE_LABEL[s]])
-    ]));
+        el('span', { class: 'state ' + s }, [el('span', { class: 'dot ' + s }), STATE_LABEL[s]])
+      ])
+    ]);
+    if (c.note) card.appendChild(el('div', { class: 'note', text: c.note }));
+    if (Array.isArray(c.history) && c.history.length) {
+      const days = c.history.slice(-45);
+      const meter = el('div', { class: 'meter', role: 'img', 'aria-label': 'Last ' + days.length + ' days' });
+      days.forEach((h, i) => {
+        const st = normState(h);
+        meter.appendChild(el('i', { style: '--i:' + i + ';--c:' + STATE_COLOR[st], title: STATE_LABEL[st] }));
+      });
+      card.appendChild(meter);
+      card.appendChild(el('div', { class: 'meter-axis' }, [el('span', { text: days.length + ' days ago' }), el('span', { text: 'Today' })]));
+    }
+    comps.appendChild(card);
   });
   root.appendChild(comps);
 
   const incidents = (data.incidents || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
   const active = incidents.filter(i => i.status !== 'resolved');
+  const past = incidents.filter(i => i.status === 'resolved');
 
-  function renderIncident(i) {
-    const box = el('div', { class: 'incident' });
-    box.appendChild(el('div', { class: 'incident-head' }, [
-      el('h3', { text: i.title || 'Incident' }),
-      el('span', { class: 'tag ' + (i.status || ''), text: i.status || 'update' })
-    ]));
-    box.appendChild(el('div', { class: 'date', text: fmtDate(i.date) }));
-    if (i.message) box.appendChild(el('p', { text: i.message }));
-    if (Array.isArray(i.updates) && i.updates.length) {
-      const u = el('div', { class: 'updates' });
-      i.updates.forEach(x => u.appendChild(el('div', {}, [
-        el('div', { class: 'u-date', text: fmtDate(x.date, true) }),
-        el('div', { class: 'u-text', text: x.text || '' })
-      ])));
-      box.appendChild(u);
-    }
-    return box;
-  }
+  root.appendChild(el('h2', { class: 'sub-title', text: 'Current incidents' }));
+  if (active.length) active.forEach(i => root.appendChild(renderIncident(i)));
+  else root.appendChild(el('div', { class: 'incident done' }, [el('div', { class: 'incident-head' }, [el('h3', { text: 'Nothing going on' }), el('span', { class: 'tag resolved', text: 'all clear' })]), el('p', { text: 'There are no open incidents right now.' })]));
 
-  if (active.length) {
-    root.appendChild(el('h2', { class: 'sub-title', text: 'Current incidents' }));
-    active.forEach(i => root.appendChild(renderIncident(i)));
+  if (past.length) {
+    root.appendChild(el('h2', { class: 'sub-title', text: 'Past incidents' }));
+    past.slice(0, 10).forEach(i => root.appendChild(renderIncident(i)));
   }
-  if (!active.length) root.appendChild(el('p', { class: 'empty', text: 'No current incidents.' }));
+  reveal(root);
 }
 
 function slugify(text) {
@@ -316,7 +518,6 @@ function initDocs() {
     'g-roles': 'roles', 'g-stats': 'stats', 'durations': 'time-formats', 'permissions': 'command-access',
     'getting-started': 'getting-started', 'troubleshooting': 'troubleshooting'
   };
-  const LEGACY_PAGES = { 'commands': 'commands.html' };
 
   const titleOf = slug => (links.find(a => a.dataset.doc === slug) || {}).textContent.trim();
 
@@ -349,7 +550,7 @@ function initDocs() {
   const search = document.getElementById('doc-search');
   const noMatch = document.getElementById('doc-nomatch');
   const index = {};
-  pages.forEach(p => { index[p.dataset.doc] = (p.dataset.title + ' ' + p.textContent).toLowerCase(); });
+  pages.forEach(p => { index[p.dataset.doc] = (p.dataset.title + ' ' + (p.dataset.keywords || '') + ' ' + p.textContent).toLowerCase(); });
   if (search) {
     search.addEventListener('input', () => {
       const terms = search.value.toLowerCase().split(/\s+/).filter(Boolean);
@@ -386,60 +587,77 @@ function initDocs() {
       const target = document.getElementById(slug + '-' + anchor);
       if (target) { target.scrollIntoView(); return; }
     }
-    window.scrollTo(0, 0);
+    const docs = document.querySelector('.docs');
+    if (docs && window.scrollY > docs.offsetTop - 110) window.scrollTo(0, docs.offsetTop - 110);
   }
 
   function route() {
     const raw = decodeURIComponent(location.hash.replace(/^#\/?/, ''));
     const parts = raw.split('/');
     const first = parts[0];
-    if (LEGACY_PAGES[first]) { location.replace(LEGACY_PAGES[first]); return; }
     show(LEGACY[first] || first || 'overview', parts.slice(1).join('/'));
   }
   window.addEventListener('hashchange', route);
   route();
 }
 
+function changelogCard(entry) {
+  const card = el('div', { class: 'tl-card' });
+  card.appendChild(el('div', { class: 'incident-head' }, [
+    el('h3', { text: entry.title || 'Update' }),
+    el('span', { class: 'tag', text: entry.type || 'update' })
+  ]));
+  const lines = String(entry.text || '').split('\n').map(l => l.trim()).filter(Boolean);
+  const bullets = lines.filter(l => l.startsWith('- '));
+  if (lines.length && bullets.length === lines.length) {
+    const ul = el('ul', {});
+    bullets.forEach(l => ul.appendChild(el('li', { text: l.slice(2) })));
+    card.appendChild(ul);
+  } else {
+    lines.forEach(l => card.appendChild(el('p', { text: l.replace(/^- /, '') })));
+  }
+  return el('div', { class: 'tl-item' }, [el('div', { class: 'tl-date', text: fmtDate(entry.date) }), card]);
+}
+
 async function initChangelog() {
   const root = document.getElementById('changelog-root');
   if (!root) return;
+  root.replaceChildren(skeleton(3));
   let entries;
   try { entries = await loadJSON('changelog.json'); }
-  catch (e) { root.innerHTML = ''; root.appendChild(el('p', { class: 'empty', text: 'The changelog could not be loaded right now. Try again in a minute.' })); return; }
+  catch (e) { root.replaceChildren(el('p', { class: 'empty', text: 'The changelog could not be loaded right now. Try again in a minute.' })); return; }
 
-  root.innerHTML = '';
+  root.replaceChildren();
   if (!Array.isArray(entries) || !entries.length) {
     root.appendChild(el('p', { class: 'empty', text: 'Nothing here yet.' }));
     return;
   }
-  entries.forEach(entry => {
-    const box = el('div', { class: 'incident' });
-    box.appendChild(el('div', { class: 'incident-head' }, [
-      el('h3', { text: entry.title || 'Update' }),
-      el('span', { class: 'tag', text: entry.type || 'update' })
-    ]));
-    box.appendChild(el('div', { class: 'date', text: fmtDate(entry.date) }));
-    const lines = String(entry.text || '').split('\n').map(l => l.trim()).filter(Boolean);
-    const bullets = lines.filter(l => l.startsWith('- '));
-    if (bullets.length === lines.length) {
-      const ul = el('ul', {});
-      bullets.forEach(l => ul.appendChild(el('li', { text: l.slice(2) })));
-      box.appendChild(ul);
-    } else {
-      lines.forEach(l => box.appendChild(el('p', { text: l.replace(/^- /, '') })));
-    }
-    root.appendChild(box);
-  });
+  const line = el('div', { class: 'timeline' });
+  const FIRST = 5;
+  entries.slice(0, FIRST).forEach(e => line.appendChild(changelogCard(e)));
+  root.appendChild(line);
+  if (entries.length > FIRST) {
+    const more = el('button', { class: 'btn btn-outline tl-more', type: 'button', text: 'Show ' + (entries.length - FIRST) + ' older updates' });
+    more.addEventListener('click', () => {
+      const added = entries.slice(FIRST).map(changelogCard);
+      added.forEach(n => line.appendChild(n));
+      more.remove();
+      reveal(line);
+    });
+    root.appendChild(more);
+  }
+  reveal(root);
 }
 
 async function initFaq() {
   const root = document.getElementById('faq-root');
   if (!root) return;
+  root.replaceChildren(skeleton(4));
   let groups;
   try { groups = await loadJSON('faq.json'); }
-  catch (e) { root.innerHTML = ''; root.appendChild(el('p', { class: 'empty', text: 'The FAQ could not be loaded right now. Try again in a minute.' })); return; }
+  catch (e) { root.replaceChildren(el('p', { class: 'empty', text: 'The FAQ could not be loaded right now. Try again in a minute.' })); return; }
 
-  root.innerHTML = '';
+  root.replaceChildren();
   (Array.isArray(groups) ? groups : []).forEach(group => {
     if (group.title && !(root.dataset.heading && groups.length === 1)) root.appendChild(el(root.dataset.heading || 'h2', { text: group.title }));
     (group.items || []).forEach(item => {
@@ -450,6 +668,7 @@ async function initFaq() {
     });
   });
   if (!root.children.length) root.appendChild(el('p', { class: 'empty', text: 'No questions yet.' }));
+  reveal(root);
 }
 
 function initials(name) {
@@ -457,17 +676,16 @@ function initials(name) {
   return parts.map(p => p.charAt(0).toUpperCase()).join('') || '?';
 }
 
-async function initStaff() {
-  const root = document.getElementById('staff-root');
-  if (!root) return;
+async function renderStaff(root) {
+  root.replaceChildren(skeleton(2));
   let data;
   try { data = await loadJSON(root.dataset.source || 'staff.json'); }
-  catch (e) { root.appendChild(el('p', { class: 'empty', text: 'The staff list could not be loaded right now. Try again in a minute.' })); return; }
+  catch (e) { root.replaceChildren(el('p', { class: 'empty', text: 'The staff list could not be loaded right now. Try again in a minute.' })); return; }
 
-  root.innerHTML = '';
+  root.replaceChildren();
   (data.sections || []).forEach(sec => {
     const members = sec.members || [];
-    const s = el('section', { class: 'staff-section', id: sec.id || '' });
+    const s = el('section', { class: 'staff-section', id: sec.id ? 'team-' + sec.id : '' });
     s.appendChild(el('h2', {}, [sec.title || 'Team', el('span', { class: 'count', text: String(members.length) })]));
     if (!members.length) {
       s.appendChild(el('p', { class: 'staff-empty', text: 'Nobody here yet.' }));
@@ -500,6 +718,46 @@ async function initStaff() {
     }
     root.appendChild(s);
   });
+  reveal(root);
+}
+
+function initStaff() {
+  document.querySelectorAll('[data-staff]').forEach(root => {
+    if (!root.closest('[hidden]')) renderStaff(root);
+    else root._lazy = true;
+  });
+}
+
+function initTabs() {
+  document.querySelectorAll('.tabs').forEach(tabs => {
+    const buttons = Array.from(tabs.querySelectorAll('button[data-tab]'));
+    const ind = el('span', { class: 'tab-ind', 'aria-hidden': 'true' });
+    tabs.prepend(ind);
+    const place = b => { ind.style.width = b.offsetWidth + 'px'; ind.style.transform = 'translateX(' + (b.offsetLeft - 5) + 'px)'; };
+    const select = (b, focus) => {
+      buttons.forEach(x => {
+        const on = x === b;
+        x.classList.toggle('on', on);
+        x.setAttribute('aria-selected', on ? 'true' : 'false');
+        const panel = document.getElementById(x.dataset.tab);
+        if (panel) panel.hidden = !on;
+      });
+      place(b);
+      const panel = document.getElementById(b.dataset.tab);
+      if (panel) panel.querySelectorAll('[data-staff]').forEach(r => { if (r._lazy) { r._lazy = false; renderStaff(r); } });
+      if (focus) b.focus();
+    };
+    buttons.forEach(b => b.addEventListener('click', () => select(b)));
+    tabs._select = name => { const b = buttons.find(x => x.dataset.tab === name); if (b) select(b); };
+    requestAnimationFrame(() => place(buttons.find(b => b.classList.contains('on')) || buttons[0]));
+    window.addEventListener('resize', () => place(buttons.find(b => b.classList.contains('on')) || buttons[0]));
+  });
+  if (location.hash === '#retired') {
+    const tabs = document.querySelector('.tabs');
+    if (tabs && tabs._select) tabs._select('panel-retired');
+    const team = document.getElementById('team');
+    if (team) setTimeout(() => team.scrollIntoView(), 50);
+  }
 }
 
 const INTENT_STOP = new Set(['the', 'a', 'an', 'to', 'of', 'how', 'do', 'i', 'can', 'my', 'me', 'someone', 'somebody', 'in', 'on', 'for', 'with', 'is', 'it', 'and', 'or', 'what', 'who', 'want', 'need', 'that', 'this', 'you', 'your', 'we', 'our', 'please', 'from', 'up']);
@@ -515,7 +773,7 @@ function intentWordMatch(q, w) {
 }
 
 async function copyText(text) {
-  try { await navigator.clipboard.writeText(text); return true; } catch (e) {   }
+  try { await navigator.clipboard.writeText(text); return true; } catch (e) {}
   try {
     const ta = el('textarea', { style: 'position:fixed;opacity:0;top:0;left:0', 'aria-hidden': 'true' });
     ta.value = text;
@@ -535,10 +793,12 @@ function permList(perms) {
 async function initCommands() {
   const host = document.getElementById('cmd-root');
   if (!host) return;
-  const sideHost = document.getElementById('side-cmds');
+  const catHost = document.getElementById('cmd-cats');
+  host.replaceChildren(skeleton(4));
   let cats;
   try { cats = await loadJSON('commands.json'); }
-  catch (e) { host.appendChild(el('p', { class: 'empty', text: 'The command list could not be loaded right now.' })); return; }
+  catch (e) { host.replaceChildren(el('p', { class: 'empty', text: 'The command list could not be loaded right now.' })); return; }
+  host.replaceChildren();
 
   const catEls = [];
   const allRows = [];
@@ -580,7 +840,11 @@ async function initCommands() {
     if (cat.note) wrap.appendChild(el('p', { class: 'note', text: cat.note }));
     host.appendChild(wrap);
     catEls.push({ wrap, rows });
-    if (sideHost) sideHost.appendChild(el('a', { href: '#cmd-' + cat.id, text: cat.name }));
+    if (catHost) {
+      const b = el('button', { type: 'button', text: cat.name });
+      b.addEventListener('click', () => wrap.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' }));
+      catHost.appendChild(b);
+    }
   });
 
   let intents = [];
@@ -590,7 +854,7 @@ async function initCommands() {
       rows: allRows.filter(r => i.commands.some(c => r._cmd === c || r._cmd.startsWith(c + ' '))),
       phrases: i.phrases.map(intentWords)
     }));
-  } catch (e) {   }
+  } catch (e) {}
 
   function intentRows(query) {
     const q = intentWords(query);
@@ -612,6 +876,7 @@ async function initCommands() {
   const noteEl = document.getElementById('cmd-intent');
 
   if (permSel) {
+    permSel.replaceChildren();
     permSel.appendChild(el('option', { value: '', text: 'Any permission' }));
     permSel.appendChild(el('option', { value: '__everyone', text: 'Everyone (no permission needed)' }));
     Array.from(permNames).sort().forEach(n => permSel.appendChild(el('option', { value: n, text: n })));
@@ -641,6 +906,7 @@ async function initCommands() {
     });
 
     none.style.display = total ? 'none' : '';
+    if (catHost) catHost.style.display = (words.length || perm) ? 'none' : '';
     if (countEl) {
       let msg = total + (total === 1 ? ' command' : ' commands');
       if (perm === '__everyone') msg += ' anyone can use';
@@ -653,8 +919,6 @@ async function initCommands() {
   if (input) input.addEventListener('input', apply);
   if (permSel) permSel.addEventListener('change', apply);
   apply();
-
-  initSideSpy();
 }
 
 function initSideSpy() {
@@ -676,6 +940,8 @@ function initSideSpy() {
 
 document.addEventListener('DOMContentLoaded', () => {
   buildChrome();
+  initSpotlight();
+  initTabs();
   initHome();
   initCompare();
   initStatus();
@@ -684,5 +950,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initDocs();
   initChangelog();
   initFaq();
-  if (!document.getElementById('cmd-root') && !document.getElementById('doc-root')) initSideSpy();
+  initMarquee();
+  initCounters();
+  reveal(document);
+  if (!document.getElementById('doc-root')) initSideSpy();
 });
