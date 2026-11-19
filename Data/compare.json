@@ -1,172 +1,112 @@
 {
+  "bots": [
+    { "id": "nexus", "name": "Nexus", "badge": "Best all-rounder", "logo": "logo.png", "highlight": true },
+    { "id": "mee6", "name": "MEE6", "badge": "Leveling" },
+    { "id": "dyno", "name": "Dyno", "badge": "Moderation" },
+    { "id": "carl", "name": "Carl-bot", "badge": "Reaction roles" }
+  ],
   "rows": [
     {
-      "id": "moderation",
-      "name": "Moderation",
-      "usual": "A moderation bot",
-      "status": "included",
-      "nexus": "Kick, ban, mute, warn, purge, slowmode and channel locks. Every action gets a case number and the member gets a DM. Nexus checks the role hierarchy, so lower roles can't act on higher ones.",
-      "cmds": [
-        "-kick",
-        "-ban",
-        "-mute",
-        "-warn",
-        "-purge"
-      ]
+      "label": "Price",
+      "icon": "💰",
+      "cells": {
+        "nexus": { "text": "Free, every feature", "tone": "good" },
+        "mee6": { "text": "Free + paid Premium" },
+        "dyno": { "text": "Free + paid Premium" },
+        "carl": { "text": "Free + paid Premium" }
+      }
     },
     {
-      "id": "cases",
-      "name": "Case history",
-      "usual": "Part of a moderation bot",
-      "status": "included",
-      "nexus": "Look up a member's full history, open any case by its number, or let members check their own record.",
-      "cmds": [
-        "-cases",
-        "-caseinfo",
-        "-myhistory"
-      ],
-      "nochip": true
+      "label": "All-in-one",
+      "icon": "🧩",
+      "cells": {
+        "nexus": { "dots": 5, "text": "Very high" },
+        "mee6": { "dots": 3, "text": "Moderate" },
+        "dyno": { "dots": 3, "text": "Moderate" },
+        "carl": { "dots": 4, "text": "High" }
+      }
     },
     {
-      "id": "automod",
-      "name": "AutoMod",
-      "usual": "An anti-spam or anti-raid bot",
-      "status": "included",
-      "nexus": "Catches spam and scam links, and can lock the server down during a raid. Each type has its own sensitivity from 1 to 10, and trusted users and roles can be whitelisted.",
-      "cmds": [
-        "-automod setup",
-        "-automod raidend"
-      ]
+      "label": "Moderation and AutoMod",
+      "icon": "🛡️",
+      "cells": {
+        "nexus": { "dots": 5, "text": "Very high" },
+        "mee6": { "dots": 3, "text": "Moderate" },
+        "dyno": { "dots": 4, "text": "High" },
+        "carl": { "dots": 4, "text": "High" }
+      }
     },
     {
-      "id": "autoroles",
-      "name": "Autoroles",
-      "usual": "An autorole bot",
-      "status": "included",
-      "nexus": "Roles on join, roles that stick when someone leaves and comes back, and timed roles that remove themselves.",
-      "cmds": [
-        "-joinroles",
-        "-role persist add",
-        "-timed role add"
-      ]
+      "label": "Tickets",
+      "icon": "🎫",
+      "cells": {
+        "nexus": { "dots": 4, "text": "Built in" },
+        "mee6": { "dots": 2, "text": "Limited" },
+        "dyno": { "dots": 2, "text": "Limited" },
+        "carl": { "dots": 2, "text": "Limited" }
+      }
     },
     {
-      "id": "tickets",
-      "name": "Tickets",
-      "usual": "A ticket bot",
-      "status": "included",
-      "nexus": "Members open a private channel with one click. Staff can add or remove people, then close it when it's handled.",
-      "cmds": [
-        "-ticket setup",
-        "-ticket panel",
-        "-ticket close"
-      ]
+      "label": "Server stats and graphs",
+      "icon": "📊",
+      "cells": {
+        "nexus": { "dots": 5, "text": "Very high" },
+        "mee6": { "dots": 2, "text": "Low" },
+        "dyno": { "dots": 2, "text": "Low" },
+        "carl": { "dots": 2, "text": "Low" }
+      }
     },
     {
-      "id": "logging",
-      "name": "Logging",
-      "usual": "A logging bot",
-      "status": "included",
-      "nexus": "Nine categories, from messages and users to moderation actions and role changes, each sent to its own channel.",
-      "cmds": [
-        "-log",
-        "-logs"
-      ]
+      "label": "Games",
+      "icon": "🎮",
+      "cells": {
+        "nexus": { "dots": 5, "text": "10 games" },
+        "mee6": { "dots": 1, "text": "Few" },
+        "dyno": { "dots": 1, "text": "Few" },
+        "carl": { "dots": 1, "text": "Few" }
+      }
     },
     {
-      "id": "stats",
-      "name": "Server stats",
-      "usual": "An activity or analytics bot",
-      "status": "included",
-      "nexus": "Message and voice activity from the last 30 days as graphs, for a person, a channel or the whole server. Also joins, leaves and which invite brought people in.",
-      "cmds": [
-        "-stats server",
-        "-stats user",
-        "-stats invite"
-      ]
+      "label": "Privacy",
+      "icon": "🔒",
+      "cells": {
+        "nexus": { "text": "Never stores message text", "tone": "good", "shield": true },
+        "mee6": { "text": "See their policy", "tone": "neutral" },
+        "dyno": { "text": "See their policy", "tone": "neutral" },
+        "carl": { "text": "See their policy", "tone": "neutral" }
+      }
     },
     {
-      "id": "giveaways",
-      "name": "Giveaways",
-      "usual": "A giveaway bot",
-      "status": "included",
-      "nexus": "Custom durations, winner counts and rerolls.",
-      "cmds": [
-        "-giveaway start",
-        "-giveaway reroll"
-      ]
+      "label": "Members see their own stats",
+      "icon": "👤",
+      "cells": {
+        "nexus": { "text": "Yes, on the dashboard", "tone": "good" },
+        "mee6": { "text": "Leveling only" },
+        "dyno": { "text": "No" },
+        "carl": { "text": "No" }
+      }
     },
     {
-      "id": "reminders",
-      "name": "Reminders",
-      "usual": "A reminder bot",
-      "status": "included",
-      "nexus": "Personal reminders in plain time formats like 1h30m.",
-      "cmds": [
-        "-reminder create"
-      ]
+      "label": "Setup time",
+      "icon": "⏱️",
+      "cells": {
+        "nexus": { "text": "Minutes" },
+        "mee6": { "text": "Minutes" },
+        "dyno": { "text": "Minutes" },
+        "carl": { "text": "Minutes" }
+      }
     },
     {
-      "id": "starboard",
-      "name": "Starboard",
-      "usual": "A starboard bot",
-      "status": "included",
-      "nexus": "React to a message and the community favorites get pinned to their own channel.",
-      "cmds": [
-        "-starboard setup"
-      ]
-    },
-    {
-      "id": "translation",
-      "name": "Translation",
-      "usual": "A translation bot",
-      "status": "included",
-      "nexus": "Translate a message into another language without leaving Discord.",
-      "cmds": [
-        "-translate"
-      ]
-    },
-    {
-      "id": "games",
-      "name": "Games",
-      "usual": "A games bot",
-      "status": "included",
-      "nexus": "10 games from one menu, played against Nexus or a friend.",
-      "cmds": [
-        "-games"
-      ]
-    },
-    {
-      "id": "leveling",
-      "name": "Leveling and XP",
-      "usual": "A leveling bot",
-      "status": "not-yet",
-      "nexus": "Not in Nexus yet. You'd still need a separate bot for this.",
-      "cmds": []
-    },
-    {
-      "id": "reactionroles",
-      "name": "Reaction roles",
-      "usual": "A reaction role bot",
-      "status": "not-yet",
-      "nexus": "Not in Nexus yet. You'd still need a separate bot for this.",
-      "cmds": []
-    },
-    {
-      "id": "polls",
-      "name": "Polls",
-      "usual": "A poll bot",
-      "status": "not-yet",
-      "nexus": "Not in Nexus yet. You'd still need a separate bot for this.",
-      "cmds": []
-    },
-    {
-      "id": "economy",
-      "name": "Economy",
-      "usual": "An economy bot",
-      "status": "not-yet",
-      "nexus": "Not in Nexus yet. You'd still need a separate bot for this.",
-      "cmds": []
+      "label": "Leveling and XP",
+      "icon": "⭐",
+      "cells": {
+        "nexus": { "text": "Coming soon", "tone": "soon" },
+        "mee6": { "dots": 5, "text": "Very high" },
+        "dyno": { "dots": 1, "text": "Low" },
+        "carl": { "dots": 3, "text": "Moderate" }
+      }
     }
-  ]
+  ],
+  "verdict": "Nexus gives you moderation, AutoMod, tickets, stats, games and more in one bot, with nothing locked behind a paywall. Other bots are great at their one speciality, but most servers end up stacking several of them, often with a premium plan on top.",
+  "note": "Ratings are the Nexus team's own view of each bot's free features as of November 2026. Other bots change over time, so check their sites for the latest details. MEE6, Dyno and Carl-bot are trademarks of their owners and are not affiliated with Nexus."
 }
