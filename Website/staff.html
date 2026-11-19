@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Staff - Nexus</title>
+<title>Staff team - Nexus</title>
 <meta name="description" content="The people who build Nexus and look after its community.">
 <link rel="icon" type="image/png" href="../logo.png">
 <link rel="stylesheet" href="style.css">
@@ -14,14 +14,24 @@
 
 <header class="page-hero">
   <div class="wrap">
+    <p class="eyebrow">Community · Staff</p>
     <h1>The Nexus team</h1>
-    <p>The people who build the bot and keep the community running.</p>
+    <p>Nexus is built by a sole developer, and staff members look after moderation and support. Want to join them? See <a class="inline" href="apply.html">open applications</a>.</p>
   </div>
 </header>
 
-<main class="wrap" style="padding-bottom:70px">
-  <p style="margin-bottom:8px"><a href="retired.html" style="color:var(--cyan)">View retired and former staff</a></p>
-  <div id="staff-root"><p class="empty">Loading team...</p></div>
+<main class="wrap" id="team" style="padding-bottom:90px">
+  <div class="tabs" role="tablist" aria-label="Team">
+    <button type="button" role="tab" data-tab="panel-current" class="on" aria-selected="true">Current team</button>
+    <button type="button" role="tab" data-tab="panel-retired" aria-selected="false">Retired staff</button>
+  </div>
+  <div id="panel-current" class="tab-panel" role="tabpanel">
+    <div data-staff="staff.json"></div>
+  </div>
+  <div id="panel-retired" class="tab-panel" role="tabpanel" hidden>
+    <p style="color:var(--muted);margin-bottom:6px">Thank you to everyone who helped build and look after Nexus.</p>
+    <div data-staff="retired.json"></div>
+  </div>
 </main>
 
 <div id="site-footer"></div>
