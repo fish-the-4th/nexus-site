@@ -85,6 +85,7 @@ const ICONS = {
   about: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.5h.01"/></svg>',
   docs: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5"/></svg>',
   community: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>',
+  ticket: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 0 2-2h14a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H5a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14 6v12" stroke-dasharray="2 2.5"/></svg>',
   info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>',
   dash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="9" rx="2"/><rect x="13.5" y="3" width="7.5" height="5.5" rx="2"/><rect x="13.5" y="11.5" width="7.5" height="9.5" rx="2"/><rect x="3" y="15" width="7.5" height="6" rx="2"/></svg>',
   link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg>',
@@ -104,10 +105,11 @@ function svgIcon(name, cls) {
 }
 
 const NAV = [
-  { id: 'about', label: 'About', icon: 'about', items: [
-    ['about', 'about.html', 'About Nexus', 'What it is, why it exists and how it works.'],
-    ['faq', 'faq.html', 'FAQ', 'Common questions, answered once.'],
-    ['compare', 'compare.html', 'Compare', 'How Nexus stacks up against the popular bots.']
+  { id: 'info', label: 'Information', icon: 'about', items: [
+    ['about', 'about.html', 'About Nexus', 'What it is, how it works, plus the FAQ.'],
+    ['status', 'status.html', 'Status', 'Live status and a calendar of uptime.'],
+    ['', 'docs.html#/commands', 'Command list', 'Every command, searchable, in the docs.'],
+    ['changelog', 'changelog.html', 'Changelog', 'What changed, and when.']
   ] },
   { id: 'docs', label: 'Docs', icon: 'docs', items: [
     ['docs', 'docs.html', 'Documentation', 'Guides for every feature, step by step.'],
@@ -117,13 +119,12 @@ const NAV = [
   { id: 'community', label: 'Community', icon: 'community', items: [
     ['staff', 'staff.html', 'Staff team', 'The people behind the bot.'],
     ['support', 'support.html', 'Support', 'Quick fixes, and where to get help.'],
-    ['projects', 'projects.html', 'Projects', 'What has launched and what is coming.'],
-    ['apply', 'apply.html', 'Apply', 'Apply to join the Nexus team.']
+    ['projects', 'projects.html', 'Projects', 'What has launched and what is coming.']
   ] },
-  { id: 'info', label: 'Information', icon: 'info', items: [
-    ['status', 'status.html', 'Status', 'Live status and a calendar of uptime.'],
-    ['', 'docs.html#/commands', 'Command list', 'Every command, searchable.'],
-    ['changelog', 'changelog.html', 'Changelog', 'What changed, and when.']
+  { id: 'tickets', label: 'Tickets', icon: 'ticket', items: [
+    ['apply', 'apply.html', 'Apply', 'Apply to join the Nexus team.'],
+    ['report', 'report.html', 'Report', 'Report a user or a problem. Coming soon.'],
+    ['appeal', 'appeal.html', 'Appeals', 'Appeal a punishment. Coming soon.']
   ] }
 ];
 
@@ -274,10 +275,10 @@ function buildChrome() {
           el('div', { class: 'footer-brand' }, [el('img', { src: ROOT + 'logo.png', alt: '' }), 'Nexus']),
           el('p', { class: 'footer-note', text: 'Built on logic, built for everyone.' })
         ]),
-        col('About', [['about.html', 'About Nexus'], ['faq.html', 'FAQ'], ['compare.html', 'Compare']]),
+        col('Information', [['about.html', 'About Nexus'], ['about.html#faq', 'FAQ'], ['status.html', 'Status'], ['docs.html#/commands', 'Command list'], ['changelog.html', 'Changelog'], ['privacy.html', 'Privacy']]),
         col('Docs', [['docs.html', 'Documentation'], ['docs.html#/getting-started', 'Getting started'], ['docs.html#/troubleshooting', 'Troubleshooting']]),
-        col('Community', [['staff.html', 'Staff team'], ['support.html', 'Support'], ['projects.html', 'Projects'], ['apply.html', 'Apply']]),
-        col('Information', [['status.html', 'Status'], ['docs.html#/commands', 'Command list'], ['changelog.html', 'Changelog'], ['privacy.html', 'Privacy']])
+        col('Community', [['staff.html', 'Staff team'], ['support.html', 'Support'], ['projects.html', 'Projects']]),
+        col('Tickets', [['apply.html', 'Apply'], ['report.html', 'Report'], ['appeal.html', 'Appeals']])
       ]),
       el('div', { class: 'footer-bottom' }, [
         el('span', { text: 'Nexus is an independent project and is not affiliated with Discord Inc.' }),
@@ -829,6 +830,10 @@ function initDocs() {
     if (!byId[slug]) slug = 'overview';
     pages.forEach(p => p.classList.toggle('active', p.dataset.doc === slug));
     links.forEach(a => a.classList.toggle('active', a.dataset.doc === slug));
+    const activeLink = links.find(a => a.dataset.doc === slug);
+    if (activeLink && side.scrollHeight > side.clientHeight) {
+      side.scrollTo({ top: Math.max(0, activeLink.offsetTop - side.clientHeight / 2), behavior: REDUCED ? 'auto' : 'smooth' });
+    }
     document.title = byId[slug].dataset.title + ' - Nexus Docs';
     side.classList.remove('open');
     if (menuBtn) {
