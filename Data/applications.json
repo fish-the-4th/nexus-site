@@ -6,19 +6,19 @@
       "questions": []
     },
     "support": {
-      "open": false,
+      "open": true,
       "questions": []
     },
     "tester": {
-      "open": false,
+      "open": true,
       "questions": []
     },
     "ambassador": {
-      "open": false,
+      "open": true,
       "questions": []
     },
     "helper": {
-      "open": false,
+      "open": true,
       "questions": []
     }
   }
