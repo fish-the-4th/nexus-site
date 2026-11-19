@@ -1,1 +1,14 @@
-
+{
+  "projects": [
+    {
+      "name": "Leveling & EXP System",
+      "description": "A leveling system with exponential level as you progress. Server admins will be able to make level roles, you may also check the leaderboard for the top 10 users of the server in terms of EXP. Levels are not global across all servers.",
+      "status": "planned"
+    },
+    {
+      "name": "Welcome & Goodbye Messages",
+      "description": "Messages can be set up to send when a user joins the server, messages can also be setup for when a user leaves.",
+      "status": "consideration"
+    }
+  ]
+}
