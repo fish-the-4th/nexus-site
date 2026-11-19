@@ -1,1 +1,31 @@
-
+{
+  "positions": {
+    "moderator": {
+      "open": true,
+      "questions": [
+        {
+          "id": "test-quesiton",
+          "type": "long",
+          "label": "Test quesiton",
+          "max": 100
+        }
+      ]
+    },
+    "support": {
+      "open": false,
+      "questions": []
+    },
+    "tester": {
+      "open": false,
+      "questions": []
+    },
+    "ambassador": {
+      "open": false,
+      "questions": []
+    },
+    "helper": {
+      "open": false,
+      "questions": []
+    }
+  }
+}
