@@ -1,14 +1,19 @@
 {
   "projects": [
     {
-      "name": "Leveling & EXP System",
+      "name": "Bot-Leveling & EXP System",
       "description": "A leveling system with exponential level as you progress. Server admins will be able to make level roles, you may also check the leaderboard for the top 10 users of the server in terms of EXP. Levels are not global across all servers.",
       "status": "planned"
     },
     {
-      "name": "Welcome & Goodbye Messages",
+      "name": "Bot-Welcome & Goodbye Messages",
       "description": "Messages can be set up to send when a user joins the server, messages can also be setup for when a user leaves.",
       "status": "consideration"
+    },
+    {
+      "name": "Website-Reports & Appeals",
+      "description": "Currently working on a report system that allows users to report others incase of rule violations. Appeals can be used to resolve these issues",
+      "status": "development"
     }
   ]
 }
