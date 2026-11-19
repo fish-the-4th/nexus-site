@@ -188,9 +188,8 @@ function buildChrome() {
   const navHost = document.getElementById('site-nav');
   if (navHost) {
     const nav = el('nav', { class: 'site-nav', 'aria-label': 'Main' });
-    const dot = el('span', { class: 'dot brand-dot', id: 'brand-dot', title: 'Checking status', 'aria-hidden': 'true' });
     const brand = el('a', { class: 'nav-brand', href: 'index.html', 'aria-label': 'Nexus home' }, [
-      el('img', { src: ROOT + 'logo.png', alt: '', width: '30', height: '30' }), el('span', { text: 'Nexus' }), dot
+      el('img', { src: ROOT + 'logo.png', alt: '', width: '30', height: '30' }), el('span', { text: 'Nexus' })
     ]);
     const list = el('div', { class: 'nav-links' });
     NAV.forEach(group => {
@@ -410,16 +409,6 @@ const Live = {
   }
 };
 
-function initBrandDot() {
-  const dot = document.getElementById('brand-dot');
-  if (!dot) return;
-  Live.subscribe(live => {
-    const s = live.state();
-    dot.className = 'dot brand-dot ' + s;
-    dot.title = OVERALL_TEXT[s];
-  });
-}
-
 function statPill(label) {
   const b = el('b', { text: '–' });
   const span = el('span', { text: label });
@@ -435,7 +424,7 @@ async function initHomeStats() {
   const servers = statPill('servers');
   const users = statPill('users');
   const cmds = statPill('commands');
-  const up = statPill('online since restart');
+  const up = statPill('uptime, last 30 days');
   const live = el('span', { class: 'live-tag', title: 'Numbers come straight from the bot and update every 30 seconds' }, [el('i'), 'LIVE']);
   [servers, users, cmds, up].forEach((p, i) => { p.style.setProperty('--d', 350 + i * 90 + 'ms'); host.appendChild(p); });
   host.appendChild(live);
@@ -454,8 +443,8 @@ async function initHomeStats() {
       servers.label.textContent = s.servers === 1 ? 'server' : 'servers';
       animateNumber(users.value, s.users);
       users.label.textContent = s.users === 1 ? 'user' : 'users';
-      up.value.textContent = fmtUptime((s.now - s.online_since) * 1000);
-      up.hidden = false;
+      up.hidden = typeof s.uptime_30d !== 'number';
+      if (!up.hidden) up.value.textContent = s.uptime_30d + '%';
       users.hidden = false;
       live.classList.remove('off');
       live.lastChild.textContent = 'LIVE';
@@ -898,16 +887,22 @@ async function initChangelog() {
     root.appendChild(el('p', { class: 'empty', text: 'Nothing here yet.' }));
     return;
   }
+  const stamp = e => { const t = new Date(String(e.date || '') + (/^\d{4}-\d{2}-\d{2}$/.test(e.date) ? 'T00:00:00' : '')).getTime(); return isNaN(t) ? 0 : t; };
+  const sorted = entries.slice().sort((a, b) => stamp(b) - stamp(a));
+  const cutoff = Date.now() - 90 * 86400000;
+  const recent = sorted.filter(e => stamp(e) >= cutoff);
+  const older = sorted.filter(e => stamp(e) < cutoff);
   const line = el('div', { class: 'timeline' });
-  const FIRST = limit || 6;
-  entries.slice(0, FIRST).forEach(e => line.appendChild(changelogCard(e)));
-  root.appendChild(line);
-  if (!limit && entries.length > FIRST) {
-    const more = el('button', { class: 'btn btn-outline tl-more', type: 'button', text: 'Show ' + (entries.length - FIRST) + ' older updates' });
+  (limit ? recent.slice(0, limit) : recent).forEach(e => line.appendChild(changelogCard(e)));
+  if (line.children.length) root.appendChild(line);
+  else root.appendChild(el('p', { class: 'empty', text: 'No updates in the last 90 days.' }));
+  if (!limit && older.length) {
+    const more = el('button', { class: 'btn btn-outline tl-more', type: 'button', text: 'View older updates' });
     more.addEventListener('click', () => {
-      entries.slice(FIRST).map(changelogCard).forEach(n => line.appendChild(n));
-      more.remove();
-      reveal(line);
+      const olderLine = el('div', { class: 'timeline' });
+      older.forEach(e => olderLine.appendChild(changelogCard(e)));
+      more.replaceWith(olderLine);
+      reveal(olderLine);
     });
     root.appendChild(more);
   }
@@ -1310,7 +1305,6 @@ document.addEventListener('DOMContentLoaded', () => {
   buildChrome();
   initSpotlight();
   initTabs();
-  initBrandDot();
   initStatusPill();
   initHomeStats();
   initLiveNumbers();
