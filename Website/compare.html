@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Compare - Nexus</title>
-<meta name="description" content="What a server usually needs separate bots for, and which of it Nexus covers in one.">
+<meta name="description" content="How Nexus compares to popular Discord bots like MEE6, Dyno and Carl-bot.">
 <link rel="icon" type="image/png" href="../logo.png">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -14,19 +14,17 @@
 
 <header class="page-hero">
   <div class="wrap">
-    <h1>One bot or a stack of them?</h1>
-    <p>Most servers end up running a different bot for each job. This is what Nexus covers in one, and what it doesn't cover yet.</p>
+    <h1>Nexus vs. the popular bots</h1>
+    <p>Why run three bots and pay for premium when one does it all for free? Here's how Nexus stacks up.</p>
   </div>
 </header>
 
 <main class="wrap" style="padding-bottom:70px">
-  <h2 class="sub-title" style="margin-top:8px">What do you run today?</h2>
-  <p style="font-size:14px;color:var(--muted)">Tap the bots your server uses now.</p>
-  <div class="cmp-picker" id="cmp-picker"></div>
-  <div class="cmp-result" id="cmp-result" aria-live="polite">Loading...</div>
-
-  <div class="cmp-list" id="cmp-list"></div>
-  <p class="cmp-foot" id="cmp-foot"></p>
+  <div id="cmp-root"><p class="empty">Loading the comparison...</p></div>
+  <div class="actions" style="margin-top:28px">
+    <a class="btn btn-primary" data-link="invite" href="#">Add Nexus to your server</a>
+    <a class="btn btn-outline" href="commands.html">See every command</a>
+  </div>
 </main>
 
 <div id="site-footer"></div>
