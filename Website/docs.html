@@ -15,7 +15,7 @@
 <header class="page-hero">
   <div class="wrap wide">
     <h1>Documentation</h1>
-    <p>Guides for every part of Nexus, from the first five minutes to running a busy server. Looking for a plain list of commands? Try the <a class="inline" href="commands.html">Commands page</a>.</p>
+    <p>Guides for every part of Nexus, from the first five minutes to running a busy server. Looking for a plain list of commands? Jump to the <a class="inline" href="#/commands">command list</a>.</p>
   </div>
 </header>
 
@@ -63,7 +63,7 @@
     <h5>Help</h5>
     <a href="#/troubleshooting" data-doc="troubleshooting">Troubleshooting</a>
     <a href="#/data-wipe" data-doc="data-wipe">Data wipe</a>
-    <a href="commands.html" data-external>Command list</a>
+    <a href="#/commands" data-doc="commands">Command list</a>
     <a href="privacy.html" data-external>Privacy</a>
     <a data-link="support" href="#" data-external>Support server</a>
   </aside>
@@ -118,7 +118,7 @@
     <li><strong>Start here</strong> covers the basics every server needs.</li>
     <li><strong>Guides</strong> walk through a whole job from start to finish, like setting up a server or handling a raid.</li>
     <li><strong>Feature pages</strong> explain how one system works, what it does in practice, and the things worth knowing before you rely on it.</li>
-    <li>The exact syntax of every command is on the <a class="inline" href="commands.html">Commands page</a>, so these pages don't repeat it all.</li>
+    <li>The exact syntax of every command is in the <a class="inline" href="#/commands">command list</a>, so these pages don't repeat it all.</li>
   </ul>
 
   <h2>Getting help</h2>
@@ -1155,7 +1155,7 @@ Expires: in 3 days (Fri, Nov 20, 2026 4:12 PM)</div></div>
   <p class="lead">Every command has a normal rule for who can use it. Command access lets a server administrator change that rule for a single command, so you can let a role use something without giving that role a Discord permission it doesn't otherwise need.</p>
 
   <h2>The normal rules</h2>
-  <p>Out of the box, each command needs a Discord permission, like Kick Members or Manage Server. The <a class="inline" href="commands.html">Commands page</a> shows the permission for every command, and commands marked "Everyone" need nothing.</p>
+  <p>Out of the box, each command needs a Discord permission, like Kick Members or Manage Server. The <a class="inline" href="#/commands">command list</a> shows the permission for every command, and commands marked "Everyone" need nothing.</p>
   <p>That's fine for most servers, but it can be clumsy. If you want helpers to be able to mute but not kick, you'd have to hand out Moderate Members to people who may not need any other permission. Command access solves that.</p>
 
   <h2>Changing access</h2>
@@ -1768,7 +1768,7 @@ Translated with Google Translate</div></div>
   </ul>
 
   <h2>"You do not have permission"</h2>
-  <p>The command needs a permission you don't have. The <a class="inline" href="commands.html">Commands page</a> lists what each one needs, and <code>-commands</code> shows the permissions as set in your server. If your server owner wants you to be able to use it without extra permissions, they can grant it with <a class="inline" href="#/command-access">command access</a>.</p>
+  <p>The command needs a permission you don't have. The <a class="inline" href="#/commands">command list</a> shows what each one needs, and <code>-commands</code> shows the permissions as set in your server. If your server owner wants you to be able to use it without extra permissions, they can grant it with <a class="inline" href="#/command-access">command access</a>.</p>
 
   <h2>Moderation problems</h2>
   <div class="table-wrap">
@@ -1870,6 +1870,22 @@ Translated with Google Translate</div></div>
   </table>
   </div>
   <p>For the full picture of what Nexus keeps and why, read the <a class="inline" href="privacy.html" data-external>Privacy page</a>.</p>
+</article>
+
+<article class="doc-page" data-doc="commands" data-title="Command list" data-keywords="commands command list permissions who can use what permission search">
+  <div class="doc-crumb">Reference</div>
+  <h1>Command list</h1>
+  <p class="lead">Every Nexus command in one place. Search by name, or describe what you want to do, like <em>stop spam</em> or <em>give someone a role</em>. The tag on the right shows what permission you need.</p>
+
+  <div class="cmd-tools" style="margin-top:22px">
+    <input id="cmd-search" class="search" type="search" placeholder="Search a command, or describe what you want" autocomplete="off" aria-label="Search commands">
+    <select id="cmd-perm" class="search" aria-label="Filter by permission"></select>
+  </div>
+  <p id="cmd-count" class="cmd-count" aria-live="polite"></p>
+  <p id="cmd-intent" class="cmd-count intent-note" hidden>Highlighted commands match what you're trying to do, even if they don't contain your words.</p>
+  <div class="cmd-cats" id="cmd-cats"></div>
+  <div id="cmd-root"></div>
+  <p style="font-size:13.5px;color:var(--muted);margin-top:18px">Square brackets mean you fill something in. Nexus asks for the same inputs in the same order as shown. Want to know how permissions work? Read <a class="inline" href="#/command-access">command access</a>.</p>
 </article>
 
   </main>
