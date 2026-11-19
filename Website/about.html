@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About - Nexus</title>
-<meta name="description" content="What Nexus is, why it exists, who builds it, and the answers to common questions.">
+<meta name="description" content="What Nexus is, why it exists, what makes it different and how it works.">
 <meta property="og:title" content="About Nexus">
-<meta property="og:description" content="Why Nexus exists, the team behind it, and common questions answered.">
+<meta property="og:description" content="One bot for moderation, protection, engagement and stats. Here's the story.">
 <link rel="icon" type="image/png" href="../logo.png">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -18,7 +18,7 @@
   <div class="wrap">
     <p class="eyebrow">About</p>
     <h1>An all-in-one bot, <span class="gradient-text">built on logic</span>.</h1>
-    <p>A bot built to handle all of your server's needs. Moderation, tickets, roles, logging, stats and more, in one place.</p>
+    <p>Nexus is one Discord bot that handles moderation, protection, logging, tickets, roles, stats, games and everyday tools, so your server doesn't need a different bot for every job.</p>
   </div>
 </header>
 
@@ -28,42 +28,65 @@
     <div class="story">
       <div class="card">
         <h3>What Nexus is</h3>
-        <p>Nexus is an all-in-one Discord bot. Moderation, tickets, roles, logging, stats, and much more, so a server doesn't need a different bot for every job.</p>
-        <p>Everything is controlled from inside Discord with simple commands, and there's no account to create. Type <code>-commands</code> to see what's available. If you'd rather click than type, the <a class="inline" href="dashboard.html">dashboard</a> lets admins change settings and lets every member see their own stats and history.</p>
+        <p>Nexus is an all-in-one Discord bot. It covers the systems a community actually runs on: moderation with numbered cases, AutoMod that stops spam, scam links and raids, logging for nine kinds of events, private tickets, automatic roles, 30-day activity stats, giveaways, a starboard and ten built-in games.</p>
+        <p>Everything is controlled from inside Discord with plain commands, and there's no account to create. Type <code>-commands</code> to see what you can use. If you'd rather click than type, the <a class="inline" href="dashboard.html">dashboard</a> lets admins change settings and lets every member see their own stats and history.</p>
       </div>
       <div class="card">
         <h3>Why it exists</h3>
-        <p>Most communities end up with a pile of bots that each do one thing, each with their own prefix. That creates clutter, and there's a real chance the bots end up breaking each other.</p>
-        <p>Nexus started with a simple idea: one bot that covers the essentials.</p>
+        <p>Most communities end up with a pile of bots that each do one thing. Every one has its own prefix, its own permissions and its own premium plan, and there's a real chance they get in each other's way. Two bots logging the same event, or two AutoMods fighting over one message, is more common than it should be.</p>
+        <p>Nexus started with a simple idea: one bot that covers the essentials well, is easy to understand, and doesn't hide the basics behind a paywall.</p>
       </div>
     </div>
-    <p class="quote reveal-me" style="margin-top:56px">Built on logic, built for everyone.<small>Our slogan</small></p>
+    <p class="quote reveal-me" style="margin-top:64px">Built on logic, built for everyone.<small>Our slogan</small></p>
   </section>
 
-  <section class="section" id="team">
+  <section class="section" id="different">
     <div class="section-head">
-      <h2>Meet the team</h2>
-      <p>Nexus is built by a sole developer, and staff members look after moderation and support. Past staff are thanked here too.</p>
+      <h2>What makes it different</h2>
+      <p>The things Nexus is deliberately built around.</p>
     </div>
-    <div class="tabs" role="tablist" aria-label="Team">
-      <button type="button" role="tab" data-tab="panel-current" class="on" aria-selected="true">Current team</button>
-      <button type="button" role="tab" data-tab="panel-retired" aria-selected="false">Retired staff</button>
-    </div>
-    <div id="panel-current" class="tab-panel" role="tabpanel">
-      <div data-staff="staff.json" id="staff-root"></div>
-    </div>
-    <div id="panel-retired" class="tab-panel" role="tabpanel" hidden>
-      <p class="hint" style="color:var(--muted);margin-bottom:6px">Thank you to everyone who helped build and look after Nexus.</p>
-      <div data-staff="retired.json"></div>
+    <div class="values">
+      <div class="card"><span class="icon">🧩</span><h4>Everything in one place</h4><p>One prefix, one set of permissions, one log setup. Features know about each other, so nothing double-fires.</p></div>
+      <div class="card"><span class="icon">🆓</span><h4>Free, all of it</h4><p>No premium tier. Every feature on this site is available to every server.</p></div>
+      <div class="card"><span class="icon">🔒</span><h4>Privacy first</h4><p>Nexus counts activity but never stores what people say. Old activity is deleted after 30 days. <a class="inline" href="privacy.html">Read the details</a>.</p></div>
+      <div class="card"><span class="icon">🧠</span><h4>Plain and predictable</h4><p>Clear replies that say exactly what happened, and what to fix when something can't be done.</p></div>
     </div>
   </section>
 
-  <section class="section" id="faq">
+  <section class="section" id="numbers">
     <div class="section-head">
-      <h2>Frequently asked questions</h2>
-      <p>Common questions, answered once.</p>
+      <h2>Nexus right now</h2>
+      <p>These numbers come straight from the bot and update while you watch.</p>
     </div>
-    <div id="faq-root" data-heading="h3"><p class="empty">Loading questions...</p></div>
+    <div class="number-band reveal-me">
+      <div><b data-live="servers">–</b><span>servers use Nexus</span></div>
+      <div><b data-live="users">–</b><span>members across those servers</span></div>
+      <div><b data-live="latency_ms">–</b><span>milliseconds to respond</span></div>
+    </div>
+  </section>
+
+  <section class="section" id="how">
+    <div class="section-head">
+      <h2>How it works</h2>
+      <p>Three ideas cover almost everything.</p>
+    </div>
+    <div class="how-grid">
+      <div class="card"><span class="icon">⌨️</span><h4>Commands in Discord</h4><p>Every feature is a text command with the server's prefix, <code>-</code> by default. Mentioning Nexus always works too.</p></div>
+      <div class="card"><span class="icon">🗂️</span><h4>Settings per server</h4><p>What you set up in one server never touches another. Cases, logs and stats stay with the server that made them.</p></div>
+      <div class="card"><span class="icon">🛡️</span><h4>Safe by default</h4><p>Every action checks your permission and the role order first, and leaves a record in cases and logs.</p></div>
+    </div>
+  </section>
+
+  <section class="section" id="who">
+    <div class="section-head">
+      <h2>Who builds it</h2>
+      <p>Nexus is built by a sole developer, with a staff team that looks after moderation and support in the community.</p>
+    </div>
+    <div class="grid three">
+      <a class="card" href="staff.html"><span class="icon">👥</span><h4>Meet the team</h4><p>The people behind the bot.</p></a>
+      <a class="card" href="projects.html"><span class="icon">🗺️</span><h4>See what's next</h4><p>What has launched, what's being built and what's planned.</p></a>
+      <a class="card" href="changelog.html"><span class="icon">📝</span><h4>Read the changelog</h4><p>Every update, newest first.</p></a>
+    </div>
   </section>
 
   <div class="cta-band reveal-me" style="margin-bottom:90px">
