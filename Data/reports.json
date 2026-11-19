@@ -1,0 +1,10 @@
+{
+  "types": {
+    "bot": {
+      "open": false
+    },
+    "server": {
+      "open": false
+    }
+  }
+}
