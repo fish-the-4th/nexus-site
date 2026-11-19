@@ -1,14 +1,10 @@
 {
-  "updated": "2026-11-18T22:14:27.423Z",
-  "components": [
+  "incidents": [
     {
-      "name": "Main Bot",
-      "status": "maintenance"
-    },
-    {
-      "name": "Website",
-      "status": "maintenance"
+      "title": "Restarting",
+      "status": "maintenance",
+      "date": "2026-11-19",
+      "message": "Bot will sometimes shut on and off, Nexus us currently being tested"
     }
-  ],
-  "incidents": []
+  ]
 }
