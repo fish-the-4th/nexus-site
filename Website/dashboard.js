@@ -89,10 +89,22 @@ function send(method, path, body) {
 function showLogin(message, isError) {
   const root = dashClear();
   if (message) root.appendChild(el('div', { class: 'callout' + (isError ? ' warn' : ''), text: message }));
-  root.appendChild(el('div', { class: 'dash-panel' }, [
-    el('h3', { text: 'Log in to continue' }),
-    el('p', { class: 'hint', text: 'Nexus only asks for your Discord username and avatar. It never sees your password.' }),
-    el('a', { class: 'btn btn-primary', href: DASH_API + '/auth/login', text: 'Log in with Discord' })
+  const perks = [
+    ['📊', 'Your stats', 'Messages, voice time and rank in every server you share with Nexus.'],
+    ['🧾', 'Your history', 'Your own moderation record, reminders, giveaways and game stats.'],
+    ['⚙️', 'Server settings', 'Owners and admins can manage Nexus without typing commands.']
+  ];
+  root.appendChild(el('div', { class: 'login-card' }, [
+    el('div', { class: 'login-glow', 'aria-hidden': 'true' }),
+    el('img', { class: 'login-logo', src: ROOT + 'logo.png', alt: '' }),
+    el('h2', { text: 'Log in to continue' }),
+    el('p', { class: 'hint', text: 'Nexus only asks for your Discord username and avatar. It never sees your password, email or server list.' }),
+    el('a', { class: 'btn btn-primary btn-lg', href: DASH_API + '/auth/login', text: 'Log in with Discord' }),
+    el('div', { class: 'login-perks' }, perks.map((p, i) => el('div', { class: 'perk', style: '--i:' + i }, [
+      el('span', { class: 'perk-ico', text: p[0] }),
+      el('b', { text: p[1] }),
+      el('small', { text: p[2] })
+    ])))
   ]));
 }
 
@@ -128,7 +140,9 @@ function guildIcon(guild) {
 }
 
 function loading(root, text) {
-  const p = el('p', { class: 'empty', text: text });
+  const p = el('div', { class: 'dash-loading', role: 'status', 'aria-label': text }, [
+    el('p', { class: 'empty', text: text }), skeleton(3)
+  ]);
   root.appendChild(p);
   return p;
 }
@@ -161,7 +175,7 @@ async function run(button, msg, work, okText) {
 }
 
 function section(id, title, hint, kids) {
-  const s = el('section', { class: 'dash-panel dash-section', id: id });
+  const s = el('section', { class: 'dash-panel dash-section spot', id: id });
   s.appendChild(el('h3', { text: title }));
   if (hint) s.appendChild(el('p', { class: 'hint', text: hint }));
   (kids || []).forEach(k => s.appendChild(k));
@@ -190,6 +204,17 @@ function layout(root, groups) {
     });
   });
   root.appendChild(el('div', { class: 'dash-layout' }, [side, main]));
+  if ('IntersectionObserver' in window) {
+    const spy = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        side.querySelectorAll('a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + en.target.id));
+      });
+    }, { rootMargin: '-110px 0px -65% 0px' });
+    const watch = () => main.querySelectorAll('.dash-section').forEach(s => { if (!s._watched) { s._watched = true; spy.observe(s); } });
+    new MutationObserver(watch).observe(main, { childList: true });
+    watch();
+  }
   return main;
 }
 
@@ -241,10 +266,10 @@ async function showGuilds(user) {
     return;
   }
   const list = el('div', { class: 'guild-list' });
-  data.guilds.forEach(g => {
+  data.guilds.forEach((g, i) => {
     const meta = el('span', { class: 'gmeta', text: g.members + ' members' });
     if (g.admin) meta.appendChild(el('span', { class: 'gtag', text: 'Admin' }));
-    const card = el('button', { class: 'guild-card', type: 'button' }, [
+    const card = el('button', { class: 'guild-card spot', type: 'button', style: '--i:' + i }, [
       guildIcon(g),
       el('span', { class: 'gtext' }, [el('span', { class: 'gname', text: g.name }), meta])
     ]);
@@ -261,7 +286,7 @@ function showChooser(user, guild) {
   root.appendChild(el('div', { class: 'dash-title' }, [guildIcon(guild), el('h2', { text: guild.name })]));
 
   const options = el('div', { class: 'choice-list' });
-  const mine = el('button', { class: 'choice-card', type: 'button' }, [
+  const mine = el('button', { class: 'choice-card spot', type: 'button' }, [
     el('span', { class: 'choice-icon', text: '👤' }),
     el('span', {}, [
       el('b', { text: 'My dashboard' }),
@@ -271,7 +296,7 @@ function showChooser(user, guild) {
   mine.addEventListener('click', () => showProfile(user, guild));
   options.appendChild(mine);
 
-  const admin = el('button', { class: 'choice-card' + (guild.admin ? '' : ' locked'), type: 'button' }, [
+  const admin = el('button', { class: 'choice-card spot' + (guild.admin ? '' : ' locked'), type: 'button', style: '--i:1' }, [
     el('span', { class: 'choice-icon', text: guild.admin ? '⚙️' : '🔒' }),
     el('span', {}, [
       el('b', { text: 'Admin dashboard' }),
@@ -285,7 +310,12 @@ function showChooser(user, guild) {
 }
 
 function statTile(value, label) {
-  return el('div', { class: 'stat-tile' }, [el('b', { text: String(value) }), el('span', { text: label })]);
+  const num = el('b', { text: String(value) });
+  if (typeof value === 'number' && isFinite(value) && typeof animateNumber === 'function') {
+    num.textContent = '0';
+    requestAnimationFrame(() => animateNumber(num, value));
+  }
+  return el('div', { class: 'stat-tile spot' }, [num, el('span', { text: label })]);
 }
 
 function caseRow(c, detailed, showModerator) {
