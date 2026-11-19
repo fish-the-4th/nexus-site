@@ -1081,3 +1081,12 @@ details.faq .a li { margin: 3px 0; }
   .pos-card, .req, .q, .flow { animation: none; }
   .req-icon.wait { animation-duration: 2s; }
 }
+
+/* ---------- Coming soon (Tickets) ---------- */
+.soon-card { text-align: center; padding: 44px 32px; position: relative; overflow: hidden; }
+.soon-card h3 { margin: 14px 0 8px; }
+.soon-card p { color: var(--muted); max-width: 520px; margin: 0 auto; }
+.soon-card .actions { justify-content: center; margin-top: 24px; }
+.soon-badge { display: inline-block; padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #fff; background: linear-gradient(90deg, #5865F2, #9b59b6, #5865F2); background-size: 200% 100%; animation: soon-shift 4s linear infinite; }
+@keyframes soon-shift { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .soon-badge { animation: none; } }
