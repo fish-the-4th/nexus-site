@@ -1,9 +1,10 @@
 {
-  "bypass": [],
+  "bypass": [
+    "1572891561698529352"
+  ],
   "positions": {
     "moderator": {
       "open": true,
-      "note": "1572891561698529352",
       "questions": [
         {
           "id": "test-quesiton",
