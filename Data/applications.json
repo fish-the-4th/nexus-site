@@ -1,13 +1,42 @@
 {
+  "bypass": [
+    "1572891561698529352"
+  ],
   "positions": {
     "moderator": {
       "open": true,
       "questions": [
         {
           "id": "test-quesiton",
-          "type": "long",
+          "type": "short",
           "label": "Test quesiton",
+          "required": false,
           "max": 100
+        },
+        {
+          "id": "test1",
+          "type": "multi",
+          "label": "test1",
+          "options": [
+            "check 1",
+            "check 2",
+            "check 3"
+          ]
+        },
+        {
+          "id": "test2",
+          "type": "choice",
+          "label": "test2",
+          "options": [
+            "check 1",
+            "check2",
+            "check3"
+          ]
+        },
+        {
+          "id": "test3",
+          "type": "image",
+          "label": "test3"
         }
       ]
     },
