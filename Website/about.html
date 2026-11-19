@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About - Nexus</title>
-<meta name="description" content="What Nexus is, why it exists, and how it works.">
+<meta name="description" content="What Nexus is, why it exists, who builds it, and the answers to common questions.">
+<meta property="og:title" content="About Nexus">
+<meta property="og:description" content="Why Nexus exists, the team behind it, and common questions answered.">
 <link rel="icon" type="image/png" href="../logo.png">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -13,32 +15,66 @@
 <div id="site-nav"></div>
 
 <header class="page-hero">
-  <div class="wrap narrow">
-    <h1>About Nexus</h1>
-    <p>A bot built to handle all of your server's needs. A complete, all-in-one bot.</p>
+  <div class="wrap">
+    <p class="eyebrow">About</p>
+    <h1>An all-in-one bot, <span class="gradient-text">built on logic</span>.</h1>
+    <p>A bot built to handle all of your server's needs. Moderation, tickets, roles, logging, stats and more, in one place.</p>
   </div>
 </header>
 
-<main class="wrap narrow prose" style="padding-bottom:70px">
+<main class="wrap">
 
-  <h2>What Nexus is</h2>
-  <p>Nexus is an all-in-one Discord bot. Moderation, tickets, roles, logging, stats, and much more, so a server doesn't need a different bot for every job.</p>
-  <p>Everything is controlled from inside Discord with simple commands, and there's no account to create. Type <code>-commands</code> and you can see what's available. If you'd rather click than type, the <a class="inline" href="dashboard.html">dashboard</a> lets admins change settings and lets every member see their own stats and history.</p>
+  <section class="section" id="story" style="padding-top:40px">
+    <div class="story">
+      <div class="card">
+        <h3>What Nexus is</h3>
+        <p>Nexus is an all-in-one Discord bot. Moderation, tickets, roles, logging, stats, and much more, so a server doesn't need a different bot for every job.</p>
+        <p>Everything is controlled from inside Discord with simple commands, and there's no account to create. Type <code>-commands</code> to see what's available. If you'd rather click than type, the <a class="inline" href="dashboard.html">dashboard</a> lets admins change settings and lets every member see their own stats and history.</p>
+      </div>
+      <div class="card">
+        <h3>Why it exists</h3>
+        <p>Most communities end up with a pile of bots that each do one thing, each with their own prefix. That creates clutter, and there's a real chance the bots end up breaking each other.</p>
+        <p>Nexus started with a simple idea: one bot that covers the essentials.</p>
+      </div>
+    </div>
+    <p class="quote reveal-me" style="margin-top:56px">Built on logic, built for everyone.<small>Our slogan</small></p>
+  </section>
 
-  <h2>Why it exists</h2>
-  <p>Most communities end up with a pile of bots that each do one thing, each with their own prefix. That creates a lot of clutter, and there's a real chance the bots end up breaking each other. Nexus started with a simple idea: one bot that covers the essentials.</p>
-  <p>Our slogan says it best: <strong style="color:var(--text)">Built on logic, built for everyone.</strong></p>
+  <section class="section" id="team">
+    <div class="section-head">
+      <h2>Meet the team</h2>
+      <p>Nexus is built by a sole developer, and staff members look after moderation and support. Past staff are thanked here too.</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Team">
+      <button type="button" role="tab" data-tab="panel-current" class="on" aria-selected="true">Current team</button>
+      <button type="button" role="tab" data-tab="panel-retired" aria-selected="false">Retired staff</button>
+    </div>
+    <div id="panel-current" class="tab-panel" role="tabpanel">
+      <div data-staff="staff.json" id="staff-root"></div>
+    </div>
+    <div id="panel-retired" class="tab-panel" role="tabpanel" hidden>
+      <p class="hint" style="color:var(--muted);margin-bottom:6px">Thank you to everyone who helped build and look after Nexus.</p>
+      <div data-staff="retired.json"></div>
+    </div>
+  </section>
 
-  <h2>Meet the staff</h2>
-  <p>Nexus is built by a sole developer, and staff members look after moderation and support. You can see who they are on the <a class="inline" href="staff.html">staff page</a>, and if something isn't working, the <a class="inline" href="status.html">status page</a> will tell you what's going on.</p>
+  <section class="section" id="faq">
+    <div class="section-head">
+      <h2>Frequently asked questions</h2>
+      <p>Common questions, answered once.</p>
+    </div>
+    <div id="faq-root" data-heading="h3"><p class="empty">Loading questions...</p></div>
+  </section>
 
-  <div class="actions" style="margin-top:28px">
-    <a class="btn btn-primary" data-link="invite" href="#">Add Nexus to your server</a>
-    <a class="btn btn-outline" href="docs.html">Read the docs</a>
+  <div class="cta-band reveal-me" style="margin-bottom:90px">
+    <span class="orb" style="left:-60px;top:-80px;background:#5865F2"></span>
+    <h2>Ready to try it?</h2>
+    <p>Add Nexus in one click, or read the docs first.</p>
+    <div class="actions">
+      <a class="btn btn-primary btn-lg" data-link="invite" href="#">Add Nexus to your server</a>
+      <a class="btn btn-outline btn-lg" href="docs.html">Read the docs</a>
+    </div>
   </div>
-
-  <h2 id="faq" style="margin-top:48px">Frequently asked questions</h2>
-  <div id="faq-root" data-heading="h3"><p class="empty">Loading questions...</p></div>
 </main>
 
 <div id="site-footer"></div>
