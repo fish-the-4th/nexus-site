@@ -118,7 +118,7 @@ const NAV = [
     ['staff', 'staff.html', 'Staff team', 'The people behind the bot.'],
     ['support', 'support.html', 'Support', 'Quick fixes, and where to get help.'],
     ['projects', 'projects.html', 'Projects', 'What has launched and what is coming.'],
-    ['apply', 'apply.html', 'Apply', 'Open positions on the team.']
+    ['apply', 'apply.html', 'Apply', 'Apply to join the Nexus team.']
   ] },
   { id: 'info', label: 'Information', icon: 'info', items: [
     ['status', 'status.html', 'Status', 'Live status and a calendar of uptime.'],
@@ -624,8 +624,7 @@ async function initStatus() {
 
     comps.replaceChildren(
       component('Discord bot', botState, error ? 'Not responding. The team is notified when Nexus goes quiet.' : (data.online ? 'Online and responding' + (data.latency_ms ? ' in ' + data.latency_ms + ' ms' : '') : 'Reconnecting to Discord')),
-      component('Dashboard and API', error ? 'outage' : 'operational', error ? 'Could not be reached' : 'Reachable, logins and settings work'),
-      component('Website', 'operational', 'You are looking at it')
+      component('Dashboard', error ? 'outage' : 'operational', error ? 'Could not be reached' : 'Reachable, logins and settings work')
     );
     reveal(comps);
 
@@ -1079,65 +1078,408 @@ async function initProjects() {
   reveal(root);
 }
 
+/* ---------- Applications ---------- */
+
+const POSITIONS = [
+  { key: 'moderator', name: 'Moderator', color: '#289053', desc: 'Moderates the support server: keeps chat friendly, handles rule breakers and keeps things safe.' },
+  { key: 'support', name: 'Support Team', color: '#f1c40f', desc: 'Helps people with suspected bugs, questions and setting up Nexus in their server.' },
+  { key: 'tester', name: 'Tester', color: '#546e7a', desc: 'Tries out beta features before everyone else and reports anything that breaks.' },
+  { key: 'ambassador', name: 'Ambassador', color: '#e91e63', desc: 'Helps advertise Nexus, sharing the bot with other servers and communities.' },
+  { key: 'helper', name: 'Helper', color: '#9b59b6', desc: 'Helps with small tasks, like writing documents and guides for the team.' }
+];
+const POSITION_BY_KEY = Object.fromEntries(POSITIONS.map(p => [p.key, p]));
+const REQUIREMENTS = [
+  ['member', 'Must be in the support server.'],
+  ['probation', 'Cannot be on probation.'],
+  ['role', 'Cannot already have role.'],
+  ['messages', 'Have at least 100 messages in the support server.'],
+  ['joined', 'Has been in the support server for at least 4 days.'],
+  ['pending', 'No open application for this position.']
+];
+const APPLY_TOKEN_KEY = 'nexus_dash_token';
+const APPLY_MAX_IMAGE = 8 * 1024 * 1024;
+
+const ApplyAuth = {
+  get() { try { return sessionStorage.getItem(APPLY_TOKEN_KEY); } catch (e) { return null; } },
+  set(t) { try { if (t) sessionStorage.setItem(APPLY_TOKEN_KEY, t); else sessionStorage.removeItem(APPLY_TOKEN_KEY); } catch (e) {} },
+  loginUrl() { return NEXUS.api + '/auth/login?next=apply'; }
+};
+
+async function applyFetch(path, opts, timeoutMs) {
+  opts = Object.assign({ cache: 'no-store' }, opts || {});
+  opts.headers = Object.assign({}, opts.headers);
+  const token = ApplyAuth.get();
+  if (token) opts.headers['Authorization'] = 'Bearer ' + token;
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs || 15000);
+  opts.signal = ctrl.signal;
+  let res;
+  try { res = await fetch(NEXUS.api + path, opts); }
+  catch (e) { const err = new Error('Could not reach Nexus. Check your connection and try again.'); err.offline = true; throw err; }
+  finally { clearTimeout(timer); }
+  let body = null;
+  try { body = await res.json(); } catch (e) {}
+  if (!res.ok) {
+    const err = new Error((body && body.error) || ('Nexus answered with ' + res.status));
+    err.status = res.status;
+    throw err;
+  }
+  return body;
+}
+
+function statusTag(status) {
+  const map = { pending: ['monitoring', 'In review'], accepted: ['resolved', 'Accepted'], denied: ['investigating', 'Denied'] };
+  const m = map[status] || ['', String(status || '')];
+  return el('span', { class: 'tag ' + m[0], text: m[1] });
+}
+
+function fmtStamp(sec) {
+  if (!sec) return '';
+  return new Date(sec * 1000).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
 async function initApply() {
   const root = document.getElementById('apply-root');
   if (!root) return;
-  root.replaceChildren(skeleton(2));
-  let data;
-  try { data = await loadJSON('applications.json'); }
-  catch (e) { root.replaceChildren(el('p', { class: 'empty', text: 'Applications could not be loaded right now. Try again in a minute.' })); return; }
-  const apps = (Array.isArray(data.applications) ? data.applications : []).filter(Boolean);
-  const open = apps.filter(a => a.status === 'open');
-  const closed = apps.filter(a => a.status !== 'open');
-  root.replaceChildren();
 
-  root.appendChild(el('h2', { class: 'sub-title', text: 'Open applications' }));
-  if (!open.length) root.appendChild(el('div', { class: 'callout' }, ['Nothing is open right now. Check back later, or keep an eye on announcements in the ', el('a', { href: NEXUS.support, class: 'inline', target: '_blank', rel: 'noopener', text: 'support server' }), '.']));
-  const openGrid = el('div', { class: 'app-grid' });
-  open.forEach(a => openGrid.appendChild(appCard(a, true)));
-  root.appendChild(openGrid);
+  const st = { forms: null, formsError: false, online: null, user: null, apps: [], view: 'home', meError: null };
 
-  if (closed.length) {
-    root.appendChild(el('h2', { class: 'sub-title', text: 'Closed applications' }));
-    const closedGrid = el('div', { class: 'app-grid' });
-    closed.forEach(a => closedGrid.appendChild(appCard(a, false)));
-    root.appendChild(closedGrid);
+  const params = new URLSearchParams(location.hash.slice(1));
+  const ticket = params.get('ticket');
+  const loginError = params.get('error');
+  if (ticket || loginError) history.replaceState(null, '', location.pathname);
+
+  root.replaceChildren(skeleton(3));
+
+  try { st.forms = (await loadJSON('applications.json')).positions || {}; }
+  catch (e) { st.forms = {}; st.formsError = true; }
+
+  if (ticket) {
+    try {
+      const out = await applyFetch('/auth/session', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ticket }) });
+      ApplyAuth.set(out.token);
+    } catch (e) { st.meError = e.message; }
+  } else if (loginError) {
+    st.meError = loginError === 'denied' ? 'Login was cancelled.' : 'Login did not work. Please try again.';
   }
-  reveal(root);
-}
 
-function appCard(a, isOpen) {
-  const card = el('article', { class: 'app-card' + (isOpen ? '' : ' closed') });
-  card.appendChild(el('div', { class: 'app-head' }, [
-    el('h3', { text: String(a.title || 'Position') }),
-    el('span', { class: 'tag ' + (isOpen ? 'resolved' : ''), text: isOpen ? 'Open' : 'Closed' })
-  ]));
-  if (a.description) card.appendChild(el('p', { class: 'app-desc', text: String(a.description) }));
-  const facts = el('div', { class: 'project-meta' });
-  if (isOpen && a.closes) facts.appendChild(el('span', { text: 'Closes ' + fmtDate(String(a.closes)) }));
-  if (!isOpen && a.reopens) facts.appendChild(el('span', { text: 'Expected to reopen ' + fmtDate(String(a.reopens)) }));
-  if (facts.children.length) card.appendChild(facts);
+  async function loadMe() {
+    if (!ApplyAuth.get()) { st.user = null; st.apps = []; return; }
+    try {
+      const me = await applyFetch('/apply/me');
+      st.user = me.user;
+      st.apps = Array.isArray(me.applications) ? me.applications : [];
+    } catch (e) {
+      if (e.status === 401) { ApplyAuth.set(null); st.user = null; st.apps = []; }
+      else st.meError = st.meError || e.message;
+    }
+  }
 
-  if (isOpen) {
-    if (Array.isArray(a.requirements) && a.requirements.length) {
-      card.appendChild(el('h4', { text: 'Requirements' }));
-      card.appendChild(el('ul', { class: 'app-list' }, a.requirements.map(r => el('li', { text: String(r) }))));
+  function canApply() { return st.online === true; }
+  function toTop() { window.scrollTo({ top: Math.max(0, root.getBoundingClientRect().top + window.scrollY - 110), behavior: REDUCED ? 'auto' : 'smooth' }); }
+
+  function formOf(key) {
+    const f = st.forms && st.forms[key];
+    return f && typeof f === 'object' ? f : { open: false };
+  }
+
+  /* ----- home: positions on the left, my applications on the right ----- */
+  function renderHome() {
+    st.view = 'home';
+    const layout = el('div', { class: 'apply-layout' });
+    const left = el('section', { class: 'apply-positions' });
+    const right = el('aside', { class: 'apply-side' });
+
+    left.appendChild(el('h2', { class: 'apply-h', text: 'Positions' }));
+    if (st.online === false) {
+      left.appendChild(el('div', { class: 'callout warn apply-down' }, [el('strong', { text: 'Applications are temporarily closed' }), ' due to connection errors. Nexus could not be reached, so nothing can be checked or sent right now. Try again in a little while.']));
+    } else if (st.formsError) {
+      left.appendChild(el('div', { class: 'callout warn' }, ['The list of open positions could not be loaded. Refresh the page in a minute.']));
     }
-    if (Array.isArray(a.questions) && a.questions.length) {
-      const qs = el('details', { class: 'faq app-qs' }, [
-        el('summary', { text: a.questions.length + (a.questions.length === 1 ? ' question' : ' questions') + ' you will be asked' }),
-        el('div', { class: 'a' }, [el('ol', { class: 'app-list' }, a.questions.map(q => el('li', { text: String(q) })))])
-      ]);
-      card.appendChild(qs);
+
+    POSITIONS.forEach((p, i) => {
+      const f = formOf(p.key);
+      const open = f.open === true;
+      const usable = open && canApply();
+      const card = el('article', { class: 'pos-card' + (open ? '' : ' closed') + (usable ? '' : ' locked'), style: '--pc:' + p.color + ';--i:' + i });
+      card.appendChild(el('div', { class: 'pos-top' }, [
+        el('span', { class: 'pos-dot' }),
+        el('h3', { text: p.name }),
+        el('span', { class: 'tag ' + (open ? 'resolved' : ''), text: open ? 'Open' : 'Closed' })
+      ]));
+      card.appendChild(el('p', { class: 'pos-desc', text: typeof f.description === 'string' && f.description ? f.description : p.desc }));
+      if (!open) {
+        card.appendChild(el('div', { class: 'pos-notice' }, ['This application is closed right now.' + (f.note ? ' ' + f.note : '')]));
+      } else {
+        const btn = el('button', { class: 'btn btn-primary pos-btn', type: 'button', text: st.user ? 'Apply' : 'Log in to apply' });
+        if (!usable) { btn.disabled = true; btn.textContent = st.online === null ? 'Checking Nexus…' : 'Temporarily closed'; }
+        btn.addEventListener('click', () => {
+          if (!canApply()) return;
+          if (!st.user) { location.href = ApplyAuth.loginUrl(); return; }
+          openRequirements(p.key);
+        });
+        card.appendChild(el('div', { class: 'pos-actions' }, [btn]));
+      }
+      left.appendChild(card);
+    });
+
+    right.appendChild(renderMine());
+    layout.append(left, right);
+    root.replaceChildren(layout);
+    reveal(root);
+  }
+
+  function renderMine() {
+    const box = el('div', { class: 'mine' });
+    box.appendChild(el('h2', { class: 'apply-h', text: 'Your applications' }));
+    if (st.meError) box.appendChild(el('p', { class: 'hint apply-err', text: st.meError }));
+    if (!st.user) {
+      box.appendChild(el('div', { class: 'mine-login' }, [
+        el('p', { text: 'Log in with Discord to apply and to see your open and past applications. Nexus only sees your username and avatar.' }),
+        el('a', { class: 'btn btn-primary', href: ApplyAuth.loginUrl(), text: 'Log in with Discord' })
+      ]));
+      return box;
     }
-    const link = safeLink(a.link);
-    card.appendChild(el('div', { class: 'actions', style: 'margin-top:16px' }, [
-      el('a', { class: 'btn btn-primary', href: link || NEXUS.support, target: '_blank', rel: 'noopener', text: link ? 'Apply now' : 'Apply in the support server' })
+    const who = el('div', { class: 'mine-user' });
+    if (st.user.avatar) who.appendChild(el('img', { src: st.user.avatar, alt: '', width: '36', height: '36' }));
+    else who.appendChild(el('span', { class: 'mine-ava', text: initials(st.user.name || '?') }));
+    who.appendChild(el('div', { class: 'mine-name' }, [el('strong', { text: st.user.name || 'You' }), el('span', { text: 'Logged in with Discord' })]));
+    const out = el('button', { class: 'btn btn-outline mine-out', type: 'button', text: 'Log out' });
+    out.addEventListener('click', async () => {
+      try { await applyFetch('/auth/logout', { method: 'POST' }); } catch (e) {}
+      ApplyAuth.set(null); st.user = null; st.apps = []; renderHome();
+    });
+    who.appendChild(out);
+    box.appendChild(who);
+
+    const current = st.apps.filter(a => a.status === 'pending');
+    const past = st.apps.filter(a => a.status !== 'pending');
+    box.appendChild(el('h3', { class: 'mine-h', text: 'Open' }));
+    if (!current.length) box.appendChild(el('p', { class: 'hint', text: 'Nothing waiting for review.' }));
+    current.forEach(a => box.appendChild(mineRow(a)));
+    box.appendChild(el('h3', { class: 'mine-h', text: 'Past' }));
+    if (!past.length) box.appendChild(el('p', { class: 'hint', text: 'No decided applications yet.' }));
+    past.forEach(a => box.appendChild(mineRow(a)));
+    return box;
+  }
+
+  function mineRow(a) {
+    const p = POSITION_BY_KEY[a.position] || { name: a.position, color: '#8b8d9c' };
+    const when = a.status === 'pending' ? 'Sent ' + fmtStamp(a.created) : 'Decided ' + fmtStamp(a.decided || a.created);
+    return el('div', { class: 'mine-row', style: '--pc:' + p.color }, [
+      el('div', {}, [el('strong', { text: p.name }), el('span', { text: when + ' · #' + a.id })]),
+      statusTag(a.status)
+    ]);
+  }
+
+  function header(p, step) {
+    const back = el('button', { class: 'btn btn-outline apply-back', type: 'button', text: '← All positions' });
+    back.addEventListener('click', () => { loadMe().then(() => { renderHome(); toTop(); }); });
+    return el('div', { class: 'flow-head', style: '--pc:' + p.color }, [
+      back,
+      el('p', { class: 'eyebrow', text: step }),
+      el('h2', {}, [el('span', { class: 'pos-dot' }), p.name + ' application'])
+    ]);
+  }
+
+  /* ----- step 1: requirements ----- */
+  async function openRequirements(key) {
+    const p = POSITION_BY_KEY[key];
+    st.view = 'req';
+    const wrap = el('div', { class: 'flow', style: '--pc:' + p.color });
+    const list = el('ul', { class: 'req-list' });
+    const rows = {};
+    REQUIREMENTS.forEach(([k, label], i) => {
+      const icon = el('span', { class: 'req-icon wait' });
+      const detail = el('span', { class: 'req-detail' });
+      const li = el('li', { class: 'req', style: '--i:' + i }, [icon, el('div', {}, [el('span', { class: 'req-label', text: label }), detail])]);
+      rows[k] = { li, icon, detail };
+      list.appendChild(li);
+    });
+    const foot = el('div', { class: 'flow-foot' });
+    wrap.append(header(p, 'Step 1 of 2 · Requirements'), el('p', { class: 'hint', text: 'Nexus is checking your account in the support server. You need a green check on every requirement to continue.' }), list, foot);
+    root.replaceChildren(wrap);
+    toTop();
+
+    let out;
+    try { out = await applyFetch('/apply/check/' + key); }
+    catch (e) {
+      if (e.status === 401) { ApplyAuth.set(null); location.href = ApplyAuth.loginUrl(); return; }
+      if (e.offline || e.status === 503) { st.online = false; }
+      Object.values(rows).forEach(r => { r.icon.className = 'req-icon bad'; });
+      foot.replaceChildren(el('div', { class: 'callout warn' }, [e.offline || e.status === 503 ? 'Applications are temporarily closed due to connection errors.' : e.message]));
+      return;
+    }
+    if (st.view !== 'req') return;
+    const byKey = Object.fromEntries((out.checks || []).map(c => [c.key, c]));
+    for (const [k] of REQUIREMENTS) {
+      await new Promise(r => setTimeout(r, REDUCED ? 0 : 380));
+      const c = byKey[k];
+      const r = rows[k];
+      if (!c) { r.li.remove(); continue; }
+      r.icon.className = 'req-icon ' + (c.ok ? 'ok' : 'bad');
+      r.li.classList.add(c.ok ? 'is-ok' : 'is-bad');
+      if (c.detail && !c.ok) r.detail.textContent = c.detail;
+    }
+    if (out.ok) {
+      const go = el('button', { class: 'btn btn-primary btn-lg', type: 'button', text: 'Continue to the application' });
+      go.addEventListener('click', () => renderForm(key, out.questions || []));
+      foot.replaceChildren(el('p', { class: 'req-pass', text: 'You meet every requirement.' }), go);
+    } else {
+      foot.replaceChildren(el('div', { class: 'callout warn' }, ['You need a check on every requirement before you can apply. Once you meet them, come back and try again. Questions? Ask in the ', el('a', { class: 'inline', href: NEXUS.support, target: '_blank', rel: 'noopener', text: 'support server' }), '.']));
+    }
+  }
+
+  /* ----- step 2: questions ----- */
+  function renderForm(key, questions) {
+    const p = POSITION_BY_KEY[key];
+    st.view = 'form';
+    const form = el('form', { class: 'app-form', novalidate: '' });
+    const files = {};
+    const getters = [];
+
+    questions.forEach((q, i) => {
+      if (!['short', 'long', 'choice', 'multi', 'image'].includes(q.type)) return;
+      const field = el('div', { class: 'q', style: '--i:' + i });
+      const id = 'q-' + q.id;
+      field.appendChild(el('label', { class: 'q-label', for: id }, [q.label, q.required === false ? el('span', { class: 'q-opt', text: ' (optional)' }) : '']));
+      const err = el('p', { class: 'q-err' });
+
+      if (q.type === 'short' || q.type === 'long') {
+        const input = q.type === 'short'
+          ? el('input', { id, type: 'text', maxlength: String(q.max || 200), autocomplete: 'off' })
+          : el('textarea', { id, rows: '6', maxlength: String(q.max || 2000) });
+        const count = el('span', { class: 'q-count', text: '0 / ' + (q.max || (q.type === 'short' ? 200 : 2000)) });
+        input.addEventListener('input', () => { count.textContent = input.value.length + ' / ' + (q.max || (q.type === 'short' ? 200 : 2000)); });
+        field.append(input, count);
+        getters.push(() => {
+          const v = input.value.trim();
+          if (q.required !== false && !v) return [null, 'Please answer this question.'];
+          return [v, null];
+        });
+      } else if (q.type === 'choice' || q.type === 'multi') {
+        const multi = q.type === 'multi';
+        const opts = el('div', { class: 'q-options', role: multi ? 'group' : 'radiogroup' });
+        (q.options || []).forEach((o, n) => {
+          const inp = el('input', { type: multi ? 'checkbox' : 'radio', name: id, value: o, id: id + '-' + n });
+          opts.appendChild(el('label', { class: 'q-choice', for: id + '-' + n }, [inp, el('span', { class: 'q-mark' }), el('span', { text: o })]));
+        });
+        field.appendChild(opts);
+        getters.push(() => {
+          const picked = Array.from(opts.querySelectorAll('input:checked')).map(x => x.value);
+          if (q.required !== false && !picked.length) return [null, multi ? 'Pick at least one option.' : 'Pick an option.'];
+          return [multi ? picked : (picked[0] || ''), null];
+        });
+      } else if (q.type === 'image') {
+        const max = q.max || 1;
+        files[q.id] = [];
+        const input = el('input', { id, type: 'file', accept: 'image/png,image/jpeg,image/gif,image/webp', class: 'q-file-input' });
+        if (max > 1) input.setAttribute('multiple', '');
+        const drop = el('label', { class: 'q-drop', for: id }, [el('strong', { text: 'Choose image' + (max > 1 ? 's' : '') }), el('span', { text: 'PNG, JPG, GIF or WEBP · up to 8 MB' + (max > 1 ? ' · up to ' + max : '') })]);
+        const previews = el('div', { class: 'q-previews' });
+        function draw() {
+          previews.replaceChildren();
+          files[q.id].forEach((f, n) => {
+            const url = URL.createObjectURL(f);
+            const rm = el('button', { type: 'button', class: 'q-rm', 'aria-label': 'Remove image', text: '×' });
+            rm.addEventListener('click', () => { files[q.id].splice(n, 1); draw(); });
+            const img = el('img', { src: url, alt: '' });
+            img.addEventListener('load', () => URL.revokeObjectURL(url));
+            previews.appendChild(el('div', { class: 'q-thumb' }, [img, rm]));
+          });
+          drop.style.display = files[q.id].length >= max ? 'none' : '';
+        }
+        input.addEventListener('change', () => {
+          err.textContent = '';
+          Array.from(input.files || []).forEach(f => {
+            if (files[q.id].length >= max) { err.textContent = 'You can add up to ' + max + ' image(s) here.'; return; }
+            if (!/^image\/(png|jpeg|gif|webp)$/.test(f.type)) { err.textContent = 'That file is not a PNG, JPG, GIF or WEBP image.'; return; }
+            if (f.size > APPLY_MAX_IMAGE) { err.textContent = f.name + ' is larger than 8 MB.'; return; }
+            files[q.id].push(f);
+          });
+          input.value = '';
+          draw();
+        });
+        field.append(input, drop, previews);
+        getters.push(() => {
+          if (q.required !== false && !files[q.id].length) return [undefined, 'Please add an image.'];
+          return [undefined, null];
+        });
+      }
+      field.appendChild(err);
+      getters[getters.length - 1].field = field;
+      getters[getters.length - 1].err = err;
+      getters[getters.length - 1].q = q;
+      form.appendChild(field);
+    });
+
+    if (!questions.length) form.appendChild(el('p', { class: 'hint', text: 'This position has no questions. Just send your application.' }));
+
+    const status = el('p', { class: 'form-status', role: 'status' });
+    const send = el('button', { class: 'btn btn-primary btn-lg', type: 'submit', text: 'Send application' });
+    form.append(el('div', { class: 'flow-foot' }, [send, status]));
+
+    form.addEventListener('submit', async ev => {
+      ev.preventDefault();
+      const answers = {};
+      let firstBad = null;
+      getters.forEach(g => {
+        const [v, problem] = g();
+        g.err.textContent = problem || '';
+        g.field.classList.toggle('bad', !!problem);
+        if (problem && !firstBad) firstBad = g.field;
+        if (v !== undefined && v !== null) answers[g.q.id] = v;
+      });
+      if (firstBad) { firstBad.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'center' }); status.textContent = 'Some answers need another look.'; return; }
+
+      const data = new FormData();
+      data.append('answers', JSON.stringify(answers));
+      Object.keys(files).forEach(qid => files[qid].forEach(f => data.append('image:' + qid, f, f.name)));
+      send.disabled = true;
+      send.textContent = 'Sending…';
+      status.textContent = '';
+      try {
+        const out = await applyFetch('/apply/submit/' + key, { method: 'POST', body: data }, 90000);
+        await loadMe();
+        renderDone(key, out.id);
+      } catch (e) {
+        send.disabled = false;
+        send.textContent = 'Send application';
+        if (e.status === 401) { status.textContent = 'Your login expired. Log in again, then send it again.'; return; }
+        status.textContent = e.offline || e.status === 503 ? 'Applications are temporarily closed due to connection errors. Your answers are still here, try again in a little while.' : e.message;
+      }
+    });
+
+    root.replaceChildren(el('div', { class: 'flow', style: '--pc:' + p.color }, [
+      header(p, 'Step 2 of 2 · Questions'),
+      el('p', { class: 'hint', text: 'Take your time. Your answers go straight to the team in Discord and are not stored on this website.' }),
+      form
     ]));
-  } else if (a.note) {
-    card.appendChild(el('p', { class: 'hint', text: String(a.note) }));
+    toTop();
   }
-  return card;
+
+  function renderDone(key, id) {
+    const p = POSITION_BY_KEY[key];
+    st.view = 'done';
+    const back = el('button', { class: 'btn btn-primary', type: 'button', text: 'Back to applications' });
+    back.addEventListener('click', () => { renderHome(); toTop(); });
+    root.replaceChildren(el('div', { class: 'flow done-card', style: '--pc:' + p.color }, [
+      el('div', { class: 'done-check' }),
+      el('h2', { text: 'Application sent' }),
+      el('p', { text: 'Your ' + p.name + ' application (#' + id + ') is with the team. You can follow its status on the right side of the Apply page. It changes to Accepted or Denied once someone has looked at it.' }),
+      back
+    ]));
+    toTop();
+  }
+
+  await loadMe();
+  Live.subscribe(live => {
+    const online = !live.error && !!(live.stats && live.stats.online);
+    if (online === st.online) return;
+    st.online = online;
+    if (st.view === 'home') renderHome();
+  });
+  if (st.online === null) renderHome();
 }
 
 const INTENT_STOP = new Set(['the', 'a', 'an', 'to', 'of', 'how', 'do', 'i', 'can', 'my', 'me', 'someone', 'somebody', 'in', 'on', 'for', 'with', 'is', 'it', 'and', 'or', 'what', 'who', 'want', 'need', 'that', 'this', 'you', 'your', 'we', 'our', 'please', 'from', 'up']);
