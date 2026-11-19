@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Status and changelog - Nexus</title>
-<meta name="description" content="Live status for Nexus, past incidents, and the changelog of every version.">
-<meta property="og:title" content="Nexus status and changelog">
-<meta property="og:description" content="Is Nexus running right now? See incidents and every update.">
+<title>Status - Nexus</title>
+<meta name="description" content="Live status straight from the Nexus bot, and a calendar of uptime.">
+<meta property="og:title" content="Nexus status">
+<meta property="og:description" content="Is Nexus running right now? Live status and uptime history.">
 <link rel="icon" type="image/png" href="../logo.png">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -16,26 +16,33 @@
 
 <header class="page-hero">
   <div class="wrap">
-    <p class="eyebrow">Live status</p>
+    <p class="eyebrow">Information · Live status</p>
     <div class="status-hero">
       <span class="dot" id="status-dot" aria-hidden="true"></span>
       <h1 id="status-headline">Checking status…</h1>
     </div>
-    <p>What's running, what isn't, and what we're doing about it. This page is updated by hand, so it reflects what the team knows.</p>
+    <p>This comes straight from the bot and refreshes every minute. The calendar shows how each day went, and any day with a note has an explanation from the team.</p>
     <div class="status-meta" id="status-meta"></div>
   </div>
 </header>
 
-<main class="wrap" style="padding-bottom:70px">
+<main class="wrap" style="padding-bottom:90px">
   <div id="status-root"></div>
-  <div class="callout" style="margin-top:34px">Something wrong that isn't listed here? Let us know in the <a data-link="support" href="#" style="color:var(--cyan)">support server</a>.</div>
 
-  <section class="section" id="changelog" style="padding-top:70px">
+  <section class="section" id="history" style="padding-top:70px">
     <div class="section-head">
-      <h2>Changelog</h2>
-      <p>New features and fixes, newest first.</p>
+      <h2>Uptime calendar</h2>
+      <p>Pick a day to see what happened. Days follow UTC time.</p>
     </div>
-    <div id="changelog-root"></div>
+    <div id="status-calendar"></div>
+  </section>
+
+  <section class="section" id="incidents" style="padding-top:40px">
+    <div class="section-head">
+      <h2>Current incidents</h2>
+    </div>
+    <div id="status-incidents"></div>
+    <div class="callout" style="margin-top:28px">Something wrong that isn't listed here? Tell us in the <a class="inline" data-link="support" href="#">support server</a>.</div>
   </section>
 </main>
 
