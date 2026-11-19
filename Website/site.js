@@ -54,7 +54,6 @@ function buildChrome() {
   const moreLinks = [
     ['compare', 'compare.html', 'Compare'],
     ['changelog', 'changelog.html', 'Changelog'],
-    ['faq', 'faq.html', 'FAQ'],
     ['privacy', 'privacy.html', 'Privacy']
   ];
 
@@ -91,7 +90,7 @@ function buildChrome() {
     list.appendChild(more);
 
     list.appendChild(el('a', { href: NEXUS.support, text: 'Support' }));
-    list.appendChild(el('a', { href: NEXUS.invite, class: 'nav-cta', text: 'Add Nexus' }));
+    list.appendChild(el('a', { href: 'dashboard.html', class: 'nav-cta' + (page === 'dashboard' ? ' active' : ''), text: 'Dashboard' }));
     const toggle = el('button', { class: 'nav-toggle', 'aria-label': 'Menu', text: '☰' });
     toggle.addEventListener('click', () => list.classList.toggle('open'));
     wrap.appendChild(brand); wrap.appendChild(list); wrap.appendChild(toggle);
@@ -175,65 +174,51 @@ async function initHomeStats() {
 }
 
 async function initCompare() {
-  const list = document.getElementById('cmp-list');
-  if (!list) return;
-  const result = document.getElementById('cmp-result');
-  const picker = document.getElementById('cmp-picker');
-  let rows;
-  try { rows = (await loadJSON('compare.json')).rows || []; }
-  catch (e) { result.textContent = 'The comparison could not be loaded right now. Try again in a minute.'; return; }
+  const root = document.getElementById('cmp-root');
+  if (!root) return;
+  let data;
+  try { data = await loadJSON('compare.json'); }
+  catch (e) { root.replaceChildren(el('p', { class: 'empty', text: 'The comparison could not be loaded right now. Try again in a minute.' })); return; }
 
-  const picked = new Set();
-  const rowEls = {};
-
-  list.appendChild(el('div', { class: 'cmp-head' }, [el('span', { text: 'The usual way' }), el('span', { text: 'What Nexus does' }), el('span', { text: 'In Nexus' })]));
-  let dividerAdded = false;
-  rows.forEach(r => {
-    const inNexus = r.status !== 'not-yet';
-    if (!inNexus && !dividerAdded) { list.appendChild(el('div', { class: 'cmp-divider', text: 'Not covered yet' })); dividerAdded = true; }
-    const body = el('div', { class: 'cmp-body' }, [el('p', { text: r.nexus || '' })]);
-    if ((r.cmds || []).length) {
-      const c = el('div', { class: 'cmds' });
-      r.cmds.forEach(x => c.appendChild(el('code', { text: x })));
-      body.appendChild(c);
-    }
-    const row = el('div', { class: 'cmp-row' + (inNexus ? '' : ' not-yet') }, [
-      el('div', { class: 'cmp-name' }, [el('b', { text: r.name }), el('small', { text: r.usual || '' })]),
-      body,
-      el('span', { class: 'cmp-badge ' + (inNexus ? 'in' : 'no'), text: inNexus ? 'Built in' : 'Not yet' })
-    ]);
-    rowEls[r.id] = row;
-    list.appendChild(row);
-
-    if (r.nochip) return;
-    const chip = el('button', { type: 'button', class: 'cmp-chip', 'aria-pressed': 'false', text: r.usual || r.name });
-    chip.addEventListener('click', () => {
-      if (picked.has(r.id)) picked.delete(r.id); else picked.add(r.id);
-      chip.setAttribute('aria-pressed', picked.has(r.id) ? 'true' : 'false');
-      row.classList.toggle('picked', picked.has(r.id));
-      summary();
-    });
-    picker.appendChild(chip);
+  const bots = data.bots || [];
+  const rows = data.rows || [];
+  const table = el('table', { class: 'cmp-table' });
+  const headRow = el('tr', {}, [el('th', { class: 'cmp-corner' })]);
+  bots.forEach(b => {
+    const logo = el('div', { class: 'cmp-logo' });
+    if (b.logo) logo.appendChild(el('img', { src: ROOT + b.logo, alt: '' }));
+    else logo.textContent = (b.name || '?').charAt(0);
+    headRow.appendChild(el('th', { class: 'cmp-col-head' + (b.highlight ? ' win' : ''), scope: 'col' }, [
+      el('span', { class: 'cmp-col-name', text: b.name }),
+      el('div', { class: 'cmp-col-body' }, [
+        logo,
+        el('span', { class: 'cmp-badge' }, [el('span', { class: 'tick', text: '✓' }), b.badge || ''])
+      ])
+    ]));
   });
+  table.appendChild(el('thead', {}, [headRow]));
 
-  const built = rows.filter(r => r.status !== 'not-yet').length;
-  const foot = document.getElementById('cmp-foot');
-  if (foot) foot.textContent = 'Nexus aims to cover the everyday version of each of these. A bot built for just one job may go deeper on it, so if you need something very specialised, keep using that bot alongside Nexus.';
+  const body = el('tbody');
+  rows.forEach(r => {
+    const tr = el('tr', {}, [el('th', { class: 'cmp-row-label', scope: 'row' }, [el('span', { text: r.icon || '•' }), r.label || ''])]);
+    bots.forEach(b => {
+      const c = (r.cells || {})[b.id] || {};
+      const cell = el('td', { class: 'cmp-cell' + (b.highlight ? ' win' : '') + (c.tone ? ' ' + c.tone : '') });
+      cell.appendChild(el('span', { class: 'val', text: (c.shield ? '🛡 ' : '') + (c.text || '') }));
+      if (typeof c.dots === 'number') {
+        const dots = el('span', { class: 'cmp-dots', 'aria-label': c.dots + ' out of 5' });
+        for (let i = 1; i <= 5; i++) dots.appendChild(el('i', { class: i <= c.dots ? 'on' : '' }));
+        cell.appendChild(dots);
+      }
+      tr.appendChild(cell);
+    });
+    body.appendChild(tr);
+  });
+  table.appendChild(body);
 
-  function summary() {
-    if (!picked.size) {
-      result.textContent = 'Nexus has ' + built + ' of these built in. Pick the bots you run today to see how many it could replace.';
-      return;
-    }
-    const chosen = rows.filter(r => picked.has(r.id));
-    const covered = chosen.filter(r => r.status !== 'not-yet');
-    const missing = chosen.filter(r => r.status === 'not-yet');
-    let t = 'Nexus covers ' + covered.length + ' of the ' + chosen.length + ' you picked.';
-    if (!missing.length) t += ' That is every one of them.';
-    else t += ' Not yet: ' + missing.map(r => r.name).join(', ') + '.';
-    result.textContent = t;
-  }
-  summary();
+  root.replaceChildren(el('div', { class: 'cmp-scroll' }, [table]));
+  if (data.verdict) root.appendChild(el('div', { class: 'callout cmp-verdict' }, [el('strong', { text: 'The verdict. ' }), data.verdict]));
+  if (data.note) root.appendChild(el('p', { class: 'cmp-note', text: data.note }));
 }
 
 async function initHome() {
@@ -456,7 +441,7 @@ async function initFaq() {
 
   root.innerHTML = '';
   (Array.isArray(groups) ? groups : []).forEach(group => {
-    if (group.title) root.appendChild(el('h2', { text: group.title }));
+    if (group.title && !(root.dataset.heading && groups.length === 1)) root.appendChild(el(root.dataset.heading || 'h2', { text: group.title }));
     (group.items || []).forEach(item => {
       root.appendChild(el('details', { class: 'faq' }, [
         el('summary', { text: item.q || '' }),
