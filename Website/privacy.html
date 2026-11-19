@@ -60,6 +60,8 @@
       <tr><td>Games</td><td>Per user and per game: wins, losses, draws, current streak, best streak and best score. This is not tied to any server.</td><td>Until removal is requested</td></tr>
       <tr><td>Blacklist</td><td>User ID, the reason and the time. Added by the bot owner only. A blacklisted user can't use Nexus or its dashboard in servers they own.</td><td>Until the owner removes it</td></tr>
       <tr><td>Dashboard changes</td><td>When someone changes a setting on the dashboard: the server, their user ID, what changed and the time.</td><td>Until a wipe</td></tr>
+      <tr><td>Moderation settings</td><td>Whether members get a DM for moderation actions, an optional note added to that DM, the default reason, whether a reason is required, and roles that are immune to warns, mutes, kicks or bans.</td><td>While the server uses Nexus, until a wipe</td></tr>
+      <tr><td>Error log</td><td>Things Nexus tried to do in a server but couldn't, like giving a role that sits above its own. Each entry has the time, where it happened and a short message, which can include the member's name. Only that server's admins can see it on the dashboard.</td><td>Up to 200 entries for 30 days, or until an admin clears it</td></tr>
       <tr><td>Data wipe requests</td><td>Server ID and name, the server owner, who ran the request, its status and the times.</td><td>Until the request is deleted</td></tr>
     </tbody>
   </table>
@@ -128,7 +130,7 @@
   <ul>
     <li>Your user ID, name and avatar are kept in the bot's memory while you're logged in, for up to 8 hours. They are never written to the database, and a bot restart clears them.</li>
     <li>Your browser keeps a random login key in session storage until you log out or close the tab. It is not a cookie and isn't shared with other sites.</li>
-    <li>Every member can open their own page for a server they share with Nexus. It shows their profile, their activity stats and their own moderation history, and never anyone else's.</li>
+    <li>Every member can open their own page for a server they share with Nexus. It shows their profile, activity stats, moderation history, active reminders, which giveaways they have entered, which commands they can use and their game stats, and never anyone else's.</li>
     <li>Only the server owner and members with the Administrator permission can open the admin side. Every change is checked against those permissions, and saved in the dashboard changes record shown above.</li>
   </ul>
 
