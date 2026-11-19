@@ -245,28 +245,28 @@ nav.site-nav.scrolled { top: 8px; height: 56px; background: var(--glass-strong);
 }
 .orbit { position: relative; aspect-ratio: 1; width: min(100%, 440px); margin: 0 auto; }
 .orbit .ring { position: absolute; inset: 0; border-radius: 50%; border: 1px dashed rgba(255, 255, 255, .12); animation: spin 40s linear infinite; }
-.orbit .ring:nth-child(2) { inset: 13%; border-style: solid; border-color: rgba(88, 101, 242, .25); animation-duration: 28s; animation-direction: reverse; }
-.orbit .ring:nth-child(3) { inset: 26%; border-color: rgba(79, 195, 224, .2); animation-duration: 20s; }
+.orbit .ring:nth-child(2) { inset: 7%; border-style: solid; border-color: rgba(88, 101, 242, .25); animation-duration: 28s; animation-direction: reverse; }
+.orbit .ring:nth-child(3) { inset: 15%; border-color: rgba(79, 195, 224, .2); animation-duration: 20s; }
 .orbit .ring i {
-  position: absolute; top: -18px; left: 50%; width: 36px; height: 36px; margin-left: -18px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center; font-style: normal; font-size: 17px;
+  position: absolute; top: -22px; left: 50%; width: 44px; height: 44px; margin-left: -22px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center; font-style: normal; font-size: 30px; line-height: 1;
   background: var(--glass-strong); border: 1px solid var(--line-strong); box-shadow: 0 8px 24px rgba(0, 0, 0, .4);
   animation: spin 40s linear infinite reverse;
 }
 .orbit .ring:nth-child(2) i { animation-duration: 28s; animation-direction: normal; }
 .orbit .ring:nth-child(3) i { animation-duration: 20s; }
-.orbit .ring i.b { top: auto; bottom: -18px; }
-.orbit .ring i.l { top: 50%; left: -18px; margin: -18px 0 0; }
-.orbit .ring i.r { top: 50%; left: auto; right: -18px; margin: -18px 0 0; }
+.orbit .ring i.b { top: auto; bottom: -22px; }
+.orbit .ring i.l { top: 50%; left: -22px; margin: -22px 0 0; }
+.orbit .ring i.r { top: 50%; left: auto; right: -22px; margin: -22px 0 0; }
 .orbit .core {
-  position: absolute; inset: 36%; border-radius: 30%;
+  position: absolute; inset: 34%; border-radius: 30%; z-index: 2;
   display: flex; align-items: center; justify-content: center;
   background: radial-gradient(circle at 30% 25%, rgba(255, 255, 255, .12), transparent 60%), #1b1d27;
   border: 1px solid var(--line-strong);
   box-shadow: 0 0 80px rgba(88, 101, 242, .45), 0 0 160px rgba(79, 195, 224, .18);
   animation: float 6s ease-in-out infinite;
 }
-.orbit .core img { width: 72%; height: 72%; object-fit: cover; border-radius: 26%; }
+.orbit .core img { width: 92%; height: 92%; object-fit: cover; border-radius: 26%; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes float { 50% { transform: translateY(-12px) rotate(2deg); } }
 
