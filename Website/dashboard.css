@@ -85,7 +85,7 @@ button.btn:disabled { opacity: .6; cursor: default; transform: none; }
 .top-list li span::before { content: counter(top) ". "; color: var(--muted); }
 
 .dash-layout { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 28px; align-items: start; }
-.dash-side { position: sticky; top: 84px; display: flex; flex-direction: column; gap: 2px; font-size: 14px; }
+.dash-side { position: sticky; top: 104px; display: flex; flex-direction: column; gap: 2px; font-size: 14px; }
 .dash-side .side-head {
   background: none; border: 0; text-align: left; font-family: inherit; cursor: pointer;
   font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700;
@@ -98,7 +98,7 @@ button.btn:disabled { opacity: .6; cursor: default; transform: none; }
 .dash-side a:hover { color: var(--text); background: var(--bg-raised); }
 .dash-side a.on { color: var(--text); border-left-color: var(--blurple); background: var(--bg-raised); }
 .dash-main { min-width: 0; }
-.dash-section { scroll-margin-top: 84px; }
+.dash-section { scroll-margin-top: 110px; }
 
 .dash-toggle { display: flex; align-items: center; gap: 10px; font-size: 14px; margin: 8px 0; cursor: pointer; }
 .dash-toggle input { width: 16px; height: 16px; accent-color: var(--blurple); flex: none; }
