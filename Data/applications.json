@@ -2,7 +2,7 @@
   "bypass": [],
   "positions": {
     "moderator": {
-      "open": false,
+      "open": true,
       "questions": []
     },
     "support": {
