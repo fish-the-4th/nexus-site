@@ -1,9 +1,9 @@
 {
   "bots": [
     { "id": "nexus", "name": "Nexus", "badge": "Best all-rounder", "logo": "logo.png", "highlight": true },
-    { "id": "mee6", "name": "MEE6", "badge": "Leveling" },
-    { "id": "dyno", "name": "Dyno", "badge": "Moderation" },
-    { "id": "carl", "name": "Carl-bot", "badge": "Reaction roles" }
+    { "id": "mee6", "name": "MEE6", "logo": "mee6.logo.png" },
+    { "id": "Dyno", "name": "Dyno", "logo": "dyno.logo.png" },
+    { "id": "Carl", "name": "Carl Bot", "logo": "carl.logo.png" }
   ],
   "rows": [
     {
@@ -11,9 +11,9 @@
       "icon": "💰",
       "cells": {
         "nexus": { "text": "Free, every feature", "tone": "good" },
-        "mee6": { "text": "Free + paid Premium" },
-        "dyno": { "text": "Free + paid Premium" },
-        "carl": { "text": "Free + paid Premium" }
+        "mee6": { "text": "Barely Free + Paid Premium" },
+        "dyno": { "text": "Free + Paid Premium" },
+        "carl": { "text": "Free + Paid Premium" }
       }
     },
     {
@@ -21,18 +21,18 @@
       "icon": "🧩",
       "cells": {
         "nexus": { "dots": 5, "text": "Very high" },
-        "mee6": { "dots": 3, "text": "Moderate" },
-        "dyno": { "dots": 3, "text": "Moderate" },
-        "carl": { "dots": 4, "text": "High" }
+        "mee6": { "dots": 4, "text": "High" },
+        "dyno": { "dots": 4, "text": "High" },
+        "carl": { "dots": 3, "text": "Moderate" }
       }
     },
     {
       "label": "Moderation and AutoMod",
       "icon": "🛡️",
       "cells": {
-        "nexus": { "dots": 5, "text": "Very high" },
-        "mee6": { "dots": 3, "text": "Moderate" },
-        "dyno": { "dots": 4, "text": "High" },
+        "nexus": { "dots": 3, "text": "Moderate" },
+        "mee6": { "dots": 5, "text": "Very High" },
+        "dyno": { "dots": 3, "text": "Moderate" },
         "carl": { "dots": 4, "text": "High" }
       }
     },
@@ -40,10 +40,10 @@
       "label": "Tickets",
       "icon": "🎫",
       "cells": {
-        "nexus": { "dots": 4, "text": "Built in" },
-        "mee6": { "dots": 2, "text": "Limited" },
-        "dyno": { "dots": 2, "text": "Limited" },
-        "carl": { "dots": 2, "text": "Limited" }
+        "nexus": { "dots": 2, "text": "Limited" },
+        "mee6": { "dots": 3, "text": "Moderate" },
+        "dyno": { "dots": 3, "text": "Moderate" },
+        "carl": { "dots": 4, "text": "High" }
       }
     },
     {
@@ -51,9 +51,9 @@
       "icon": "📊",
       "cells": {
         "nexus": { "dots": 5, "text": "Very high" },
-        "mee6": { "dots": 2, "text": "Low" },
-        "dyno": { "dots": 2, "text": "Low" },
-        "carl": { "dots": 2, "text": "Low" }
+        "mee6": { "dots": 3, "text": "Moderate" },
+        "dyno": { "dots": 3, "text": "Moderate" },
+        "carl": { "dots": 3, "text": "Moderate" }
       }
     },
     {
@@ -62,7 +62,7 @@
       "cells": {
         "nexus": { "dots": 5, "text": "10 games" },
         "mee6": { "dots": 1, "text": "Few" },
-        "dyno": { "dots": 1, "text": "Few" },
+        "dyno": { "dots": 3, "text": "Basic games" },
         "carl": { "dots": 1, "text": "Few" }
       }
     },
@@ -70,7 +70,7 @@
       "label": "Privacy",
       "icon": "🔒",
       "cells": {
-        "nexus": { "text": "Never stores message text", "tone": "good", "shield": true },
+        "nexus": { "text": "Fully transparent on data collection", "tone": "good", "shield": true },
         "mee6": { "text": "See their policy", "tone": "neutral" },
         "dyno": { "text": "See their policy", "tone": "neutral" },
         "carl": { "text": "See their policy", "tone": "neutral" }
