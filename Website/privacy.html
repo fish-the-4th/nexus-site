@@ -63,6 +63,8 @@
       <tr><td>Moderation settings</td><td>Whether members get a DM for moderation actions, an optional note added to that DM, the default reason, whether a reason is required, and roles that are immune to warns, mutes, kicks or bans.</td><td>While the server uses Nexus, until a wipe</td></tr>
       <tr><td>Error log</td><td>Things Nexus tried to do in a server but couldn't, like giving a role that sits above its own. Each entry has the time, where it happened and a short message, which can include the member's name. Only that server's admins can see it on the dashboard.</td><td>Up to 200 entries for 30 days, or until an admin clears it</td></tr>
       <tr><td>Uptime history</td><td>One record for each minute Nexus was online, used for the status calendar. It holds only the time, nothing about any person or server.</td><td>120 days</td></tr>
+      <tr><td>Staff applications</td><td>For each application sent from the Apply page: your user ID, the position, when you sent it, whether it was accepted or denied, who decided and when. Your answers and images are not kept by Nexus or the website. They are posted once to a private staff channel in the support server, where they stay as Discord messages.</td><td>Until removal is requested</td></tr>
+      <tr><td>Support server message count</td><td>A running count of how many messages you have sent in the Nexus support server, used for the 100 message requirement. The messages themselves are not saved.</td><td>Until removal is requested</td></tr>
       <tr><td>Data wipe requests</td><td>Server ID and name, the server owner, who ran the request, its status and the times.</td><td>Until the request is deleted</td></tr>
     </tbody>
   </table>
@@ -123,7 +125,7 @@
   </ul>
 
   <h2 id="the-website">The website</h2>
-  <p>Apart from the dashboard, this site is static. It has no forms or comments, doesn't run analytics, and loads no scripts from other sites. The pages fetch a few small data files (the command list, status, staff, projects, applications and changelog) from the same place they are hosted. The home, about and status pages also ask the Nexus bot for live public numbers: whether it's online, how many servers and members it has in total, and its uptime history. Those requests carry no login and no personal data, and your IP address is only used for a minute or two to stop spam, the same as the dashboard. GitHub, which hosts the site, may keep ordinary server logs under its own policy.</p>
+  <p>Apart from the dashboard and the Apply page, this site is static. It has no other forms or comments, doesn't run analytics, and loads no scripts from other sites. The pages fetch a few small data files (the command list, status, staff, projects, applications and changelog) from the same place they are hosted. The home, about and status pages also ask the Nexus bot for live public numbers: whether it's online, how many servers and members it has in total, and its uptime history. Those requests carry no login and no personal data, and your IP address is only used for a minute or two to stop spam, the same as the dashboard. GitHub, which hosts the site, may keep ordinary server logs under its own policy.</p>
   <p>Links to Discord, Top.gg and the support server take you to those sites, and they follow their own privacy policies.</p>
 
   <h3>The dashboard</h3>
