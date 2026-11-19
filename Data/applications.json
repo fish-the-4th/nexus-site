@@ -2,23 +2,23 @@
   "bypass": [],
   "positions": {
     "moderator": {
-      "open": true,
+      "open": false,
       "questions": []
     },
     "support": {
-      "open": true,
+      "open": false,
       "questions": []
     },
     "tester": {
-      "open": true,
+      "open": false,
       "questions": []
     },
     "ambassador": {
-      "open": true,
+      "open": false,
       "questions": []
     },
     "helper": {
-      "open": true,
+      "open": false,
       "questions": []
     }
   }
