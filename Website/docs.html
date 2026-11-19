@@ -1,0 +1,1904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentation - Nexus</title>
+<meta name="description" content="Guides for every part of Nexus: setup, moderation, AutoMod, logging, tickets, roles, stats, games and more.">
+<link rel="icon" type="image/png" href="../logo.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="docs">
+
+<div id="site-nav"></div>
+
+<header class="page-hero">
+  <div class="wrap wide">
+    <h1>Documentation</h1>
+    <p>Guides for every part of Nexus, from the first five minutes to running a busy server. Looking for a plain list of commands? Jump to the <a class="inline" href="#/commands">command list</a>.</p>
+  </div>
+</header>
+
+<div class="wrap wide docs docs-wide">
+
+  <button class="docs-menu-btn" id="doc-menu" type="button" aria-expanded="false"><span>Overview</span><span aria-hidden="true">&#9662;</span></button>
+
+  <aside class="docs-side">
+    <input id="doc-search" class="search docs-search" type="search" placeholder="Search the docs" autocomplete="off" aria-label="Search the docs">
+    <div id="doc-nomatch" class="no-match" hidden>Nothing matches that.</div>
+
+    <h5>Start here</h5>
+    <a href="#/overview" data-doc="overview">Overview</a>
+    <a href="#/getting-started" data-doc="getting-started">Getting started</a>
+    <a href="#/how-nexus-works" data-doc="how-nexus-works">How Nexus works</a>
+    <a href="#/time-formats" data-doc="time-formats">Time formats</a>
+
+    <h5>Guides</h5>
+    <a href="#/guide-new-server" data-doc="guide-new-server">Set up a new server</a>
+    <a href="#/guide-protect" data-doc="guide-protect">Protect your server</a>
+    <a href="#/guide-staff" data-doc="guide-staff">Run a moderation team</a>
+    <a href="#/guide-events" data-doc="guide-events">Run events and giveaways</a>
+
+    <h5>Moderation</h5>
+    <a href="#/moderation" data-doc="moderation">Moderation</a>
+    <a href="#/cases" data-doc="cases">Cases and history</a>
+    <a href="#/notes" data-doc="notes">Staff notes</a>
+    <a href="#/automod" data-doc="automod">AutoMod</a>
+    <a href="#/logging" data-doc="logging">Logging</a>
+
+    <h5>Server tools</h5>
+    <a href="#/tickets" data-doc="tickets">Tickets</a>
+    <a href="#/roles" data-doc="roles">Roles and autoroles</a>
+    <a href="#/command-access" data-doc="command-access">Command access</a>
+    <a href="#/starboard" data-doc="starboard">Starboard</a>
+    <a href="#/giveaways" data-doc="giveaways">Giveaways</a>
+
+    <h5>For members</h5>
+    <a href="#/games" data-doc="games">Games</a>
+    <a href="#/stats" data-doc="stats">Stats</a>
+    <a href="#/reminders" data-doc="reminders">Reminders</a>
+    <a href="#/info" data-doc="info">Info and lookup</a>
+    <a href="#/utilities" data-doc="utilities">Utilities</a>
+
+    <h5>Help</h5>
+    <a href="#/troubleshooting" data-doc="troubleshooting">Troubleshooting</a>
+    <a href="#/data-wipe" data-doc="data-wipe">Data wipe</a>
+    <a href="#/commands" data-doc="commands">Command list</a>
+    <a href="#/privacy" data-doc="privacy">Privacy</a>
+    <a data-link="support" href="#" data-external>Support server</a>
+  </aside>
+
+  <main class="docs-main doc prose" id="doc-root">
+
+
+<article class="doc-page" data-doc="overview" data-title="Overview">
+  <div class="doc-crumb">Start here</div>
+  <h1>Overview</h1>
+  <p class="lead">Nexus is a Discord bot that takes care of moderation, protection, logging, tickets, roles, stats, games and a handful of everyday tools, all from one place, with nothing to log in to.</p>
+
+  <h2>What Nexus does</h2>
+  <p>Everything is a text command, and every feature has its own guide in these docs.</p>
+  <div class="grid three">
+    <a class="card" href="#/moderation"><span class="icon">🔨</span><h4>Moderation</h4><p>Kick, ban, mute and warn, with numbered cases for everything.</p></a>
+    <a class="card" href="#/automod"><span class="icon">🛡️</span><h4>AutoMod</h4><p>Stops spam, scam links and raids while you're away.</p></a>
+    <a class="card" href="#/logging"><span class="icon">📋</span><h4>Logging</h4><p>Nine kinds of events, each sent to the channel you choose.</p></a>
+    <a class="card" href="#/tickets"><span class="icon">🎫</span><h4>Tickets</h4><p>Private support channels members open with one click.</p></a>
+    <a class="card" href="#/roles"><span class="icon">🎭</span><h4>Roles</h4><p>Join roles, roles that come back, and roles that expire.</p></a>
+    <a class="card" href="#/stats"><span class="icon">📊</span><h4>Stats</h4><p>Thirty days of activity, turned into graphs.</p></a>
+    <a class="card" href="#/games"><span class="icon">🎮</span><h4>Games</h4><p>Ten games to play against Nexus or a friend.</p></a>
+    <a class="card" href="#/giveaways"><span class="icon">🎉</span><h4>Giveaways and starboard</h4><p>Run giveaways and celebrate the best messages.</p></a>
+    <a class="card" href="#/utilities"><span class="icon">🧰</span><h4>Everyday tools</h4><p>Reminders, translation, lookups and server info.</p></a>
+  </div>
+
+  <h2>How you use it</h2>
+  <p>You type a command in any channel where Nexus can read and send messages. Commands start with the server's prefix, which is <code>-</code> unless someone changed it. You can also mention Nexus instead of using a prefix.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-ping</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>🏓 Pong! 42ms</div></div>
+  </div>
+  <p>There's no website dashboard to learn. Settings are stored per server, so what you set up in one server never affects another.</p>
+
+  <h2>Where to start</h2>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>You are</th><th>Start with</th></tr></thead>
+    <tbody>
+      <tr><td>Adding Nexus to a new server</td><td><a class="inline" href="#/getting-started">Getting started</a>, then <a class="inline" href="#/guide-new-server">Set up a new server</a></td></tr>
+      <tr><td>Worried about spam or raids</td><td><a class="inline" href="#/guide-protect">Protect your server</a></td></tr>
+      <tr><td>A moderator or building a team</td><td><a class="inline" href="#/guide-staff">Run a moderation team</a></td></tr>
+      <tr><td>Planning something for your community</td><td><a class="inline" href="#/guide-events">Run events and giveaways</a></td></tr>
+      <tr><td>A member who wants to play or look things up</td><td><a class="inline" href="#/games">Games</a>, <a class="inline" href="#/reminders">Reminders</a> and <a class="inline" href="#/info">Info and lookup</a></td></tr>
+      <tr><td>Stuck on something</td><td><a class="inline" href="#/troubleshooting">Troubleshooting</a></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>How these docs are organised</h2>
+  <ul>
+    <li><strong>Start here</strong> covers the basics every server needs.</li>
+    <li><strong>Guides</strong> walk through a whole job from start to finish, like setting up a server or handling a raid.</li>
+    <li><strong>Feature pages</strong> explain how one system works, what it does in practice, and the things worth knowing before you rely on it.</li>
+    <li>The exact syntax of every command is in the <a class="inline" href="#/commands">command list</a>, so these pages don't repeat it all.</li>
+  </ul>
+
+  <h2>Getting help</h2>
+  <p>Check <a class="inline" href="#/troubleshooting">Troubleshooting</a> first. If you're still stuck, ask in the <a class="inline" data-link="support" href="#">support server</a> and include what you typed and what Nexus said back. The <a class="inline" href="status.html">status page</a> shows whether anything is down.</p>
+</article>
+
+<article class="doc-page" data-doc="getting-started" data-title="Getting started">
+  <div class="doc-crumb">Start here</div>
+  <h1>Getting started</h1>
+  <p class="lead">Add Nexus, put its role in the right place, and check that it answers. This takes about five minutes, and the role order is the step people most often skip.</p>
+
+  <h2>1. Add Nexus</h2>
+  <p>Use the invite link and pick your server. You need the Manage Server permission to add a bot.</p>
+  <div class="actions">
+    <a class="btn btn-primary" data-link="invite" href="#">Add Nexus</a>
+    <a class="btn btn-outline" data-link="support" href="#">Ask in the support server</a>
+  </div>
+  <p>The invite asks for the Administrator permission. That's deliberate: it means every feature works without a permission puzzle. If you'd rather give Nexus less, you can edit its role after it joins. A feature that needs a permission Nexus doesn't have will tell you which one is missing.</p>
+
+  <h2>2. Put the Nexus role in the right place</h2>
+  <p>Discord decides what a bot can do by its permissions and by where its role sits in the role list. A bot can only act on people and roles <em>below</em> its own role. That means Nexus can't ban, mute, or give a role to anyone who sits above it.</p>
+  <p>Open <strong>Server Settings, Roles</strong> and drag the Nexus role up so it sits above every role it needs to manage, but below your own admin roles.</p>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Position</th><th>Role</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Top</td><td>Owner and admin roles</td><td>People Nexus should never act on</td></tr>
+      <tr><td>Next</td><td><strong class="hl">Nexus</strong></td><td>Needs to be above anything it moderates or hands out</td></tr>
+      <tr><td>Below that</td><td>Moderator roles</td><td>Moderators can act on members, and Nexus can act on them</td></tr>
+      <tr><td>Bottom</td><td>Member roles</td><td>What join roles and timed roles usually give out</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout warn"><strong>If you do only one thing from this page, do this.</strong> When Nexus says <em>"I can't do that to X, their role sits above mine"</em>, the role order is almost always the reason.</div>
+
+  <h2>3. Check that it answers</h2>
+  <p>In any channel Nexus can see, type:</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-ping</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>🏓 Pong! 38ms</div></div>
+  </div>
+  <p>If nothing comes back, check that Nexus can view and send messages in that channel, then see <a class="inline" href="#/troubleshooting">Troubleshooting</a>.</p>
+
+  <h2>4. Open the commands menu</h2>
+  <p>Run <code>-commands</code> for a menu with a button for every category. Only you can see what comes up when you press a button, so it won't clutter the channel. <code>-help</code> gives a shorter set of tips and the support buttons.</p>
+
+  <h2>What permissions Nexus needs</h2>
+  <p>If you're giving Nexus specific permissions instead of Administrator, this is what each feature uses.</p>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Permission</th><th>Used for</th></tr></thead>
+    <tbody>
+      <tr><td>View Channels, Send Messages, Embed Links</td><td>Everything. Nexus answers with embeds.</td></tr>
+      <tr><td>Ban Members</td><td><code>-ban</code>, <code>-unban</code>, timed bans, voiding a ban</td></tr>
+      <tr><td>Kick Members</td><td><code>-kick</code>, and AutoMod raid lockdown kicks</td></tr>
+      <tr><td>Moderate Members</td><td><code>-mute</code> and <code>-unmute</code> (Discord timeouts)</td></tr>
+      <tr><td>Manage Messages</td><td><code>-purge</code>, and AutoMod deleting spam and scam links</td></tr>
+      <tr><td>Manage Channels</td><td><code>-slowmode</code>, ticket channels</td></tr>
+      <tr><td>Manage Roles</td><td>Join roles, persistent roles, timed roles, <code>-role</code> commands, and changing channel permissions for <code>-lock</code>, tickets and raid lockdown</td></tr>
+      <tr><td>Manage Server</td><td>Reading invites for <code>-stats invite</code> and invite logs</td></tr>
+      <tr><td>View Audit Log</td><td>Telling kicks and bans apart in logs</td></tr>
+      <tr><td>Add Reactions, Read Message History</td><td>Giveaways and the starboard</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Changing the prefix</h2>
+  <p>The default prefix is <code>-</code>. Anyone with Manage Server can change it for the server.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-prefix set !</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>Done. My prefix here is now `!`.</div></div>
+  </div>
+  <p>A prefix can be up to five characters with no spaces. Mentioning Nexus always works as a prefix too, even if you forget the one you chose. Run <code>-prefix</code> on its own to see the current one.</p>
+
+  <h2>What to do next</h2>
+  <div class="grid two">
+    <a class="card" href="#/guide-new-server"><h4>Set up a new server</h4><p>A step-by-step first setup: logs, AutoMod, join roles and tickets.</p></a>
+    <a class="card" href="#/how-nexus-works"><h4>How Nexus works</h4><p>Cooldowns, cases, permissions and the things that apply everywhere.</p></a>
+  </div>
+</article>
+
+<article class="doc-page" data-doc="how-nexus-works" data-title="How Nexus works">
+  <div class="doc-crumb">Start here</div>
+  <h1>How Nexus works</h1>
+  <p class="lead">A handful of rules apply to every command. Knowing them makes the rest of the docs easier, and explains most of the "why did it say that" moments.</p>
+
+  <h2>Commands and the prefix</h2>
+  <p>A command is a prefix followed by a name and any details: <code>-ban @Sam 7d spamming</code>. The default prefix is <code>-</code>. Each server can set its own, and you can always mention Nexus instead (<code>@Nexus ping</code>).</p>
+  <p>Square brackets in the docs, like <code>[user]</code>, mean "fill this in". Nexus reads the inputs in the order shown.</p>
+  <div class="callout">When a command asks for a <strong>user</strong>, a mention or a Discord ID always works. Most commands also accept a username. IDs are the safest choice when two people have similar names, and they're the only way to reach someone who isn't in the server.</div>
+
+  <h2>Two permission checks</h2>
+  <p>Every command that changes something goes through two checks.</p>
+  <div class="cols">
+    <div class="card"><h4>1. Do you have permission?</h4><p>Each command needs a Discord permission, like Kick Members or Manage Roles. Owners and administrators can use everything. The Commands page lists the permission for each command, and <a class="inline" href="#/command-access">Command access</a> lets admins change who can use what.</p></div>
+    <div class="card"><h4>2. Does the role order allow it?</h4><p>You can only act on someone whose top role is below yours. Nexus needs the same: its role must be above them. The server owner is exempt from the first rule.</p></div>
+  </div>
+  <p>When the role order blocks something, Nexus says so in the channel instead of failing quietly. See <a class="inline" href="#/troubleshooting">Troubleshooting</a> if you hit it.</p>
+
+  <h2>Cooldowns</h2>
+  <p>Nexus runs on a small host with limited resources, so each person is limited in how fast they can run commands:</p>
+  <ul>
+    <li>No two commands within <strong>2 seconds</strong> of each other.</li>
+    <li>The same command can't be repeated within <strong>3 seconds</strong>.</li>
+  </ul>
+  <p>If you hit a limit, Nexus tells you how long to wait. It only affects you, never anyone else in the channel.</p>
+
+  <h2>Cases</h2>
+  <p>Kicks, bans, mutes, warnings and their reversals each create a <strong>case</strong>: a record with a number like <code>A1B2-C3D4-E5F6</code>. The member is sent a DM with the reason (if their DMs are closed, the action still goes through). Cases are kept per server, so one server can never see another's. The <a class="inline" href="#/cases">Cases and history</a> page covers looking them up.</p>
+
+  <h2>Direct messages</h2>
+  <p>Nexus is built for servers. In a DM, only <code>-ping</code>, <code>-commands</code> and <code>-help</code> work. The one thing Nexus does send you privately is your own moderation history, when you run <code>-myhistory</code> in a server.</p>
+
+  <h2>Timestamps</h2>
+  <p>When Nexus shows a time, like when a reminder is due or a giveaway ends, it uses Discord's own timestamps. Everyone sees them converted to their own time zone automatically.</p>
+
+  <h2>Blacklist</h2>
+  <p>The Nexus owner can blacklist a user who abuses the bot. A blacklisted user gets a message the next time they try a command, and Nexus ignores them otherwise. If you think it's a mistake, ask in the <a class="inline" data-link="support" href="#">support server</a>.</p>
+
+  <h2>Your server's data</h2>
+  <p>Settings, cases and the rest are stored per server and stay until they're removed or the server's data is wiped. Activity stats and join records are deleted after 30 days. The <a class="inline" href="privacy.html">privacy page</a> lists exactly what is kept.</p>
+</article>
+
+<article class="doc-page" data-doc="time-formats" data-title="Time formats">
+  <div class="doc-crumb">Start here</div>
+  <h1>Time formats</h1>
+  <p class="lead">Anywhere Nexus asks for a length of time, you write a number followed by a unit, like <code>2h</code> or <code>1d12h</code>. Each command accepts a slightly different set, so this page lists them all.</p>
+
+  <h2>The basic format</h2>
+  <p>Write a number and a unit with no space between them, and chain several together to combine them.</p>
+  <div class="table-wrap">
+  <table class="ref tight">
+    <thead><tr><th>Unit</th><th>Letters and words it accepts</th></tr></thead>
+    <tbody>
+      <tr><td>Seconds</td><td><code>s</code> <code>sec</code> <code>secs</code> <code>second</code> <code>seconds</code></td></tr>
+      <tr><td>Minutes</td><td><code>m</code> <code>min</code> <code>mins</code> <code>minute</code> <code>minutes</code></td></tr>
+      <tr><td>Hours</td><td><code>h</code> <code>hr</code> <code>hrs</code> <code>hour</code> <code>hours</code></td></tr>
+      <tr><td>Days</td><td><code>d</code> <code>day</code> <code>days</code></td></tr>
+      <tr><td>Weeks</td><td><code>w</code> <code>week</code> <code>weeks</code></td></tr>
+      <tr><td>Months (30 days)</td><td><code>mon</code> <code>month</code> <code>months</code></td></tr>
+      <tr><td>Years (365 days)</td><td><code>y</code> <code>yr</code> <code>yrs</code> <code>year</code> <code>years</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Some examples: <code>30m</code>, <code>2h</code>, <code>3d</code>, <code>1w</code>, <code>1h30m</code>, <code>2d12h</code>.</p>
+
+  <h2>What each command accepts</h2>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Command</th><th>Units</th><th>Limit</th></tr></thead>
+    <tbody>
+      <tr><td><code>-ban</code></td><td>Seconds, minutes, hours and days. The length is optional.</td><td>Leave it out for a permanent ban</td></tr>
+      <tr><td><code>-mute</code></td><td>A plain number of <strong>minutes</strong>, not a unit</td><td>1 minute to 28 days (40320 minutes)</td></tr>
+      <tr><td><code>-reminder create</code></td><td>Seconds up to weeks</td><td>Up to 1 year</td></tr>
+      <tr><td><code>-giveaway start</code></td><td>Seconds up to weeks</td><td>Up to 30 days</td></tr>
+      <tr><td><code>-timed role add</code></td><td>Every unit, including months and years</td><td>Up to 5 years</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Common mistakes</h2>
+  <ul>
+    <li><strong>A number with no unit.</strong> <code>-reminder create 30 take a break</code> doesn't say whether that's seconds, minutes or hours, so Nexus asks you to try again. Write <code>30m</code>.</li>
+    <li><strong>A space inside the time.</strong> <code>1h 30m</code> is read as <code>1h</code> followed by the reminder text "30m". Write <code>1h30m</code>.</li>
+    <li><strong>A unit the command doesn't know.</strong> Months only work for timed roles. For a reminder, use days (<code>30d</code>).</li>
+    <li><strong>A time that's too long.</strong> Each command has a limit, shown above.</li>
+  </ul>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-reminder create 1h30m Check the oven</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>✅ Reminder set
+Check the oven
+I will remind you: in 2 hours</div></div>
+  </div>
+</article>
+
+
+<article class="doc-page" data-doc="guide-new-server" data-title="Set up a new server">
+  <div class="doc-crumb">Guides</div>
+  <h1>Set up a new server</h1>
+  <p class="lead">A first-time setup that covers logs, AutoMod, welcome roles, tickets and the starboard. Plan on about fifteen minutes. You can stop after any step, and everything you've done so far keeps working.</p>
+
+  <h2>Before you start</h2>
+  <ul>
+    <li>Add Nexus and move its role above the roles it manages. <a class="inline" href="#/getting-started">Getting started</a> shows how.</li>
+    <li>You need to be the owner, an administrator, or have the Manage Server permission. Ticket setup needs Administrator.</li>
+    <li>Decide which channels staff should see. Log channels can contain the text of deleted messages, so keep them private.</li>
+  </ul>
+
+  <h2>1. Create the channels</h2>
+  <p>Make these in your server first, so you can point Nexus at them. You can name them anything.</p>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Channel</th><th>Used for</th><th>Who should see it</th></tr></thead>
+    <tbody>
+      <tr><td>#mod-log</td><td>Bans, kicks, mutes and warnings</td><td>Staff only</td></tr>
+      <tr><td>#message-log</td><td>Deleted and edited messages</td><td>Staff only</td></tr>
+      <tr><td>#member-log</td><td>Joins, leaves, name changes, roles</td><td>Staff only</td></tr>
+      <tr><td>#automod-log</td><td>What AutoMod caught</td><td>Staff only</td></tr>
+      <tr><td>#ticket-logs</td><td>Ticket activity</td><td>Staff only</td></tr>
+      <tr><td>Tickets (a category)</td><td>Where ticket channels are created</td><td>Hidden from members</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Make sure Nexus can view and send messages in every one of them.</p>
+
+  <h2>2. Turn on logging</h2>
+  <p>Logging sends each kind of event to a channel you choose. A good starting set is moderation, messages and users. You can add the rest later.</p>
+  <div class="chat">
+    <div class="caption">Run these in any channel</div>
+    <div class="line you"><span class="who">You</span><div>-log moderation #mod-log</div></div>
+    <div class="line you"><span class="who">You</span><div>-log messages #message-log</div></div>
+    <div class="line you"><span class="who">You</span><div>-log users #member-log</div></div>
+    <div class="line you"><span class="who">You</span><div>-log roles #member-log</div></div>
+  </div>
+  <p>Run <code>-logs</code> afterwards to see every type and where it goes. The full list of types and what each one records is on the <a class="inline" href="#/logging">Logging</a> page.</p>
+
+  <h2>3. Turn on AutoMod</h2>
+  <p>AutoMod has three protections. A level of 5 is a sensible starting point for each one.</p>
+  <div class="chat">
+    <div class="caption">Run these in any channel</div>
+    <div class="line you"><span class="who">You</span><div>-automod setup spam 5</div></div>
+    <div class="line you"><span class="who">You</span><div>-automod setup scam 5</div></div>
+    <div class="line you"><span class="who">You</span><div>-automod setup raids 5</div></div>
+    <div class="line you"><span class="who">You</span><div>-automod logging #automod-log</div></div>
+    <div class="line you"><span class="who">You</span><div>-automod whitelist add @Moderators</div></div>
+  </div>
+  <p>The last line exempts your moderators, so AutoMod never deletes their messages. Other people are checked as normal. <a class="inline" href="#/guide-protect">Protect your server</a> explains what each level does and how to tune it.</p>
+
+  <h2>4. Give new members a role</h2>
+  <p>Join roles are handed out automatically when someone joins. The role must sit below the Nexus role.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-joinroles set @Member</div></div>
+  </div>
+  <p>You can list more than one role in the same command. <a class="inline" href="#/roles">Roles and autoroles</a> also covers roles that come back when someone rejoins, and roles that expire.</p>
+
+  <h2>5. Set up tickets</h2>
+  <p>Tickets give members a private channel with your support team. You need a support role, the category you made earlier, and the log channel.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-ticket setup @Support Tickets #ticket-logs</div></div>
+  </div>
+  <p>If the category's name has spaces, put it in quotes or use its ID. Then go to the channel where members should ask for help, such as #support, and post the panel:</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-ticket panel</div></div>
+  </div>
+  <p>Members press the button on that message to open a ticket. See <a class="inline" href="#/tickets">Tickets</a> for how it works day to day.</p>
+
+  <h2>6. Optional: starboard</h2>
+  <p>The starboard reposts messages that get a chosen reaction, so the best moments don't get buried.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-starboard setup ⭐ #starboard</div></div>
+  </div>
+
+  <h2>7. Check your work</h2>
+  <p>These show what's currently set, so you can confirm everything saved.</p>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Run</th><th>Shows</th></tr></thead>
+    <tbody>
+      <tr><td><code>-logs</code></td><td>Every log type and its channel</td></tr>
+      <tr><td><code>-automods</code></td><td>Your AutoMod levels</td></tr>
+      <tr><td><code>-joinroles</code></td><td>The roles new members get</td></tr>
+      <tr><td><code>-starboard</code></td><td>The starboard emoji and channel</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>8. Tell your team</h2>
+  <p>Point your moderators to <a class="inline" href="#/guide-staff">Run a moderation team</a>. It covers cases, notes, escalation and how to use the tools without stepping on each other.</p>
+</article>
+
+<article class="doc-page" data-doc="guide-protect" data-title="Protect your server">
+  <div class="doc-crumb">Guides</div>
+  <h1>Protect your server</h1>
+  <p class="lead">How to set up AutoMod so it catches spam, scam links and raids without getting in the way of normal chat, and what to do if a raid actually happens.</p>
+
+  <h2>What AutoMod protects against</h2>
+  <div class="grid three">
+    <div class="card"><h4>Spam</h4><p>Someone sends a burst of messages faster than a person normally would. Nexus removes the burst and tells them to slow down.</p></div>
+    <div class="card"><h4>Scam links</h4><p>A link that matches a known scam or look-alike domain. Nexus removes the message and warns the sender.</p></div>
+    <div class="card"><h4>Raids</h4><p>Many accounts join at once. Nexus locks the server down until you say it's over.</p></div>
+  </div>
+  <p>Each one is switched on separately with a level from 1 to 10, and 0 turns it off.</p>
+
+  <h2>Choosing a level</h2>
+  <p>Higher levels are stricter. Here is exactly what each level means for spam and raids.</p>
+  <div class="table-wrap">
+  <table class="ref tight">
+    <thead><tr><th>Level</th><th>Spam: more than this many messages</th><th>Raids: this many joins or more</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>10 in 10 seconds</td><td>20 in 30 seconds</td></tr>
+      <tr><td>2</td><td>9 in 10 seconds</td><td>18 in 30 seconds</td></tr>
+      <tr><td>3</td><td>8 in 10 seconds</td><td>15 in 30 seconds</td></tr>
+      <tr><td>4</td><td>7 in 10 seconds</td><td>12 in 30 seconds</td></tr>
+      <tr><td>5</td><td>6 in 10 seconds</td><td>10 in 30 seconds</td></tr>
+      <tr><td>6</td><td>5 in 10 seconds</td><td>8 in 30 seconds</td></tr>
+      <tr><td>7</td><td>5 in 8 seconds</td><td>6 in 20 seconds</td></tr>
+      <tr><td>8</td><td>4 in 8 seconds</td><td>5 in 20 seconds</td></tr>
+      <tr><td>9</td><td>4 in 6 seconds</td><td>4 in 15 seconds</td></tr>
+      <tr><td>10</td><td>3 in 5 seconds</td><td>3 in 15 seconds</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>A rough guide to picking:</p>
+  <ul>
+    <li><strong>Small, friendly servers:</strong> level 3 or 4. Real people rarely trip it.</li>
+    <li><strong>Typical public servers:</strong> level 5. A good default for all three.</li>
+    <li><strong>Large or targeted servers:</strong> 7 or higher for raids, and watch the log closely, because fast chat in busy channels can reach the spam limit.</li>
+  </ul>
+  <p>Scam link levels work differently. Higher levels match more look-alike domains, and from level 6 up they also flag links that use typical scam wording. That catches more, but it's also more likely to flag something harmless.</p>
+
+  <h2>What happens when something is caught</h2>
+
+  <h3>Spam</h3>
+  <p>When someone goes over the limit, Nexus deletes the messages from that burst (only those, not their older chat), posts "Slow down a bit" in the channel for a few seconds, and writes an entry in the AutoMod log. It doesn't mute or kick anyone. If Nexus can't delete the messages, the log entry says to check its Manage Messages permission.</p>
+
+  <h3>Scam links</h3>
+  <p>The message is deleted, the sender is told the link looked dangerous, and the log records what was posted. Edited messages are checked too, so changing a harmless message into a link afterwards doesn't get around it.</p>
+
+  <h3>Raids</h3>
+  <p>When enough accounts join inside the window, Nexus starts a lockdown:</p>
+  <ol>
+    <li>It switches off Send Messages for <code>@everyone</code> in every text channel, and remembers what each channel was set to before.</li>
+    <li>It posts an alert in the server's system channel and writes to the AutoMod log.</li>
+    <li>While the lockdown is active, anyone who tries to join is sent a short DM saying the server is on lockdown, then kicked.</li>
+  </ol>
+  <p>A channel that was already locked is left alone. When you're ready to reopen, run:</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-automod raidend</div></div>
+  </div>
+  <p>Every channel goes back to exactly how it was, including channels that had custom settings for <code>@everyone</code>.</p>
+
+  <h2>Who AutoMod ignores</h2>
+  <p>Bots and people on the whitelist are skipped. You can whitelist a single user or a whole role.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-automod whitelist add @Moderators</div></div>
+    <div class="line you"><span class="who">You</span><div>-automod whitelist remove @Moderators</div></div>
+  </div>
+  <div class="callout warn"><strong>Be careful with big roles.</strong> Whitelisting a role that anyone can get, like a self-assigned role, switches AutoMod off for everyone who has it. Keep the whitelist to staff and trusted bots.</div>
+
+  <h2>Tuning it over the first week</h2>
+  <ol>
+    <li>Turn everything on at level 5 and set an AutoMod log channel.</li>
+    <li>Check the log each day. Look for real people being caught.</li>
+    <li>If real chat keeps tripping the spam limit, lower the level by one. If spam keeps getting through, raise it by one.</li>
+    <li>If a trusted person is flagged, whitelist them instead of lowering the whole server's level.</li>
+  </ol>
+  <p><code>-automods</code> shows your current levels at any time.</p>
+
+  <h2>If a raid happens</h2>
+  <div class="steps">
+    <div class="step"><div><h4>Let the lockdown do its job</h4><p>You'll see the alert in the system channel. Chat is paused and new joiners are turned away, so the raid can't grow.</p></div></div>
+    <div class="step"><div><h4>Find the accounts</h4><p>Check the member list and the join logs for accounts that arrived at the same time. <code>-stats members</code> shows the spike.</p></div></div>
+    <div class="step"><div><h4>Remove them</h4><p>Ban the accounts with <code>-ban [ID] [reason]</code>. Each ban creates a case, and you can ban by ID even if they already left.</p></div></div>
+    <div class="step"><div><h4>Reopen the server</h4><p>Run <code>-automod raidend</code> once things are calm.</p></div></div>
+    <div class="step"><div><h4>Review the settings</h4><p>If it triggered on a real burst of new members, like after an announcement, consider lowering the raid level a step.</p></div></div>
+  </div>
+
+  <h2>Things Nexus can't do for you</h2>
+  <ul>
+    <li>Nexus doesn't read images or files. It checks message text and links.</li>
+    <li>It can only act in channels where it has permission. If a channel is hidden from Nexus, it won't see anything there.</li>
+    <li>It works alongside Discord's own tools. Setting a verification level and using Discord's built-in AutoMod rules in addition adds another layer.</li>
+  </ul>
+</article>
+
+<article class="doc-page" data-doc="guide-staff" data-title="Run a moderation team">
+  <div class="doc-crumb">Guides</div>
+  <h1>Run a moderation team</h1>
+  <p class="lead">How to give your staff the right tools, agree on how to respond, and keep a clear record so everyone is acting the same way.</p>
+
+  <h2>Decide who can do what</h2>
+  <p>Every command needs a Discord permission. The simplest setup is to give each staff role only the permissions it needs.</p>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Level</th><th>Permissions</th><th>What they can do</th></tr></thead>
+    <tbody>
+      <tr><td>Helper</td><td>Kick Members, Moderate Members, Manage Messages</td><td>Warn, mute, kick, purge, add notes and look up cases</td></tr>
+      <tr><td>Moderator</td><td>All of the above plus Ban Members, Manage Channels</td><td>Everything above, plus bans, voiding cases, locking channels</td></tr>
+      <tr><td>Admin</td><td>Manage Server, Manage Roles</td><td>AutoMod, logging, roles, giveaways, starboard, prefix</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>If you'd rather not hand out a Discord permission just so someone can use one command, use <a class="inline" href="#/command-access">Command access</a> to let a single role use a single command.</p>
+
+  <h2>Agree on an escalation ladder</h2>
+  <p>People are treated more fairly when everyone follows the same steps. Here's a ladder you can copy and adjust.</p>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Situation</th><th>Action</th><th>Command</th></tr></thead>
+    <tbody>
+      <tr><td>First small offence</td><td>Private note and a warning</td><td><code>-note add</code>, <code>-warn</code></td></tr>
+      <tr><td>Repeats after a warning</td><td>Short mute</td><td><code>-mute [user] 60 [reason]</code></td></tr>
+      <tr><td>Serious or repeated</td><td>Longer mute or a kick</td><td><code>-mute</code>, <code>-kick</code></td></tr>
+      <tr><td>Harassment or a rule breaker who won't stop</td><td>Timed ban</td><td><code>-ban [user] 7d [reason]</code></td></tr>
+      <tr><td>Severe: scams, threats, raids</td><td>Permanent ban</td><td><code>-ban [user] [reason]</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Skip steps when the offence calls for it. A scam link doesn't need a warning first.</p>
+
+  <h2>Check history before you act</h2>
+  <p>Before handing out a punishment, look at what's already on record. It stops one moderator warning someone for the fifth time without anyone noticing.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-cases @Sam</div></div>
+    <div class="line you"><span class="who">You</span><div>-notes @Sam</div></div>
+  </div>
+  <p><code>-cases</code> shows every action on file, and <code>-notes</code> shows private comments from other staff. <a class="inline" href="#/cases">Cases and history</a> and <a class="inline" href="#/notes">Staff notes</a> cover both.</p>
+
+  <h2>Write good reasons</h2>
+  <p>The reason you type is saved in the case, shown in the log, and sent to the member in a DM. Write it so someone reading it a month later understands it without asking you.</p>
+  <ul>
+    <li>Good: <code>Posted invite links in #general after being asked to stop</code></li>
+    <li>Not so good: <code>annoying</code></li>
+  </ul>
+
+  <h2>Handle mistakes</h2>
+  <p>If an action was wrong, void the case with <code>-casedelete [case number]</code>. That deletes the record and also lifts the ban or the mute it created. It needs Ban Members, so it's naturally limited to senior staff. A deleted case is also written to the moderation log, so there's still a trail showing who removed it.</p>
+
+  <h2>Use the logs to keep each other honest</h2>
+  <ul>
+    <li>The <strong>moderation</strong> log records every action, including warnings, mutes and deleted cases.</li>
+    <li>The <strong>messages</strong> log records deleted and edited messages, and every time someone uses <code>-say</code>.</li>
+    <li>The <strong>users</strong> log shows role changes, so you can see who was given what.</li>
+  </ul>
+
+  <h2>Managing an incident in a channel</h2>
+  <div class="steps">
+    <div class="step"><div><h4>Slow it down</h4><p><code>-slowmode 10</code> in the channel, or <code>-lock</code> to stop everyone from sending messages while you sort it out.</p></div></div>
+    <div class="step"><div><h4>Clean up</h4><p><code>-purge @user 20</code> removes up to 100 of one person's recent messages. It can't touch messages older than 14 days.</p></div></div>
+    <div class="step"><div><h4>Take action</h4><p>Warn, mute or ban, with a clear reason. Each action creates a case.</p></div></div>
+    <div class="step"><div><h4>Reopen</h4><p><code>-slowmode 0</code> turns slowmode off and <code>-unlock</code> opens the channel again. <code>-locked</code> lists any channel that's still locked.</p></div></div>
+  </div>
+
+  <h2>Onboarding a new moderator</h2>
+  <ol>
+    <li>Give them the staff role, and check it sits below the Nexus role so Nexus can act on the members they act on.</li>
+    <li>Have them read <a class="inline" href="#/moderation">Moderation</a> and <a class="inline" href="#/cases">Cases and history</a>.</li>
+    <li>Walk through your escalation ladder and one real example.</li>
+    <li>Tell them to run <code>-cases</code> and <code>-notes</code> before acting, and to add a note when something looks like it might come up again.</li>
+  </ol>
+
+  <h2>Transparency for members</h2>
+  <p>Any member can run <code>-myhistory</code> to get their own record sent to their DMs. They can't see anyone else's. It's worth mentioning in your rules, so people know where to look if they're unsure why something happened.</p>
+</article>
+
+<article class="doc-page" data-doc="guide-events" data-title="Run events and giveaways">
+  <div class="doc-crumb">Guides</div>
+  <h1>Run events and giveaways</h1>
+  <p class="lead">How to plan and run a giveaway, a game night or a community event using Nexus for the announcements, the entries, the winners and the highlights.</p>
+
+  <h2>What you'll use</h2>
+  <div class="grid three">
+    <div class="card"><h4>Giveaways</h4><p>Entries by reaction, automatic winners, rerolls.</p></div>
+    <div class="card"><h4>Starboard</h4><p>Reposts the best messages from the event.</p></div>
+    <div class="card"><h4>Games</h4><p>Ten games members can play against each other.</p></div>
+    <div class="card"><h4>Timed roles</h4><p>An event role that removes itself when it's over.</p></div>
+    <div class="card"><h4>Reminders</h4><p>Let people set a reminder for the start.</p></div>
+    <div class="card"><h4>Slowmode and lock</h4><p>Keep a busy event channel manageable.</p></div>
+  </div>
+
+  <h2>Running a giveaway</h2>
+  <div class="steps">
+    <div class="step"><div><h4>Write the rules first</h4><p>Say who can enter, any requirements, and how the winner will be contacted. Post it with <code>-say #announcements [message]</code> so it comes from the bot and is recorded in the logs.</p></div></div>
+    <div class="step"><div><h4>Start it in the right channel</h4><p>Run the command in the channel where people should enter, for example <code>-giveaway start 2d 1 Discord Nitro</code>. It takes a length, the number of winners and the prize.</p></div></div>
+    <div class="step"><div><h4>Let it run</h4><p>Members enter by pressing the 🎉 reaction. Nexus checks the giveaway every 30 seconds and picks winners when time is up. Winners must still be in the server.</p></div></div>
+    <div class="step"><div><h4>Ending early or rerolling</h4><p><code>-giveaway end [message ID]</code> ends one now. <code>-giveaway reroll [message ID]</code> picks fresh winners if someone doesn't respond. Copy the message ID by right-clicking the giveaway message with Developer Mode on.</p></div></div>
+    <div class="step"><div><h4>Deliver the prize</h4><p>Nexus announces and pings the winners. Handing over the prize is up to you.</p></div></div>
+  </div>
+  <p>The full details, including limits, are on the <a class="inline" href="#/giveaways">Giveaways</a> page.</p>
+
+  <h2>Keeping entries fair</h2>
+  <ul>
+    <li>Giveaways only count the 🎉 reaction. If you need entry requirements like a certain role, state them in the rules and check the winners before announcing the prize.</li>
+    <li>Bots and people who left the server don't count as entries.</li>
+    <li>If a winner is unreachable or doesn't qualify, use a reroll instead of picking someone by hand.</li>
+  </ul>
+
+  <h2>Give participants an event role</h2>
+  <p>A timed role lets you hand out an event role that removes itself, so you don't have to remember to clean up afterwards.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-timed role add @Sam 3d @Event</div></div>
+  </div>
+  <p>The role needs to sit below Nexus. <a class="inline" href="#/roles">Roles and autoroles</a> explains timed roles in full.</p>
+
+  <h2>Highlight the best moments</h2>
+  <p>Set up the starboard before the event starts, so great messages get reposted as they happen.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-starboard setup ⭐ #highlights</div></div>
+  </div>
+
+  <h2>Hosting a game night</h2>
+  <ol>
+    <li>Pick a channel and run <code>-games</code> to open the menu.</li>
+    <li>Choose a game, then either play Nexus on a difficulty or challenge a friend from the menu.</li>
+    <li>Players can rematch right after a game. <code>-games stats</code> shows wins and streaks, which makes a simple leaderboard.</li>
+    <li>For a bigger event, run a bracket by hand: use Tic-Tac-Toe, Connect Four or Card Battle for head-to-head rounds.</li>
+  </ol>
+
+  <h2>Keep the channel tidy</h2>
+  <ul>
+    <li><code>-slowmode 5</code> in a busy event channel keeps it readable.</li>
+    <li><code>-lock</code> stops messages when the event ends, and <code>-unlock</code> reopens it.</li>
+    <li>Members can set their own reminder for the start time with <code>-reminder create 2h Event starts</code>.</li>
+  </ul>
+</article>
+
+
+<article class="doc-page" data-doc="moderation" data-title="Moderation">
+  <div class="doc-crumb">Moderation</div>
+  <h1>Moderation</h1>
+  <p class="lead">Kicks, bans, mutes and warnings, plus the tools for tidying up a channel. Every action leaves a record, tells the member why, and shows up in your logs.</p>
+
+  <h2>What happens when you take an action</h2>
+  <p>Each time you kick, ban, mute or warn someone, Nexus does the same things in the same order:</p>
+  <ol>
+    <li>Checks that you have the right permission and that your role is above theirs.</li>
+    <li>Checks that Nexus's own role is above theirs.</li>
+    <li>Carries out the action.</li>
+    <li>Creates a <a class="inline" href="#/cases">case</a> and replies with its number.</li>
+    <li>Sends the member a DM with the reason. If their DMs are closed the action still goes through.</li>
+    <li>Writes the action to your moderation log, if you've set one up.</li>
+  </ol>
+
+  <h2>Kicking</h2>
+  <p>A kick removes someone from the server. They can come back with a new invite, so it's a way of saying "step back and think about it" without a ban. The person must be in the server.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-kick @Sam Spamming invites after a warning</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>👢 <b>Sam</b> has been kicked. Reason: Spamming invites after a warning
+📋 Case: `7K3F-92QM-X1RA`</div></div>
+  </div>
+
+  <h2>Banning</h2>
+  <p>A ban removes someone and stops them from coming back. You can ban people who aren't in the server, which is useful for repeat offenders and raiders: use their ID. Banned members' past messages aren't deleted.</p>
+  <h3>Timed and permanent bans</h3>
+  <p>Add a length after the user to make the ban temporary. Leave it out for a permanent ban. Nexus remembers timed bans, so they still end on schedule if the bot restarts.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-ban @Sam 7d Repeated harassment</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>🔨 <b>Sam</b> is banned for <b>7d</b>. Reason: Repeated harassment
+📋 Case: `7K3F-92QM-X1RA`
+⏰ They will be unbanned in 7 days</div></div>
+    <div class="line you"><span class="who">You</span><div>-ban 123456789012345678 Scam links</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>🔨 <b>scammer99</b> is permanently banned. Reason: Scam links
+📋 Case: `B4TH-61DE-ZK9P`</div></div>
+  </div>
+  <p>Timed bans accept seconds, minutes, hours and days (see <a class="inline" href="#/time-formats">Time formats</a>). Nexus won't ban the server owner, and tells you if someone is already banned.</p>
+  <h3>Unbanning</h3>
+  <p><code>-unban</code> takes a user ID, which is the most reliable way. Nexus can also find a banned person by username from the ban list.</p>
+
+  <h2>Muting</h2>
+  <p>A mute uses Discord's own timeout. The member can still read but can't send messages, react or join voice for the length you set. Mutes run from 1 minute up to 28 days, which is Discord's limit. Give the length as a plain number of minutes.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-mute @Sam 60 Arguing in #general after a warning</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>🔇 <b>Sam</b> has been muted for 60 minute(s). Reason: Arguing in #general after a warning
+📋 Case: `7K3F-92QM-X1RA`</div></div>
+  </div>
+  <ul>
+    <li>If the person <strong>isn't in the server</strong>, the mute is saved and applies when they join. That stops someone leaving and returning to dodge it.</li>
+    <li><code>-unmute</code> ends a timeout early, or cancels a saved mute for someone who isn't in the server.</li>
+    <li>Nexus can't time out an administrator or anyone whose role sits above its own.</li>
+  </ul>
+
+  <h2>Warnings</h2>
+  <p>A warning is a recorded "this isn't okay" with no restriction attached. It creates a case, sends the member a DM, and goes in the log. Warnings don't trigger anything automatically, so you decide when a pile of warnings means a mute or a ban. <code>-unwarn</code> removes one if it was a mistake. The person has to be in the server.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-warn @Sam Posting spoilers in #general</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>⚠️ <b>Sam</b> has been warned. Reason: Posting spoilers in #general
+📋 Case: `7K3F-92QM-X1RA`</div></div>
+  </div>
+
+  <h2>Cleaning up a channel</h2>
+  <h3>Purging messages</h3>
+  <p><code>-purge [user] [amount]</code> deletes recent messages from one person in the current channel. You can remove up to 100 at a time. Discord doesn't let bots bulk-delete messages older than 14 days, so anything older stays.</p>
+  <h3>Slowmode</h3>
+  <p><code>-slowmode [seconds]</code> sets how often each person can send a message in the current channel. <code>-slowmode 0</code> turns it off.</p>
+  <h3>Locking</h3>
+  <p><code>-lock</code> stops <code>@everyone</code> from sending messages in the current channel, and <code>-unlock</code> reverses it. <code>-locked</code> lists every channel that's currently locked, which helps you find one you forgot about.</p>
+
+  <h2>Rules that apply to every action</h2>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>You can't</th><th>Because</th></tr></thead>
+    <tbody>
+      <tr><td>Act on yourself</td><td>Nexus refuses, to avoid accidents</td></tr>
+      <tr><td>Act on someone with the same or a higher role than you</td><td>Your role must be above theirs. The server owner is exempt.</td></tr>
+      <tr><td>Act on someone above Nexus</td><td>Discord won't let a bot act on a higher role. Move the Nexus role up.</td></tr>
+      <tr><td>Ban the server owner</td><td>Not possible</td></tr>
+      <tr><td>Mute an administrator</td><td>Discord doesn't let timeouts apply to them</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Which permission does each need?</h2>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Permission</th><th>Commands</th></tr></thead>
+    <tbody>
+      <tr><td>Kick Members</td><td><code>-kick</code>, <code>-warn</code>, <code>-unwarn</code></td></tr>
+      <tr><td>Ban Members</td><td><code>-ban</code>, <code>-unban</code>, <code>-casedelete</code></td></tr>
+      <tr><td>Moderate Members</td><td><code>-mute</code>, <code>-unmute</code></td></tr>
+      <tr><td>Manage Messages</td><td><code>-purge</code></td></tr>
+      <tr><td>Manage Channels</td><td><code>-slowmode</code>, <code>-lock</code>, <code>-unlock</code>, <code>-locked</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Admins can change who uses a command with <a class="inline" href="#/command-access">Command access</a>. For running a team, see <a class="inline" href="#/guide-staff">Run a moderation team</a>.</p>
+</article>
+
+<article class="doc-page" data-doc="cases" data-title="Cases and history">
+  <div class="doc-crumb">Moderation</div>
+  <h1>Cases and history</h1>
+  <p class="lead">A case is the permanent record of a moderation action. This page covers what a case holds, how to look one up, and how to undo one.</p>
+
+  <h2>What a case is</h2>
+  <p>Kicks, bans, mutes, warnings and their reversals each create a case with its own number, in the form <code>7K3F-92QM-X1RA</code>. Case numbers are unique, and cases are kept per server, so one server can never see another's.</p>
+  <p>A case holds:</p>
+  <ul>
+    <li>The type of action (kick, ban, mute, warn and so on)</li>
+    <li>The member it was taken against, and the moderator who did it</li>
+    <li>When it happened</li>
+    <li>The reason, and the length if there was one</li>
+  </ul>
+
+  <h2>Looking someone up</h2>
+  <p><code>-cases [user]</code> shows every case on file for that person. It also works with a user ID for someone who has left. If they have no history, Nexus says so.</p>
+  <div class="chat">
+    <div class="caption">Simplified. Nexus shows this as an embed.</div>
+    <div class="line you"><span class="who">You</span><div>-cases @Sam</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>Cases for Sam
+7K3F-92QM-X1RA · Warn · by Alex · Posting spoilers in #general
+B4TH-61DE-ZK9P · Mute · by Jordan · Arguing in #general after a warning</div></div>
+  </div>
+  <p><code>-inf</code> is a shorter alias. It needs Kick Members.</p>
+
+  <h2>Looking at one case</h2>
+  <p><code>-caseinfo [case number]</code> shows the full detail of a single case. If the number doesn't exist in this server, Nexus tells you.</p>
+
+  <h2>Members checking their own record</h2>
+  <p>Any member can run <code>-myhistory</code> in a server. Nexus sends that member's own cases for that server to their DMs. They can't use it to look at anyone else's history, and it's the only way a member sees their record.</p>
+  <p>If they have DMs closed, Nexus tells them to turn on direct messages from server members for that server and try again.</p>
+
+  <h2>Undoing a case</h2>
+  <p><code>-casedelete [case number]</code> (also <code>-void</code>) deletes a case and reverses what it did. It needs Ban Members.</p>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Case type</th><th>What happens</th></tr></thead>
+    <tbody>
+      <tr><td>Ban</td><td>The case is deleted and the ban is lifted. If they were already unbanned, the case is still deleted.</td></tr>
+      <tr><td>Mute</td><td>The case is deleted and the mute is lifted. If they've left, any saved mute is cancelled instead.</td></tr>
+      <tr><td>Warn, kick and others</td><td>The case is deleted. A kick can't be reversed, so the person isn't brought back.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Deleting a case is permanent, and the moderation log records who did it, so there's still a trail.</p>
+
+  <h2>Good habits</h2>
+  <ul>
+    <li>Look at <code>-cases</code> before you act on someone, so the response matches their history.</li>
+    <li>Void a case only when it was a real mistake, not to hide history.</li>
+    <li>Write reasons that make sense out of context. They're shown to the member and to other staff.</li>
+  </ul>
+</article>
+
+<article class="doc-page" data-doc="notes" data-title="Staff notes">
+  <div class="doc-crumb">Moderation</div>
+  <h1>Staff notes</h1>
+  <p class="lead">Notes are private comments about a member, visible only to staff. They're for the context that doesn't belong in a punishment, like "keep an eye on this one" or "already had a chat about this".</p>
+
+  <h2>Notes or cases?</h2>
+  <div class="cols">
+    <div class="card"><h4>Cases</h4><ul><li>Created by kicks, bans, mutes, warnings</li><li>The member is told, in a DM</li><li>Members can see their own with <code>-myhistory</code></li></ul></div>
+    <div class="card"><h4>Notes</h4><ul><li>Written by hand, for staff</li><li>The member is never told</li><li>Don't show up in <code>-myhistory</code></li></ul></div>
+  </div>
+
+  <h2>Adding a note</h2>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-note add @Sam Said they're going through a rough week, go easy</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>Got it, note added for <b>Sam</b>.</div></div>
+  </div>
+  <p>A note can be up to 300 characters. Each one records who wrote it and when.</p>
+
+  <h2>Reading notes</h2>
+  <p><code>-notes [user]</code> lists everything on file for someone, oldest first. Once there are more than eight, the list is split into pages with Previous and Next buttons that only the person who ran the command can use.</p>
+
+  <h2>Removing a note</h2>
+  <p>Remove a note by its position in the list.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-note remove @Sam 2</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>Removed note #2 for <b>Sam</b>.</div></div>
+  </div>
+  <div class="callout warn"><strong>Positions change.</strong> Notes are numbered by their place in the list, so removing #2 moves the old #3 up to #2. Run <code>-notes</code> again before removing a second one.</div>
+
+  <h2>Who can use notes</h2>
+  <p>All three commands need Kick Members. Notes are saved per server, so another server's staff can't see them.</p>
+</article>
+
+<article class="doc-page" data-doc="automod" data-title="AutoMod">
+  <div class="doc-crumb">Moderation</div>
+  <h1>AutoMod</h1>
+  <p class="lead">AutoMod protects your server without anyone having to be online. This page explains how each protection works and how to manage it. For a step-by-step setup, read <a class="inline" href="#/guide-protect">Protect your server</a>.</p>
+
+  <h2>The three protections</h2>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Type</th><th>Catches</th><th>What Nexus does</th></tr></thead>
+    <tbody>
+      <tr><td><code>spam</code></td><td>One person sending too many messages too fast</td><td>Deletes the burst and says "slow down"</td></tr>
+      <tr><td><code>scam</code></td><td>Links to known scam and look-alike sites</td><td>Deletes the message and warns the sender</td></tr>
+      <tr><td><code>raids</code></td><td>Many accounts joining at once</td><td>Locks the server down and turns away new joiners</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Turning a type on</h2>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-automod setup spam 5</div></div>
+  </div>
+  <p>The level runs from 1 (gentle) to 10 (strict), and <code>0</code> turns that type off. Each type has its own level, so you can run spam at 4 and raids at 8. The exact thresholds for every level are in <a class="inline" href="#/guide-protect">Protect your server</a>.</p>
+
+  <h2>Seeing your settings</h2>
+  <p><code>-automods</code> shows every type, its level, and the log channel.</p>
+
+  <h2>The AutoMod log</h2>
+  <p>Set a channel where AutoMod reports what it did, such as spam caught, a link removed or a raid detected:</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-automod logging #automod-log</div></div>
+  </div>
+  <p>Each entry names the person, the channel, and the level that triggered it. Without a log channel AutoMod still works, you just won't see what it caught.</p>
+
+  <h2>The whitelist</h2>
+  <p>People and roles on the whitelist are never checked. Use it for staff and trusted bots.</p>
+  <ul>
+    <li><code>-automod whitelist add @user-or-role</code></li>
+    <li><code>-automod whitelist remove @user-or-role</code></li>
+  </ul>
+  <p>Bots are always skipped without needing to be whitelisted.</p>
+
+  <h2>Raid lockdown in detail</h2>
+  <p>A lockdown turns off Send Messages for <code>@everyone</code> in every text channel, and saves each channel's previous setting first. Channels that were already locked are skipped. While it's active, anyone who joins is DMed that the server is locked down and then kicked. <code>-automod raidend</code> restores every channel to exactly how it was.</p>
+
+  <h2>Scam link matching</h2>
+  <p>Nexus looks at the address in each link, not the surrounding text. A match can be an exact domain (and its subdomains), a look-alike address, or a keyword. A harmless site that merely has a similar name, such as one that shares part of a word with a scam site, isn't flagged by the domain rules. Edited messages are re-checked.</p>
+
+  <h2>Permissions</h2>
+  <p>All AutoMod commands need Manage Server. For AutoMod to work, Nexus needs Manage Messages (to delete), Manage Channels and Manage Roles (for lockdowns), and Kick Members (to turn away raiders).</p>
+</article>
+
+<article class="doc-page" data-doc="logging" data-title="Logging">
+  <div class="doc-crumb">Moderation</div>
+  <h1>Logging</h1>
+  <p class="lead">Logging records what happens in your server, and sends each kind of event to a channel you choose. You decide which events to track and who can see them.</p>
+
+  <h2>How it's organised</h2>
+  <p>Events are split into nine types. Each type has its own channel, or none, so you can send message logs to one place and role changes to another. Several types can share a channel.</p>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Type</th><th>What it records</th></tr></thead>
+    <tbody>
+      <tr><td><code>messages</code></td><td>Deleted messages, edited messages (before and after), bulk deletions, and every use of <code>-say</code></td></tr>
+      <tr><td><code>users</code></td><td>Members joining and leaving, nickname, username and display name changes, avatar changes, and roles added or removed</td></tr>
+      <tr><td><code>expressions</code></td><td>Emoji and stickers added, removed, renamed or updated</td></tr>
+      <tr><td><code>channels</code></td><td>Channels created, deleted or changed</td></tr>
+      <tr><td><code>voice</code></td><td>Joining, leaving and moving between voice channels</td></tr>
+      <tr><td><code>moderation</code></td><td>Bans, unbans, kicks, warnings, mutes and deleted cases</td></tr>
+      <tr><td><code>invites</code></td><td>Invites created and deleted</td></tr>
+      <tr><td><code>applications</code></td><td>Bots added and webhook changes</td></tr>
+      <tr><td><code>roles</code></td><td>Roles created, deleted or edited</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Setting it up</h2>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-log messages #message-log</div></div>
+    <div class="line you"><span class="who">You</span><div>-log moderation #mod-log</div></div>
+    <div class="line you"><span class="who">You</span><div>-logs</div></div>
+  </div>
+  <p><code>-logs</code> shows every type and where it's sent. <code>-log remove [type]</code> turns a type off. All of these need Manage Server, and Nexus needs to be able to view and send messages in the channel you pick.</p>
+
+  <h2>Ignoring people</h2>
+  <p>Add a person to the ignore list to leave them out of every log. It's handy for a bot that edits messages constantly, or a test account.</p>
+  <ul>
+    <li><code>-logging ignore add [user]</code></li>
+    <li><code>-logging ignore remove [user]</code></li>
+  </ul>
+
+  <h2>What the logs show</h2>
+  <ul>
+    <li><strong>Deleted messages</strong> show the author, channel, the message text, and the names of any attachments.</li>
+    <li><strong>Edits</strong> show the text before and after, with a link to jump to the message.</li>
+    <li><strong>Bulk deletions</strong>, like a purge, show how many messages went and who was involved, not the text.</li>
+    <li><strong>Kicks and bans</strong> are worked out from Discord's audit log so the moderator is named, and a kick is logged once instead of as a leave plus a kick.</li>
+  </ul>
+
+  <h2>Limits worth knowing</h2>
+  <ul>
+    <li>Nexus can only show the text of a deleted or edited message if it saw the message recently while it was online. Very old messages, or ones sent while Nexus was offline, can't be shown.</li>
+    <li>Messages from bots aren't logged.</li>
+    <li>Long text is shortened to fit in an embed.</li>
+    <li>Nexus doesn't keep these logs itself. They're messages in your channel, so Discord's rules and your own channel permissions apply.</li>
+  </ul>
+  <div class="callout warn"><strong>Keep log channels private.</strong> Message logs can contain things people thought they'd deleted. Make them staff-only.</div>
+</article>
+
+
+<article class="doc-page" data-doc="tickets" data-title="Tickets">
+  <div class="doc-crumb">Server tools</div>
+  <h1>Tickets</h1>
+  <p class="lead">Tickets give members a private place to talk to your staff. A member presses a button, Nexus creates a channel only they and your support team can see, and the channel is removed when the conversation is over.</p>
+
+  <h2>How a ticket works</h2>
+  <div class="steps">
+    <div class="step"><div><h4>You post a panel</h4><p>The panel is a message with a green <strong>Create Ticket</strong> button. You post it once, in a channel members can read, like #support.</p></div></div>
+    <div class="step"><div><h4>A member presses the button</h4><p>Nexus creates a channel called <code>ticket-username</code> in your ticket category. Only that member, your support role and Nexus can see it. Everyone else, including other members, can't.</p></div></div>
+    <div class="step"><div><h4>Support is pinged</h4><p>Nexus welcomes the member in the new channel, pings the support role, and adds two buttons: <strong>Claim</strong> and <strong>Close</strong>.</p></div></div>
+    <div class="step"><div><h4>You talk it through</h4><p>Staff can bring in other people if needed, like a second moderator or another member involved in the issue.</p></div></div>
+    <div class="step"><div><h4>Someone closes it</h4><p>Nexus posts a short record in your log channel, waits five seconds, and deletes the channel.</p></div></div>
+  </div>
+
+  <h2>Setting it up</h2>
+  <p>You need the Administrator permission, a role for your support team, a category for ticket channels, and a log channel. If you haven't made them yet, <a class="inline" href="#/guide-new-server">Set up a new server</a> walks through it.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-ticket setup @Support Tickets #ticket-logs</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>✅ Ticket System Configured
+Support Role: @Support
+Ticket Category: Tickets
+Log Channel: #ticket-logs</div></div>
+  </div>
+  <p>The three details come in this order: the support role, the category, then the log channel. If the category's name has spaces, put it in quotes (<code>"Support Tickets"</code>) or use its ID. Running setup again later replaces the old settings.</p>
+  <p>Then go to the channel where members should ask for help and post the panel:</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-ticket panel</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>🎫 Support Tickets
+Click the button below to create a support ticket.
+Our team will assist you as soon as possible.
+[ 🎫 Create Ticket ]</div></div>
+  </div>
+  <p>The panel keeps working after Nexus restarts, so you never need to post it again. You can post it in more than one channel, and every copy opens tickets the same way.</p>
+
+  <h3>Make the category private</h3>
+  <p>Nexus hides each ticket channel from <code>@everyone</code> by itself, but it's worth setting the category to staff-only as well, so the channels stay hidden even if someone changes a ticket's settings. Give Nexus permission to see and manage the category.</p>
+
+  <h2>What members see</h2>
+  <ul>
+    <li>After pressing the button they get a private reply with a link to their new channel, so nobody else sees it.</li>
+    <li>Each member can have <strong>one open ticket at a time</strong>. If they press the button again, Nexus points them to the one they already have.</li>
+    <li>If a ticket channel is deleted by hand, the member's next press cleans up the old record and opens a fresh ticket.</li>
+  </ul>
+
+  <h2>What staff can do</h2>
+  <p>Staff means anyone with the <strong>Manage Channels</strong> permission, plus anyone with the support role you chose in setup.</p>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Action</th><th>How</th><th>Who</th></tr></thead>
+    <tbody>
+      <tr><td>Claim a ticket</td><td>Press <strong>Claim</strong> in the ticket</td><td>Staff</td></tr>
+      <tr><td>Add someone</td><td><code>-ticket add [user]</code> inside the ticket</td><td>Staff</td></tr>
+      <tr><td>Remove someone</td><td><code>-ticket remove [user]</code> inside the ticket</td><td>Staff</td></tr>
+      <tr><td>Close the ticket</td><td>Press <strong>Close</strong>, or <code>-ticket close</code></td><td>Anyone in the ticket</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Claiming</h3>
+  <p>Claiming posts "this ticket has been claimed by" with your name, so the rest of the team knows you've got it. It's a marker for your team, not a lock: it doesn't stop other staff from replying.</p>
+
+  <h3>Adding and removing people</h3>
+  <p>Adding someone lets them see the channel, send messages and read its history. Removing takes that access away again. Both only work inside a ticket channel, and both tell you if you run them somewhere else.</p>
+
+  <h3>Closing</h3>
+  <p>Closing is open to <strong>anyone who can type in the ticket</strong>, including the member who opened it. That's on purpose, so a member can close a ticket once their problem is solved. Nexus says it's closing, writes this to your log channel, and deletes the channel five seconds later:</p>
+  <ul>
+    <li>the channel name</li>
+    <li>who opened the ticket</li>
+    <li>who closed it</li>
+  </ul>
+  <div class="callout warn"><strong>Nexus doesn't save a transcript.</strong> Once the channel is deleted, the conversation is gone. If you need to keep it, copy what matters, or use a note on the member with <code>-note add</code>, before closing.</div>
+
+  <h2>Permissions Nexus needs</h2>
+  <ul>
+    <li>Manage Channels, to create and delete ticket channels.</li>
+    <li>Manage Roles, to set who can see each channel.</li>
+    <li>View and Send Messages in the panel channel and the log channel.</li>
+  </ul>
+
+  <h2>Habits that work well</h2>
+  <ul>
+    <li>Keep the panel channel read-only for members, so it stays a clean place with just the button.</li>
+    <li>Give the support role to people who answer tickets, and Manage Channels only to people you'd trust with channels generally.</li>
+    <li>Add a short line to the panel channel's description about what belongs in a ticket, like ban appeals, reports and questions.</li>
+    <li>Use the log channel to see how often tickets open and who handles them.</li>
+  </ul>
+
+  <h2>If something goes wrong</h2>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Nexus says</th><th>What to do</th></tr></thead>
+    <tbody>
+      <tr><td>The ticket system has not been set up yet</td><td>Run <code>-ticket setup</code> first, then post the panel.</td></tr>
+      <tr><td>Please run -ticket setup first</td><td>Same fix. The panel needs the settings to exist.</td></tr>
+      <tr><td>I do not have permission to create channels</td><td>Give Nexus Manage Channels, and check it can manage the ticket category.</td></tr>
+      <tr><td>You already have an open ticket</td><td>The member should use the channel Nexus links. If it's gone, pressing the button again opens a new one.</td></tr>
+      <tr><td>This command can only be used inside a ticket channel</td><td>Run <code>-ticket add</code>, <code>remove</code> or <code>close</code> inside the ticket itself.</td></tr>
+      <tr><td>You do not have permission to manage this ticket</td><td>The person needs Manage Channels or the support role.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>What tickets don't do</h2>
+  <p>Tickets are deliberately simple. There are no ticket topics or forms, no transcripts, and only one support role per server. If you need more than that, keep a dedicated ticket bot alongside Nexus.</p>
+</article>
+
+<article class="doc-page" data-doc="roles" data-title="Roles and autoroles">
+  <div class="doc-crumb">Server tools</div>
+  <h1>Roles and autoroles</h1>
+  <p class="lead">Nexus can give out roles automatically when people join, bring roles back when someone returns, remove a role on a timer, and let your staff change roles by hand. This page covers all four.</p>
+
+  <h2>Which tool for which job</h2>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>You want to</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td>Give every new member a starter role</td><td><a class="inline" href="#/roles/join-roles">Join roles</a></td></tr>
+      <tr><td>Keep someone's special roles if they leave and come back</td><td><a class="inline" href="#/roles/persistent-roles">Persistent roles</a></td></tr>
+      <tr><td>Give a role that disappears by itself</td><td><a class="inline" href="#/roles/timed-roles">Timed roles</a></td></tr>
+      <tr><td>Add, remove or swap roles on one person</td><td><a class="inline" href="#/roles/changing-roles-by-hand">The role commands</a></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>The rules for every role command</h2>
+  <p>Every command here needs <strong>Manage Roles</strong>, and these rules apply to all of them.</p>
+  <ul>
+    <li>Nexus can only give or take roles that sit <strong>below its own role</strong>. Move the Nexus role up in Server Settings if it says it can't.</li>
+    <li>You can only use roles that sit <strong>below your own top role</strong>. The server owner is exempt.</li>
+    <li>You can't change the roles of someone whose top role is equal to or above yours. If you try, Nexus says so by name.</li>
+    <li>Roles managed by an integration, such as a bot's own role or a booster role, can't be handed out or removed. The <code>@everyone</code> role is always left alone.</li>
+  </ul>
+  <p>When a role is refused, Nexus tells you which ones and why, instead of failing quietly:</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-role add @Sam @Admin</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>I can't use **Admin**. They're above your top role or mine, or an integration manages them.</div></div>
+  </div>
+
+  <h2>Join roles</h2>
+  <p>Join roles are given to every member the moment they join. Use them for a basic "Member" role, a role that unlocks your channels, or a marker for new arrivals.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-joinroles set @Member @New</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>Join roles are now: @Member, @New</div></div>
+  </div>
+  <ul>
+    <li><code>-joinroles</code> shows the roles set right now.</li>
+    <li><code>-joinroles set [roles]</code> replaces the whole list. List every role you want, not just the new one.</li>
+    <li><code>-joinroles remove</code> clears the list. Nothing happens to roles people already have.</li>
+  </ul>
+  <p>If any role in your list is one Nexus or you can't hand out, the whole command is refused and nothing is saved, so you never end up with half a list. Join roles apply to people who join <em>after</em> you set them. To cover existing members, give them the role yourself.</p>
+  <div class="callout">If your server uses Discord's membership screening or a verification step, join roles are still given at the moment someone joins. Pair them with a role that only unlocks channels after verification, rather than one that grants broad access.</div>
+
+  <h2>Changing roles by hand</h2>
+  <p>These commands change the roles of one person at a time. Each reply lists what was added, what was removed, and anything that couldn't be changed.</p>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Command</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code>-role add [user] [roles]</code></td><td>Gives one or more roles. Roles they already have are skipped.</td></tr>
+      <tr><td><code>-role remove [user] [roles]</code></td><td>Takes one or more roles away.</td></tr>
+      <tr><td><code>-role toggle [user] [roles]</code></td><td>Adds the roles they're missing and removes the ones they have.</td></tr>
+      <tr><td><code>-role set [user] [role]</code></td><td>Gives one role and takes away every other role you're allowed to change.</td></tr>
+      <tr><td><code>-role removeall [user]</code></td><td>Takes away every role you're allowed to change.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-role toggle @Sam @Event @Streamer</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>Role-Toggle
+Role command applied to @Sam
+Added Roles: @Event
+Removed Roles: @Streamer
+Moderator: Alex</div></div>
+  </div>
+  <p><code>-role set</code> is careful: it gives the new role first, and only then removes the others. If the new role can't be given, nothing else is touched.</p>
+  <p>You can list several roles in one command by mentioning each one, separated by spaces.</p>
+
+  <h2>Persistent roles</h2>
+  <p>A persistent role comes back when the person rejoins. It's for roles that mean something about a person, like a trusted member, a supporter or someone you've muted with a role, and that shouldn't be lost because they left and returned.</p>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Command</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code>-role persist add [user] [roles]</code></td><td>Marks the roles as persistent, and gives them now if the person doesn't have them.</td></tr>
+      <tr><td><code>-role persist remove [user] [roles]</code></td><td>Stops the roles coming back. The person keeps the role they have right now.</td></tr>
+      <tr><td><code>-role persist toggle [user] [roles]</code></td><td>Turns each role on if it's off, and off if it's on.</td></tr>
+      <tr><td><code>-role persist set [user] [role]</code></td><td>Clears their persistent roles and sets just this one.</td></tr>
+      <tr><td><code>-role persists [user]</code></td><td>Lists the persistent roles for a person.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>When that person rejoins, Nexus gives them their persistent roles along with your join roles, as long as Nexus can still hand them out. A persistent role whose role was deleted is tidied away on its own.</p>
+  <div class="callout warn"><strong>Persistence is something you set on purpose.</strong> A role you give with <code>-role add</code> or a role another bot gives doesn't come back after a rejoin unless you also mark it with <code>-role persist add</code>.</div>
+
+  <h2>Timed roles</h2>
+  <p>A timed role is given now and taken away automatically later. It suits event roles, trial periods, a "new member" marker, or a temporary access role.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-timed role add @Sam 3d @Event</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>⏰ Timed Role Added
+User: @Sam    Role: @Event    Duration: 3d
+Expires: in 3 days (Fri, Nov 20, 2026 4:12 PM)</div></div>
+  </div>
+  <ul>
+    <li><code>-timed role add [user] [duration] [role]</code> gives the role and starts the timer. The length can go up to 5 years. See <a class="inline" href="#/time-formats">Time formats</a> for everything it accepts.</li>
+    <li><code>-timed role remove [user] [role]</code> ends it early and removes the role.</li>
+    <li><code>-timed roles [user]</code> lists a person's active timed roles, soonest first, with when each one ends. It shows up to 24.</li>
+  </ul>
+  <h3>Good to know</h3>
+  <ul>
+    <li>Nexus checks for expired roles <strong>once a minute</strong>, so a role can last up to a minute longer than the time you set.</li>
+    <li>Timers are saved, so they still end on time if Nexus restarts.</li>
+    <li>Giving the same timed role again <strong>replaces</strong> the old timer, so you can extend someone by running the command again.</li>
+    <li>If the person leaves the server before it ends, the timer is dropped, since there's nothing left to take away.</li>
+    <li>If the role is deleted, the timer is dropped too.</li>
+  </ul>
+
+  <h2>Ideas that work</h2>
+  <div class="cols">
+    <div class="card"><h4>Welcome without spam</h4><ul><li>Set a join role that lets people see only a welcome channel</li><li>Give the full Member role after they read the rules</li></ul></div>
+    <div class="card"><h4>Event access</h4><ul><li>Give the event role as a timed role</li><li>It removes itself when the event is over</li></ul></div>
+    <div class="card"><h4>Trusted members</h4><ul><li>Mark their special roles as persistent</li><li>A short break from the server doesn't cost them anything</li></ul></div>
+    <div class="card"><h4>Trial staff</h4><ul><li>Give a helper role for 30 days</li><li>Extend it by running the command again, or let it lapse</li></ul></div>
+  </div>
+</article>
+
+<article class="doc-page" data-doc="command-access" data-title="Command access">
+  <div class="doc-crumb">Server tools</div>
+  <h1>Command access</h1>
+  <p class="lead">Every command has a normal rule for who can use it. Command access lets a server administrator change that rule for a single command, so you can let a role use something without giving that role a Discord permission it doesn't otherwise need.</p>
+
+  <h2>The normal rules</h2>
+  <p>Out of the box, each command needs a Discord permission, like Kick Members or Manage Server. The <a class="inline" href="#/commands">command list</a> shows the permission for every command, and commands marked "Everyone" need nothing.</p>
+  <p>That's fine for most servers, but it can be clumsy. If you want helpers to be able to mute but not kick, you'd have to hand out Moderate Members to people who may not need any other permission. Command access solves that.</p>
+
+  <h2>Changing access</h2>
+  <p>The command is <code>-permission [command] [role, user or permission]</code>, and it needs the <strong>Administrator</strong> permission. It does one of three things depending on what you give it as the last part.</p>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>You give it</th><th>Example</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>A role</td><td><code>-permission ban @Moderators</code></td><td>Everyone with that role can use the command, even without the usual permission.</td></tr>
+      <tr><td>A person</td><td><code>-permission mute @Sam</code></td><td>That one person can use the command.</td></tr>
+      <tr><td>A permission</td><td><code>-permission mute Moderate Members</code></td><td>The command now needs that permission instead of its usual one.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-permission warn @Helpers</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>✅ @Helpers can now use `-warn`, even without the usual permission.</div></div>
+  </div>
+  <p>Running the exact same thing again <strong>takes it back off</strong>, so the same command both adds and removes.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-permission warn @Helpers</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>Took @Helpers off `-warn`. They need the usual permission again.</div></div>
+  </div>
+
+  <h2>Checking what's set</h2>
+  <p>Give only the command name to see its current access.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-permission warn</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>Access for -warn
+Roles that can always use it: @Helpers</div></div>
+  </div>
+  <p>If nothing has been changed, Nexus says the command "is using its normal access rules".</p>
+
+  <h2>Writing the command name</h2>
+  <ul>
+    <li>Leave off the prefix. Write <code>ban</code>, not <code>-ban</code>.</li>
+    <li>Use the <strong>full name</strong> for commands with parts. Access is set per part, so write <code>giveaway start</code>, <code>role add</code> or <code>ticket close</code>, and set each part you want to open up.</li>
+    <li>A permission can be written many ways. <code>Moderate Members</code>, <code>moderate_members</code> and <code>moderate-members</code> all work, and <code>Manage Server</code> works for Manage Guild.</li>
+  </ul>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-permission giveaway start @Events</div></div>
+    <div class="line you"><span class="who">You</span><div>-permission giveaway end @Events</div></div>
+    <div class="line you"><span class="who">You</span><div>-permission giveaway reroll @Events</div></div>
+  </div>
+
+  <h2>What access does and doesn't change</h2>
+  <p>Command access replaces <strong>the Discord permission check and nothing else</strong>. Everything that keeps your server safe still applies:</p>
+  <ul>
+    <li>The role-order rule still holds. A helper who is allowed to use <code>-ban</code> still can't ban someone above them.</li>
+    <li>Nexus still needs its own permissions to do the job, and its role must still be above the person it's acting on.</li>
+    <li>Cases and logs are still written, with the real moderator's name on them.</li>
+  </ul>
+  <p>A few commands decide who can use them in their own way instead of through a Discord permission, like <code>-ticket add</code> and <code>-ticket remove</code>, which check for the support role. Command access can't change those.</p>
+
+  <h2>What can't be changed</h2>
+  <p>For safety, the access for these commands is fixed: <code>-permission</code> itself, <code>-wipe</code>, <code>-commands</code>, <code>-help</code> and <code>-ping</code>. Nexus's owner-only commands are fixed too. If you try, Nexus says "that command's access can't be changed".</p>
+
+  <h2>Seeing it in the commands menu</h2>
+  <p>If you change which permission a command needs, <code>-commands</code> in your server shows the new permission, so your team sees the real rule instead of the default.</p>
+
+  <h2>Recipes</h2>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Goal</th><th>Run</th></tr></thead>
+    <tbody>
+      <tr><td>Helpers can warn without Kick Members</td><td><code>-permission warn @Helpers</code></td></tr>
+      <tr><td>Event hosts can run giveaways</td><td><code>-permission giveaway start @Events</code> and the same for <code>end</code> and <code>reroll</code></td></tr>
+      <tr><td>Only people who can manage messages may mute</td><td><code>-permission mute Manage Messages</code></td></tr>
+      <tr><td>Let one trusted person post as the bot</td><td><code>-permission say @Sam</code></td></tr>
+      <tr><td>Undo any of the above</td><td>Run the same command again</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>If it doesn't work</h2>
+  <ul>
+    <li><strong>"I couldn't find a command called..."</strong> You probably included the prefix, or the name is wrong. Use <code>-commands</code> to check it.</li>
+    <li><strong>"I couldn't tell if X is a role, a member or a permission."</strong> Mention the role or person, or write the permission's name.</li>
+    <li><strong>It still says "you do not have permission".</strong> Check you set it on the full command name, like <code>giveaway start</code>, and that the person has the role.</li>
+  </ul>
+</article>
+
+<article class="doc-page" data-doc="starboard" data-title="Starboard">
+  <div class="doc-crumb">Server tools</div>
+  <h1>Starboard</h1>
+  <p class="lead">The starboard collects the best messages in your server in one channel. When someone reacts to a message with the emoji you choose, Nexus reposts it there, so the funny, helpful and memorable moments don't get buried.</p>
+
+  <h2>How it works</h2>
+  <ol>
+    <li>You pick an emoji and a channel.</li>
+    <li>A member reacts to any message with that emoji.</li>
+    <li>Nexus posts a copy of the message in the starboard channel, with a link back to the original.</li>
+  </ol>
+  <div class="callout warn"><strong>The first reaction is enough.</strong> There's no minimum number of reactions. The moment anyone reacts with the starboard emoji, the message is posted. Choose an emoji that members understand means "this deserves the board", and not one they'd use casually.</div>
+
+  <h2>Setting it up</h2>
+  <p>You need the Manage Server permission, and a channel for the board.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-starboard setup ⭐ #starboard</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>Starboard is set up. Messages with ⭐ will be posted to #starboard.</div></div>
+  </div>
+  <p>You can use a normal emoji or a custom emoji from your server. Run the command again to change the emoji or the channel, and <code>-starboard</code> on its own to see what's set. Anyone can run that check.</p>
+
+  <h2>What gets posted</h2>
+  <ul>
+    <li>The author's name and avatar, and the message text (long messages are shortened).</li>
+    <li>A <strong>Jump to message</strong> link and the channel it came from.</li>
+    <li>The reaction count at the moment it was posted.</li>
+    <li>The first attached image, if the message has one.</li>
+  </ul>
+  <p>Each message is posted <strong>once</strong>. More reactions later don't create a second copy, and the count on the repost isn't updated afterwards.</p>
+
+  <h2>What's ignored</h2>
+  <ul>
+    <li>Reactions from bots.</li>
+    <li>Messages in the starboard channel itself, so the board can't repost itself.</li>
+    <li>Messages in direct messages.</li>
+    <li>Other emoji. Only the one you chose counts.</li>
+  </ul>
+  <p>If Nexus can't post to the starboard channel at that moment, it forgets that it tried, so the next reaction on the message tries again.</p>
+
+  <h2>Permissions</h2>
+  <p>Nexus needs to view and send messages and embeds in the starboard channel, and to read the messages people react to. Make the starboard channel read-only for members, so it stays a gallery.</p>
+
+  <h2>Tips</h2>
+  <ul>
+    <li>Explain the emoji in your rules or a pinned message, so members know how to nominate something.</li>
+    <li>Use a separate starboard per theme by keeping the emoji distinctive, like 🌟 for memorable moments.</li>
+    <li>If someone abuses it, a moderator can delete the repost from the board. The original is untouched.</li>
+    <li>Reactions on very old messages may not trigger it, since Nexus works from messages it has seen recently.</li>
+  </ul>
+</article>
+
+<article class="doc-page" data-doc="giveaways" data-title="Giveaways">
+  <div class="doc-crumb">Server tools</div>
+  <h1>Giveaways</h1>
+  <p class="lead">Run a giveaway in one command. Nexus posts it, counts the entries, picks the winners when time is up, and announces them. This page covers everything from starting one to rerolling a winner.</p>
+
+  <h2>Starting a giveaway</h2>
+  <p>You need the Manage Server permission. Run the command in the channel where people should enter.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-giveaway start 2d 1 Discord Nitro</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>🎉 Giveaway!
+Prize: Discord Nitro
+Winners: 1
+Ends: in 2 days (Fri, Nov 20, 2026 4:12 PM)
+
+React with 🎉 to enter!
+Hosted by Alex</div></div>
+  </div>
+  <p>The command takes three things, in this order:</p>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Part</th><th>What to write</th><th>Limit</th></tr></thead>
+    <tbody>
+      <tr><td>Length</td><td>A time like <code>30m</code>, <code>2h</code>, <code>1d</code> or <code>1h30m</code>. See <a class="inline" href="#/time-formats">Time formats</a>.</td><td>Up to 30 days</td></tr>
+      <tr><td>Winners</td><td>A whole number</td><td>1 to 20</td></tr>
+      <tr><td>Prize</td><td>Anything after the winners, spaces included</td><td>Up to 200 characters</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Nexus deletes the message you typed so the channel stays tidy, posts the giveaway, and adds the 🎉 reaction itself. If it can't add the reaction, it says so, since people can't enter without it. Check that Nexus has Add Reactions there.</p>
+
+  <h2>How people enter</h2>
+  <p>By pressing the 🎉 reaction on the giveaway message. There's nothing else to do. The embed shows the time left, and Discord shows it in each person's own time zone.</p>
+
+  <h2>Picking winners</h2>
+  <p>When the time is up, Nexus draws the winners at random from everyone who reacted, except:</p>
+  <ul>
+    <li>bots</li>
+    <li>people who are no longer in the server</li>
+  </ul>
+  <p>It then posts an announcement that pings the winners, and edits the original message to show the giveaway has ended and who won. If nobody entered, it says so instead.</p>
+  <p>Nexus checks for finished giveaways every 30 seconds, so the announcement can arrive up to half a minute after the end time. Giveaways are saved, so they survive a restart. If Nexus was offline when one ended, it finishes it as soon as it's back.</p>
+
+  <h2>Ending early</h2>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-giveaway end 1234567890123456789</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>Giveaway ended early.</div></div>
+  </div>
+  <p>Use the ID of the giveaway message. To copy it, turn on <strong>Developer Mode</strong> in Discord's settings under Advanced, then right-click the giveaway message and choose <strong>Copy Message ID</strong>.</p>
+
+  <h2>Rerolling</h2>
+  <p>If a winner doesn't respond or isn't eligible, reroll after the giveaway has ended.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-giveaway reroll 1234567890123456789</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>🎉 Giveaway reroll!
+Prize: Discord Nitro
+New winner(s): @Jordan</div></div>
+  </div>
+  <div class="callout warn"><strong>A reroll draws a whole new set of winners.</strong> It picks again from everyone eligible, using the original number of winners, so the same person can be picked again. For a giveaway with several winners, it replaces all of them, not just one.</div>
+  <p>A reroll needs the original giveaway message to still exist. If that message was deleted, Nexus tells you it can't reroll.</p>
+
+  <h2>Running it fairly</h2>
+  <ul>
+    <li>Post the rules first with <code>-say</code>, including who can enter and how winners are contacted.</li>
+    <li>Giveaways only count the 🎉 reaction. For extra requirements, like a certain role, check the winners before handing over the prize and reroll if they don't qualify.</li>
+    <li>Nexus pings the winners but doesn't deliver the prize. That part is yours.</li>
+  </ul>
+
+  <h2>If something goes wrong</h2>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Nexus says</th><th>What it means</th></tr></thead>
+    <tbody>
+      <tr><td>I couldn't read that length</td><td>Use a number and a unit with no spaces, like <code>2h</code>. The limit is 30 days.</td></tr>
+      <tr><td>Winners have to be between 1 and 20</td><td>Pick a number in that range.</td></tr>
+      <tr><td>I can't find a giveaway with that message ID</td><td>Copy the ID of the giveaway message itself, not the channel or your own message.</td></tr>
+      <tr><td>That giveaway hasn't ended yet</td><td>You can only reroll after it ends. Use <code>-giveaway end</code> first if you want it over now.</td></tr>
+      <tr><td>There are no eligible entries to reroll from</td><td>Everyone who entered is a bot or has left.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>If the giveaway message or its channel is deleted, Nexus closes the giveaway quietly, since there's nothing left to update.</p>
+
+  <h2>What giveaways don't do</h2>
+  <p>There are no role requirements, no entry limits, and no separate prizes per winner. Each giveaway has one prize and a number of winners who share it. For several different prizes, run one giveaway per prize.</p>
+</article>
+
+<article class="doc-page" data-doc="games" data-title="Games">
+  <div class="doc-crumb">For members</div>
+  <h1>Games</h1>
+  <p class="lead">Nexus has ten games built in. Pick one from a menu, choose how hard Nexus plays, or challenge a friend. Nothing to install, and every result goes on your personal record.</p>
+
+  <h2>Starting a game</h2>
+  <p>Anyone can play. Type <code>-games</code> to open the menu, or jump straight to a game by name.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-games</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>🎮 Games
+Pick a game below. Play Nexus or challenge a friend.
+[ Pick a game ▾ ]</div></div>
+  </div>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-games connect4</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>🔴 Connect Four
+Drop discs into the columns. First to link four in any direction wins. You play 🔴 and go first.
+[ Difficulty ▾ ]  [ Challenge a friend ▾ ]
+[ ▶️ Play vs Nexus ]  [ 📊 My record ]  [ Back ]</div></div>
+  </div>
+  <p>Games have short names too, so <code>-games c4</code>, <code>-games bj</code> and <code>-games ttt</code> all work. If Nexus doesn't know the name, it tells you to use the menu.</p>
+
+  <h2>The lobby</h2>
+  <p>Picking a game opens its lobby, where you decide how to play:</p>
+  <ul>
+    <li><strong>Difficulty.</strong> Easy, Medium or Hard. The lobby explains what each level means for that game. Medium is the default.</li>
+    <li><strong>Challenge a friend.</strong> Pick someone from the list to play them instead of Nexus. Only games marked <em>vs a friend</em> below have this.</li>
+    <li><strong>Play.</strong> The green button starts the game. It says <em>Play vs Nexus</em> when the game also supports friends.</li>
+    <li><strong>My record.</strong> Shows your results in a private message only you can see.</li>
+    <li><strong>Back.</strong> Returns to the game list.</li>
+  </ul>
+  <p>The menu belongs to the person who opened it. If someone else presses its buttons, Nexus tells them to run <code>-games</code> for their own.</p>
+
+  <h2>The ten games</h2>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Game</th><th>Play with</th><th>How it works</th><th>Short names</th></tr></thead>
+    <tbody>
+      <tr><td>❌ Tic-Tac-Toe</td><td>Nexus or a friend</td><td>Three in a row on a 3x3 grid. You play ✕ and move first.</td><td><code>ttt</code> <code>xo</code></td></tr>
+      <tr><td>🔴 Connect Four</td><td>Nexus or a friend</td><td>Drop discs into columns and link four in any direction. You play 🔴 and go first.</td><td><code>c4</code> <code>cf</code></td></tr>
+      <tr><td>✌️ Rock Paper Scissors</td><td>Nexus or a friend</td><td>First to 3 round wins. Ties are replayed. Picks stay secret until both players lock in.</td><td><code>rps</code></td></tr>
+      <tr><td>🃏 Blackjack</td><td>Solo</td><td>Get closer to 21 than the dealer without going over. Hit to draw, stand to hold.</td><td><code>bj</code> <code>21</code></td></tr>
+      <tr><td>⚔️ Card Battle</td><td>Nexus or a friend</td><td>Five cards each, one per round, higher card wins and aces are high. Once per game you can mark a round as Double for 2 points. Your hand stays private.</td><td><code>cards</code> <code>cb</code> <code>war</code></td></tr>
+      <tr><td>🔢 2048</td><td>Solo</td><td>Slide the board with the arrows and merge equal tiles. Reach 2048 to win, or keep going for a higher score.</td><td><code>2048</code> <code>puzzle</code></td></tr>
+      <tr><td>🧠 Trivia</td><td>Nexus or a friend</td><td>Five questions with four answers each. Correct answers score points and faster answers score more. A friend gets the same questions.</td><td><code>quiz</code></td></tr>
+      <tr><td>🎯 Number Guess</td><td>Nexus or a friend</td><td>Nexus picks a secret number. You take turns guessing, and every guess narrows the range for both players.</td><td><code>guess</code> <code>ng</code></td></tr>
+      <tr><td>🪢 Hangman</td><td>Nexus or a friend</td><td>Pick letters to uncover the word before the drawing is finished, or risk a full guess. Against a friend, they choose the word.</td><td><code>hm</code></td></tr>
+      <tr><td>🔤 Word Scramble</td><td>Nexus or a friend</td><td>Five rounds of unscrambling a word before the timer runs out. Against a friend it's a race: the first correct answer takes the round.</td><td><code>scramble</code> <code>ws</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>What the difficulties change</h2>
+  <p>Each game tunes difficulty in its own way, and the lobby spells it out before you start. A few examples:</p>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Game</th><th>Easy</th><th>Medium</th><th>Hard</th></tr></thead>
+    <tbody>
+      <tr><td>Tic-Tac-Toe</td><td>Nexus picks any open square</td><td>Takes a win and blocks yours</td><td>Never loses. The best you can get is a draw</td></tr>
+      <tr><td>Connect Four</td><td>Drops discs at random</td><td>Wins when it can and blocks you</td><td>Looks several moves ahead</td></tr>
+      <tr><td>Blackjack</td><td>Dealer stands on 15</td><td>Dealer stands on any 17</td><td>Dealer hits on a soft 17</td></tr>
+      <tr><td>2048</td><td>A roomy 5x5 board</td><td>The classic 4x4 board</td><td>4x4, and 4s appear three times as often</td></tr>
+      <tr><td>Trivia</td><td>Easy questions, 20 seconds each</td><td>Tougher questions, 15 seconds</td><td>Hard questions, 12 seconds</td></tr>
+      <tr><td>Hangman</td><td>8 lives, short words, category hint</td><td>6 lives, medium words, hint</td><td>5 lives, long words, no hint</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Difficulty only matters when you play Nexus. Against a friend, both of you face the same rules.</p>
+
+  <h2>Challenging a friend</h2>
+  <ol>
+    <li>Open the game's lobby and pick your friend from <strong>Challenge a friend</strong>.</li>
+    <li>Nexus posts the challenge in the channel and pings them.</li>
+    <li>They have <strong>one minute</strong> to accept or decline. If they don't answer, the challenge expires.</li>
+    <li>If they accept, the game starts straight away, and only the two of you can press its buttons.</li>
+  </ol>
+  <p>You can't challenge yourself or a bot. Someone Nexus has blocked from games can't be challenged either.</p>
+
+  <h2>During a game</h2>
+  <ul>
+    <li>Games run on buttons, and only the people playing can use them. Anyone else who tries is told it's not their game.</li>
+    <li>You have about two minutes of inactivity before a game times out. In a game against a friend, the person who stopped playing <strong>loses</strong> and the other person takes the win. Against Nexus, the game is just closed.</li>
+    <li>When a game ends, a <strong>Play again</strong> button appears for 90 seconds. In games where the first move matters, it swaps who goes first.</li>
+  </ul>
+
+  <h2>Your record</h2>
+  <p>Wins, losses and draws are tracked for every game, for you personally across every server. See your own or someone else's with:</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-games stats @Sam</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>Sam's game record
+14 wins, 9 losses, 2 draws
+🃏 Blackjack: 6W 3L 0D (Streak 2, best 4)
+🔢 2048: 1W 2L 0D (Best score 3,284)</div></div>
+  </div>
+  <p>The record shows each game you've played, most played first, with your current and best win streak once it reaches two, and your best score for scored games like 2048. Games against Nexus and against friends both count.</p>
+
+  <h2>Tips for server owners</h2>
+  <ul>
+    <li>Games work in any channel where Nexus can send messages. Make a #games channel to keep the buttons out of your main chat.</li>
+    <li>The game menus are interactive messages, so Nexus needs the Send Messages and Embed Links permissions, plus Use External Emoji if you restrict it.</li>
+    <li>Games make good event content. <a class="inline" href="#/guide-events">Run events and giveaways</a> has ideas for tournaments.</li>
+  </ul>
+</article>
+
+<article class="doc-page" data-doc="stats" data-title="Stats">
+  <div class="doc-crumb">For members</div>
+  <h1>Stats</h1>
+  <p class="lead">Stats shows how active your server is: who's talking, where, when people are in voice, how many joined and left, and which invites bring people in. It's a view of the last 30 days, with graphs.</p>
+
+  <h2>How it works</h2>
+  <p>Once Nexus is in your server, it counts activity quietly in the background. It never stores what people say. It only records that a message happened, who sent it and in which channel, and how long people spent in voice channels.</p>
+  <ul>
+    <li><strong>Text.</strong> Each message from a person adds to their count and their channel's count. Bots are ignored.</li>
+    <li><strong>Voice.</strong> Time in a voice channel is added when someone leaves or switches channel. Visits shorter than 10 seconds aren't counted.</li>
+    <li><strong>Joins and leaves.</strong> Counted from the moment Nexus joined, along with which invite was used.</li>
+  </ul>
+  <div class="callout"><strong>Stats start when Nexus does.</strong> Nexus can't see activity from before it joined your server, so a brand-new server shows little until a few days have passed. Every stats page only covers the <strong>last 30 days</strong>.</div>
+
+  <h2>The six views</h2>
+  <p>Every stats command works for anyone, so members can look at the server's activity too.</p>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Command</th><th>What you see</th></tr></thead>
+    <tbody>
+      <tr><td><code>-stats user [user]</code></td><td>Total messages and rank, top text channels, voice time and rank, top voice channels, and a graph of the last 30 days. Leave the user off to see yourself.</td></tr>
+      <tr><td><code>-stats channel [channel]</code></td><td>How many members have posted there, the total messages, the top members, and a graph.</td></tr>
+      <tr><td><code>-stats server</code></td><td>Total messages, total voice time, member count and a combined graph for the whole server.</td></tr>
+      <tr><td><code>-stats top</code></td><td>Leaderboards: top members and channels for text, and top members and channels for voice.</td></tr>
+      <tr><td><code>-stats members</code></td><td>How many people joined and left, the net change, the current member count, and a graph.</td></tr>
+      <tr><td><code>-stats invite [code]</code></td><td>Who made the invite, when, whether it's still active, total joins, joins in the last 30 days, and a graph.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>If you type just <code>-stats</code>, Nexus lists these options for you.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-stats user @Sam</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>📊 Stats | Sam
+Activity from the last 30 days
+💬 Total Messages 1,284    💬 Text Rank #3 of 212
+🏆 Top Text Channels
+1. #general | 640 messages
+🔊 Total Voice Time 12h 40m    🔊 Voice Rank #5 of 48
+[ activity graph ]</div></div>
+  </div>
+
+  <h2>Invite stats</h2>
+  <p>Invite tracking answers "which invite brought these people here?" Give <code>-stats invite</code> the code from an invite link, which is the part after <code>discord.gg/</code>.</p>
+  <ul>
+    <li>Nexus needs the <strong>Manage Server</strong> permission to see which invite someone used when they join. Without it, joins still count but aren't tied to an invite.</li>
+    <li>It can only tell you about invites <em>for your own server</em>. A code from another server gets a "can't find that invite" reply.</li>
+    <li>The numbers cover joins Nexus has seen, so an older invite may show fewer joins than Discord does.</li>
+  </ul>
+
+  <h2>Reading the numbers well</h2>
+  <ul>
+    <li>Ranks compare people within your server over the last 30 days only, so they move as people's habits change.</li>
+    <li>The graph shows one point per day. A flat line means nobody was active, or Nexus hadn't started counting yet.</li>
+    <li>Member counts come from joins and leaves Nexus witnessed, and the "current members" figure comes straight from Discord.</li>
+  </ul>
+
+  <h2>What stats are good for</h2>
+  <div class="cols">
+    <div class="card"><h4>Find your busy hours</h4><ul><li>Check the server graph</li><li>Schedule events and announcements when people are around</li></ul></div>
+    <div class="card"><h4>Tidy quiet channels</h4><ul><li>Spot channels with almost no messages</li><li>Merge or archive them</li></ul></div>
+    <div class="card"><h4>Know what's working</h4><ul><li>See which invite links bring people</li><li>Compare joins to leaves after a change</li></ul></div>
+    <div class="card"><h4>Recognize regulars</h4><ul><li>Use the leaderboards to thank active members</li><li>Spot who might make a good helper</li></ul></div>
+  </div>
+
+  <h2>Your data</h2>
+  <p>Stats data belongs to your server and is erased if you use <a class="inline" href="#/data-wipe">a data wipe</a>. For exactly what's stored and for how long, see the <a class="inline" href="privacy.html" data-external>Privacy page</a>.</p>
+</article>
+
+<article class="doc-page" data-doc="reminders" data-title="Reminders">
+  <div class="doc-crumb">For members</div>
+  <h1>Reminders</h1>
+  <p class="lead">Ask Nexus to remind you about something later, from a few minutes to a full year. When the time comes, Nexus pings you where you asked.</p>
+
+  <h2>Setting a reminder</h2>
+  <p>Anyone can use reminders. Give it a length of time, then the text to remind you about.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-reminder create 1h30m Take the pizza out</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>✅ Reminder set
+Reminder: `Take the pizza out`
+I will remind you: in 2 hours (Tue, Nov 17, 2026 6:42 PM)
+Channel: #general</div></div>
+  </div>
+  <p>The time can be seconds, minutes, hours, days, weeks, months or years, and you can combine them like <code>1d12h</code>. The longest is one year. <a class="inline" href="#/time-formats">Time formats</a> lists everything it understands.</p>
+
+  <h2>When it's time</h2>
+  <ol>
+    <li>Nexus posts the reminder <strong>in the channel where you set it</strong>, and pings you.</li>
+    <li>If it can't post there anymore (the channel was deleted, or it lost permission), it sends you a <strong>direct message</strong> instead.</li>
+    <li>If neither works, because your DMs are closed and the channel is gone, the reminder is dropped.</li>
+  </ol>
+  <p>Reminders set in a DM with Nexus come back to that DM.</p>
+  <p>Nexus checks every 30 seconds, so a reminder can land up to half a minute after the exact time. Reminders are saved, so they still arrive if Nexus restarts.</p>
+
+  <h2>Seeing and deleting reminders</h2>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Command</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code>-reminder list</code></td><td>Shows all your reminders, soonest first, with when each is due, what it says and where it was set.</td></tr>
+      <tr><td><code>-reminder delete</code></td><td>Opens a menu of your reminders. Pick the one to remove.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Typing <code>-reminder</code> on its own shows a short help card. Reminders are personal: nobody else can see or delete yours.</p>
+
+  <h2>Limits</h2>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Limit</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td>Active reminders per person</td><td>25</td></tr>
+      <tr><td>Length of the reminder text</td><td>300 characters</td></tr>
+      <tr><td>Longest wait</td><td>1 year</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>At the limit, Nexus asks you to delete one first. Backticks in your text are swapped for plain quotes so the reminder displays cleanly.</p>
+
+  <h2>If something goes wrong</h2>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Nexus says</th><th>What to do</th></tr></thead>
+    <tbody>
+      <tr><td>I couldn't read that time</td><td>Write it as a number and a unit with no spaces, like <code>30m</code> or <code>2d</code>. The limit is a year.</td></tr>
+      <tr><td>What should I remind you about?</td><td>Add the text after the time.</td></tr>
+      <tr><td>Reminders can be up to 300 characters</td><td>Shorten the text.</td></tr>
+      <tr><td>You already have 25 reminders</td><td>Run <code>-reminder delete</code> to clear one.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout">If you want reminders to reach you reliably, keep DMs from server members open. If the original channel is ever deleted, a DM is the fallback.</div>
+</article>
+
+<article class="doc-page" data-doc="info" data-title="Info and lookup">
+  <div class="doc-crumb">For members</div>
+  <h1>Info and lookup</h1>
+  <p class="lead">A set of quick lookups for people, channels, roles, emojis, stickers and the server itself. They're open to everyone and don't change anything, so they're safe to run anywhere.</p>
+
+  <h2>About people</h2>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Command</th><th>What you get</th></tr></thead>
+    <tbody>
+      <tr><td><code>-userinfo [user]</code></td><td>Name, ID, whether it's a bot, when the account was created, when they joined, their top role and all their roles. For someone who isn't in the server, it shows what Discord shares and says they're not here.</td></tr>
+      <tr><td><code>-avatarinfo [user]</code></td><td>Their avatar, with PNG, JPG and WEBP download links (and GIF if it's animated).</td></tr>
+      <tr><td><code>-bannerinfo [user]</code></td><td>Their profile banner, if they have one.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Leave the user off to look at yourself. You can use a mention, a name or an ID.</p>
+
+  <h2>Finding someone</h2>
+  <p><code>-search</code> helps when you only have part of the information.</p>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Command</th><th>Use it when</th></tr></thead>
+    <tbody>
+      <tr><td><code>-search username [text]</code></td><td>You know part of someone's name. It searches usernames and display names in this server, shows details if there's one match, and lists up to 10 if there are several.</td></tr>
+      <tr><td><code>-search id [Discord ID]</code></td><td>You have an ID. It works even if the person isn't in your server, and tells you whether they are.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>To copy an ID, turn on <strong>Developer Mode</strong> in Discord's Advanced settings, then right-click a person and choose <strong>Copy User ID</strong>.</p>
+
+  <h2>About the server</h2>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Command</th><th>What you get</th></tr></thead>
+    <tbody>
+      <tr><td><code>-serverinfo</code></td><td>Owner, creation date, member, role, channel and emoji counts, boost level and number of boosts, and verification level.</td></tr>
+      <tr><td><code>-servermembercount</code></td><td>Total members, split into humans and bots.</td></tr>
+      <tr><td><code>-serverchannelcount</code></td><td>Total channels, split into text, voice and categories.</td></tr>
+      <tr><td><code>-servericoninfo</code></td><td>The server icon, with download links.</td></tr>
+      <tr><td><code>-serverbannerinfo</code></td><td>The server banner, if it has one.</td></tr>
+      <tr><td><code>-serversplashinfo</code></td><td>The invite splash image, if it has one.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>About channels, roles and extras</h2>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Command</th><th>What you get</th></tr></thead>
+    <tbody>
+      <tr><td><code>-channelinfo [channel]</code></td><td>ID, type, category, creation date, and extras depending on the type, such as slowmode, NSFW status and topic for text channels or bitrate and user limit for voice.</td></tr>
+      <tr><td><code>-roleinfo [role]</code></td><td>ID, color, member count, creation date, whether it's mentionable, hoisted or managed, its position, and its allowed and denied permissions.</td></tr>
+      <tr><td><code>-rolelist</code></td><td>Every role from highest to lowest with its member count. Very long lists are cut after three pages.</td></tr>
+      <tr><td><code>-emojiinfo [emoji]</code></td><td>ID, name, whether it's animated, when it was created, and how to use it.</td></tr>
+      <tr><td><code>-stickerinfo [name]</code></td><td>ID, name, format, description and creation date for a sticker in this server.</td></tr>
+      <tr><td><code>-stickerpackinfo</code></td><td>Every sticker in the server.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Handy uses</h2>
+  <ul>
+    <li><strong>Checking a suspicious account.</strong> <code>-userinfo</code> shows how new the account is, which is a quick sign for spotting alts and raiders.</li>
+    <li><strong>Auditing permissions.</strong> <code>-roleinfo</code> shows exactly what a role can and can't do, which helps when setting up <a class="inline" href="#/command-access">command access</a>.</li>
+    <li><strong>Reporting problems.</strong> IDs from these commands are what the support team asks for. See <a class="inline" href="#/troubleshooting">Troubleshooting</a>.</li>
+    <li><strong>Grabbing an image.</strong> Avatar, icon and banner commands give you full-size links to save.</li>
+  </ul>
+  <div class="callout">These commands only read what Discord already shows to bots. They never reveal private information like emails or messages.</div>
+</article>
+
+<article class="doc-page" data-doc="utilities" data-title="Utilities">
+  <div class="doc-crumb">For members</div>
+  <h1>Utilities</h1>
+  <p class="lead">The everyday tools that don't belong to a bigger feature: translation, speaking as the bot, the prefix, a latency check and the built-in help.</p>
+
+  <h2>Translate</h2>
+  <p>Anyone can translate text between languages, with the language names written out in full.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-translate English Spanish Where is the library?</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>🌐 Translation
+Original (English): Where is the library?
+Translated (Spanish): ¿Dónde está la biblioteca?
+Translated with Google Translate</div></div>
+  </div>
+  <p>The order is the language you're translating <em>from</em>, the language you want, then the text. The text can be up to 1,000 characters, and Nexus tells you if it's too long. If a language name isn't recognised, Nexus asks you to check both names.</p>
+
+  <h2>Say</h2>
+  <p><code>-say [channel] [message]</code> posts a message as Nexus in another channel. It needs <strong>Manage Messages</strong>, and it's useful for announcements, rules and giveaway notes.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-say #rules Rules updated, please have a read!</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>(posts in #rules and removes your command)</div></div>
+  </div>
+  <ul>
+    <li>Messages can be up to 2,000 characters, which is Discord's own limit.</li>
+    <li>It can mention people, but <strong>never</strong> <code>@everyone</code>, <code>@here</code> or roles, so it can't be used to mass-ping.</li>
+    <li>Nexus deletes your command message afterwards so only the bot's message is left.</li>
+    <li>If logging is on, each use is recorded with who ran it. See <a class="inline" href="#/logging">Logging</a>.</li>
+    <li>Nexus needs permission to send messages in the destination channel, and tells you if it can't.</li>
+  </ul>
+
+  <h2>Prefix</h2>
+  <p>The prefix is the character you type before a command. It starts as <code>-</code>, and you can always mention Nexus instead (<code>@Nexus ping</code>).</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-prefix set !</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>Done. My prefix here is now `!`.</div></div>
+  </div>
+  <ul>
+    <li><code>-prefix</code> shows the current prefix. Anyone can ask.</li>
+    <li><code>-prefix set [prefix]</code> changes it, and needs <strong>Manage Server</strong>.</li>
+    <li>A prefix can be up to <strong>5 characters</strong>, with no spaces, and it can't start with <code>&lt;</code>.</li>
+    <li>The prefix is per server, so changing it doesn't affect any other server.</li>
+  </ul>
+  <div class="callout warn">If the prefix clashes with another bot, change Nexus's rather than guessing. And if you ever forget the new one, mention Nexus with <code>@Nexus prefix</code> and it will tell you.</div>
+  <p>Throughout these docs, commands are written with the default <code>-</code>.</p>
+
+  <h2>Ping</h2>
+  <p><code>-ping</code> replies with how long Nexus takes to respond, in milliseconds. It works in server channels and in DMs. Use it to check that Nexus is online and responsive before reporting a problem.</p>
+
+  <h2>Help and the command list</h2>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Command</th><th>What it shows</th></tr></thead>
+    <tbody>
+      <tr><td><code>-help</code></td><td>A short getting-started card with the basics, plus a button to reach the support server. Works in DMs.</td></tr>
+      <tr><td><code>-commands</code></td><td>Every command, sorted by category, with the permission each needs in your server. Press a category button to see it.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><code>-commands</code> is the quickest way to see what you personally can use. What you click is only visible to you. If the buttons stop working after a while, run it again. In DMs, only <code>-ping</code>, <code>-commands</code> and <code>-help</code> work.</p>
+
+  <h2>Staff notes and giveaways</h2>
+  <p>Two other everyday tools have their own pages: <a class="inline" href="#/notes">Staff notes</a> and <a class="inline" href="#/giveaways">Giveaways</a>.</p>
+</article>
+
+<article class="doc-page" data-doc="troubleshooting" data-title="Troubleshooting">
+  <div class="doc-crumb">Help</div>
+  <h1>Troubleshooting</h1>
+  <p class="lead">Most problems come down to a missing permission, a role in the wrong place, or a typo in a command. Start with the checks below, then find your symptom.</p>
+
+  <h2>First, run these checks</h2>
+  <div class="steps">
+    <div class="step"><div><h4>Is Nexus online?</h4><p>Run <code>-ping</code>. If there's no reply, Nexus may be offline or can't see or speak in that channel. Try another channel.</p></div></div>
+    <div class="step"><div><h4>Are you using the right prefix?</h4><p>Mention Nexus and say <code>prefix</code>: <code>@Nexus prefix</code>. It always answers, even if the prefix was changed.</p></div></div>
+    <div class="step"><div><h4>Is Nexus's role high enough?</h4><p>In Server Settings, Roles, drag the Nexus role above any role it needs to manage, or above people it needs to act on.</p></div></div>
+    <div class="step"><div><h4>Does Nexus have the permissions?</h4><p>Check the channel, not only the server. A channel's own settings can block the bot even when its role allows it.</p></div></div>
+  </div>
+
+  <h2>Nexus doesn't respond to commands</h2>
+  <ul>
+    <li>Nexus must be able to <strong>view</strong> the channel and <strong>send messages</strong> in it.</li>
+    <li>Check the prefix. A change with <code>-prefix set</code> applies to the whole server.</li>
+        <li>In DMs only <code>-ping</code>, <code>-commands</code> and <code>-help</code> work.</li>
+  </ul>
+
+  <h2>"You do not have permission"</h2>
+  <p>The command needs a permission you don't have. The <a class="inline" href="#/commands">command list</a> shows what each one needs, and <code>-commands</code> shows the permissions as set in your server. If your server owner wants you to be able to use it without extra permissions, they can grant it with <a class="inline" href="#/command-access">command access</a>.</p>
+
+  <h2>Moderation problems</h2>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Problem</th><th>Likely cause and fix</th></tr></thead>
+    <tbody>
+      <tr><td>Can't ban, kick or mute someone</td><td>Their top role is equal to or higher than yours, or higher than Nexus's. Move the Nexus role up, and remember that you can't act on someone above you.</td></tr>
+      <tr><td>Mute doesn't work</td><td>Nexus needs <strong>Moderate Members</strong>. Timeouts can't be applied to server administrators or the owner.</td></tr>
+      <tr><td>The person wasn't told in a DM</td><td>They have DMs closed. The action still went through, and the case records it.</td></tr>
+      <tr><td>Purge removed fewer messages</td><td>Nexus looks through the last 500 messages in the channel for that person's, and Discord won't bulk delete anything older than 14 days.</td></tr>
+      <tr><td>A case is missing</td><td>Check <code>-cases @user</code>, and remember a voided case is removed. <a class="inline" href="#/cases">Cases and history</a> explains how it works.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>AutoMod and logging</h2>
+  <ul>
+    <li><strong>AutoMod isn't catching anything.</strong> Check the rule is set up for your server, and that the person or one of their roles isn't on the AutoMod whitelist. See <a class="inline" href="#/automod">AutoMod</a>.</li>
+    <li><strong>AutoMod is deleting too much.</strong> Loosen the limit, or whitelist the role or person. Raise the number gradually.</li>
+    <li><strong>Nothing appears in the log channel.</strong> Nexus needs to view and send messages and embeds there. Re-run the <code>-log</code> command for that event and confirm the channel. See <a class="inline" href="#/logging">Logging</a>.</li>
+  </ul>
+
+  <h2>Tickets, roles and giveaways</h2>
+  <ul>
+    <li><strong>The ticket button does nothing.</strong> Make sure setup was done with <code>-ticket setup</code> and that Nexus has Manage Channels and Manage Roles. See <a class="inline" href="#/tickets">Tickets</a>.</li>
+    <li><strong>A role can't be given.</strong> The role is above Nexus's role, above yours, or managed by an integration. See <a class="inline" href="#/roles">Roles and autoroles</a>.</li>
+    <li><strong>A timed role lasted a bit longer.</strong> Expiry is checked once a minute.</li>
+    <li><strong>The giveaway has no 🎉.</strong> Nexus needs Add Reactions in that channel. Start it again after fixing it.</li>
+    <li><strong>The giveaway or reminder came late.</strong> Both are checked about every 30 seconds.</li>
+    <li><strong>Starboard isn't posting.</strong> Check <code>-starboard</code> for the emoji and channel, and that Nexus can send embeds there.</li>
+  </ul>
+
+  <h2>Games and stats</h2>
+  <ul>
+    <li><strong>Game buttons say it isn't your game.</strong> Menus belong to whoever opened them. Run <code>-games</code> for your own.</li>
+    <li><strong>The buttons stopped working.</strong> Games and menus time out after a couple of minutes. Start again.</li>
+    <li><strong>Stats are empty.</strong> They start counting when Nexus joins and show 30 days at most. See <a class="inline" href="#/stats">Stats</a>.</li>
+    <li><strong>Invite stats show nothing.</strong> Nexus needs Manage Server to track invites, and the code has to belong to your server.</li>
+  </ul>
+
+  <h2>Reading error messages</h2>
+  <p>Nexus tries to say what went wrong in plain words. A message that starts with "I can't" or "I couldn't" usually means a missing permission or a value it couldn't read. Read it fully before trying again, because it normally names the exact thing to fix.</p>
+
+  <h2>Still stuck?</h2>
+  <p>Join the <a class="inline" data-link="support" href="#" data-external>support server</a> and tell us:</p>
+  <ul>
+    <li>the exact command you ran, and the reply (a screenshot is great)</li>
+    <li>what you expected to happen</li>
+    <li>your server's ID and the channel, if the problem is channel-specific</li>
+  </ul>
+  <p>Never share your bot token, passwords or private messages when asking for help. Nobody on the team will ever ask for them.</p>
+</article>
+
+<article class="doc-page" data-doc="data-wipe" data-title="Data wipe">
+  <div class="doc-crumb">Help</div>
+  <h1>Data wipe</h1>
+  <p class="lead">If you want everything Nexus has stored about your server deleted, the server owner can ask for it with one command. This page explains exactly what happens, step by step.</p>
+
+  <h2>Who can do it</h2>
+  <p>Only the <strong>server owner</strong>. Nobody else, not even an administrator, can start a wipe or press the confirmation buttons. If someone else runs <code>-wipe</code>, Nexus says only the server owner can use it. It must be run in a server, not in a DM.</p>
+
+  <h2>What gets deleted</h2>
+  <ul>
+    <li>Moderation cases and member history</li>
+    <li>Staff notes</li>
+    <li>Message, voice, join and leave stats</li>
+    <li>AutoMod, logging, ticket and autorole settings</li>
+    <li>Command permission changes</li>
+    <li>Giveaways, reminders, starboard settings and your custom prefix</li>
+  </ul>
+  <p>After a wipe, Nexus stays in your server and starts fresh, like a newly added bot. If you want it gone entirely, kick it afterwards.</p>
+  <div class="callout warn"><strong>A wipe can't be undone.</strong> Once it is processed, none of this can be brought back. Make a note of anything you need first, like case history for an appeal.</div>
+
+  <h2>How the request works</h2>
+  <div class="steps">
+    <div class="step"><div><h4>Run the command</h4><p>The owner types <code>-wipe</code>. Nexus lists everything that would be erased and asks you to confirm.</p></div></div>
+    <div class="step"><div><h4>Confirm twice</h4><p>The first screen has <strong>I understand, continue</strong> and a cancel button. A second "last warning" screen asks again with <strong>Yes, create my request</strong>. Either screen lets you cancel, and nothing changes if you do.</p></div></div>
+    <div class="step"><div><h4>Get your request number</h4><p>Nexus creates a request for your server and shows you a code. Nothing has been deleted at this point. It is only a request.</p></div></div>
+    <div class="step"><div><h4>The team carries it out</h4><p>The Nexus team gets the request and processes it. Once it's processed, all stored data for your server is permanently deleted.</p></div></div>
+  </div>
+  <p>Each confirmation screen waits for two minutes. If you don't answer in time, nothing is changed, and you can run <code>-wipe</code> again whenever you like.</p>
+
+  <h2>Keep your request number</h2>
+  <p>The number identifies your request. Keep it somewhere safe. If you want to check on it, or change your mind and cancel it before it's processed, share the number in the <a class="inline" data-link="support" href="#" data-external>support server</a>.</p>
+
+  <h2>One request per server</h2>
+  <p>Each server can have <strong>one</strong> request. If you run <code>-wipe</code> while one is waiting, Nexus tells you it's already on file. If a wipe was already completed, Nexus tells you when it happened. For another one, ask the support team.</p>
+
+  <h2>Questions people ask</h2>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>You wonder</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>Does it happen instantly?</td><td>No. The command creates a request, and the deletion happens when the team processes it.</td></tr>
+      <tr><td>Will my members' data be deleted too?</td><td>Everything Nexus stored for this server goes, including member history and stats for it.</td></tr>
+      <tr><td>Do I have to wipe to remove Nexus?</td><td>No. Kicking Nexus removes it from your server. A wipe is for deleting the stored data.</td></tr>
+      <tr><td>Can I only delete one thing, like cases?</td><td>The wipe is all or nothing. For smaller changes, use commands like <code>-void</code>, <code>-note remove</code> or <code>-joinroles remove</code>.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>For the full picture of what Nexus keeps and why, read the <a class="inline" href="privacy.html" data-external>Privacy page</a>.</p>
+</article>
+
+<article class="doc-page" data-doc="commands" data-title="Command list" data-keywords="commands command list permissions who can use what permission search">
+  <div class="doc-crumb">Reference</div>
+  <h1>Command list</h1>
+  <p class="lead">Every Nexus command in one place. Search by name, or describe what you want to do, like <em>stop spam</em> or <em>give someone a role</em>. The tag on the right shows what permission you need.</p>
+
+  <div class="cmd-tools" style="margin-top:22px">
+    <input id="cmd-search" class="search" type="search" placeholder="Search a command, or describe what you want" autocomplete="off" aria-label="Search commands">
+    <select id="cmd-perm" class="search" aria-label="Filter by permission"></select>
+  </div>
+  <p id="cmd-count" class="cmd-count" aria-live="polite"></p>
+  <p id="cmd-intent" class="cmd-count intent-note" hidden>Highlighted commands match what you're trying to do, even if they don't contain your words.</p>
+  <div class="cmd-cats" id="cmd-cats"></div>
+  <div id="cmd-root"></div>
+  <p style="font-size:13.5px;color:var(--muted);margin-top:18px">Square brackets mean you fill something in. Nexus asks for the same inputs in the same order as shown. Want to know how permissions work? Read <a class="inline" href="#/command-access">command access</a>.</p>
+</article>
+
+<article class="doc-page" data-doc="privacy" data-title="Privacy" data-keywords="privacy data what nexus keeps stores delete wipe retention security cookies website gdpr">
+  <div class="doc-crumb">Reference</div>
+  <h1>Privacy</h1>
+  <p class="lead">What Nexus keeps, what it never keeps, who can see it and how to remove it. This is the same text as the <a class="inline" href="privacy.html" data-external>Privacy page</a>.</p>
+  <div data-include="privacy.html"><p class="docs-privacy-loading">Loading…</p></div>
+</article>
+
+  </main>
+</div>
+
+<div id="site-footer"></div>
+<script src="site.js"></script>
+</body>
+</html>
