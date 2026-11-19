@@ -89,7 +89,7 @@
   <h2 id="who-sees-it">Who can see it</h2>
   <ul>
     <li><strong style="color:var(--text)">Server staff</strong> can see what the commands show them: cases, notes, stats and logs. Notes and cases need permissions like Kick Members. Staff in one server can't see another server's data.</li>
-    <li><strong style="color:var(--text)">You</strong> can see your own moderation history in a server with <code>-myhistory</code>. It arrives in your DMs and only ever shows your records.</li>
+    <li><strong style="color:var(--text)">You</strong> can see your own moderation history in a server with <code>-myhistory</code>, or on your page in the dashboard. Both only ever show your own records, and the dashboard also shows your own activity stats.</li>
     <li><strong style="color:var(--text)">Anyone in a server</strong> can see game stats for any user with <code>-games stats</code>, since they aren't tied to a server.</li>
     <li><strong style="color:var(--text)">The Nexus developer</strong> can read the database, because it sits on the machine that runs the bot. It is used to run, fix and support the bot.</li>
   </ul>
@@ -128,7 +128,8 @@
   <ul>
     <li>Your user ID, name and avatar are kept in the bot's memory while you're logged in, for up to 8 hours. They are never written to the database, and a bot restart clears them.</li>
     <li>Your browser keeps a random login key in session storage until you log out or close the tab. It is not a cookie and isn't shared with other sites.</li>
-    <li>Every change you make is checked against your permissions in that server, and saved in the dashboard changes record shown above.</li>
+    <li>Every member can open their own page for a server they share with Nexus. It shows their profile, their activity stats and their own moderation history, and never anyone else's.</li>
+    <li>Only the server owner and members with the Administrator permission can open the admin side. Every change is checked against those permissions, and saved in the dashboard changes record shown above.</li>
   </ul>
 
   <h2 id="security">Security</h2>
@@ -145,7 +146,7 @@
 
   <div class="actions" style="margin-top:28px">
     <a class="btn btn-outline" href="about.html">About Nexus</a>
-    <a class="btn btn-outline" href="faq.html">Support FAQ</a>
+    <a class="btn btn-outline" href="about.html#faq">Support FAQ</a>
     <a class="btn btn-outline" href="docs.html">Documentation</a>
   </div>
 </main>
