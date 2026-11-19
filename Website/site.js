@@ -114,7 +114,8 @@ const NAV = [
   { id: 'docs', label: 'Docs', icon: 'docs', items: [
     ['docs', 'docs.html', 'Documentation', 'Guides for every feature, step by step.'],
     ['', 'docs.html#/getting-started', 'Getting started', 'Your first five minutes with Nexus.'],
-    ['', 'docs.html#/troubleshooting', 'Troubleshooting', 'Fixes for the usual problems.']
+    ['', 'docs.html#/troubleshooting', 'Troubleshooting', 'Fixes for the usual problems.'],
+    ['', 'docs.html#/privacy', 'Privacy', 'What Nexus keeps, and what it never does.']
   ] },
   { id: 'community', label: 'Community', icon: 'community', items: [
     ['staff', 'staff.html', 'Staff team', 'The people behind the bot.'],
@@ -826,8 +827,31 @@ function initDocs() {
     });
   }
 
+  async function include(page) {
+    const host = page.querySelector('[data-include]');
+    if (!host || host.dataset.loaded) return;
+    host.dataset.loaded = '1';
+    try {
+      const res = await fetch(host.dataset.include, { cache: 'no-cache' });
+      const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+      const main = doc.querySelector('main');
+      if (!main) throw new Error('missing');
+      main.querySelectorAll('script').forEach(s => s.remove());
+      const slug = page.dataset.doc;
+      main.querySelectorAll('[id]').forEach(n => { n.id = slug + '-' + n.id; });
+      main.querySelectorAll('a[href^="#"]').forEach(a => { a.setAttribute('href', '#/' + slug + '/' + a.getAttribute('href').slice(1)); });
+      host.replaceChildren(...Array.from(main.childNodes).map(n => document.importNode(n, true)));
+      host.classList.add('prose');
+      index[slug] += ' ' + host.textContent.toLowerCase();
+      reveal(host);
+    } catch (e) {
+      host.replaceChildren(el('p', {}, ['This could not be loaded. Open the ', el('a', { class: 'inline', href: host.dataset.include, text: 'full page' }), ' instead.']));
+    }
+  }
+
   function show(slug, anchor) {
     if (!byId[slug]) slug = 'overview';
+    include(byId[slug]);
     pages.forEach(p => p.classList.toggle('active', p.dataset.doc === slug));
     links.forEach(a => a.classList.toggle('active', a.dataset.doc === slug));
     const activeLink = links.find(a => a.dataset.doc === slug);
@@ -1096,6 +1120,8 @@ const POSITION_BY_KEY = Object.fromEntries(POSITIONS.map(p => [p.key, p]));
 const REQUIREMENTS = [
   ['member', 'Must be in the support server.'],
   ['probation', 'Cannot be on probation.'],
+  ['app_blacklist', 'Cannot be blacklisted from applications.'],
+  ['bot_blacklist', 'Cannot be bot blacklisted.'],
   ['role', 'Cannot already have role.'],
   ['messages', 'Have at least 100 messages in the support server.'],
   ['joined', 'Has been in the support server for at least 4 days.'],
@@ -1141,6 +1167,122 @@ function statusTag(status) {
 function fmtStamp(sec) {
   if (!sec) return '';
   return new Date(sec * 1000).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+/* ---------- Reports (home page only; tickets come later) ---------- */
+
+const REPORT_TYPES = [
+  { key: 'bot', name: 'Bot report', color: '#5865F2', icon: '🤖', desc: 'Report someone for misusing Nexus in a way that breaks our policy, like abusing commands or using the bot to harass people.' },
+  { key: 'server', name: 'Server report', color: '#e67e22', icon: '🚩', desc: 'Report a rule break in the Nexus support server, like spam, harassment or scams.' }
+];
+
+async function initReport() {
+  const root = document.getElementById('report-root');
+  if (!root) return;
+  const st = { types: {}, typesError: false, online: null, user: null, meError: null, notice: null };
+  const loginUrl = NEXUS.api + '/auth/login?next=report';
+
+  const params = new URLSearchParams(location.hash.slice(1));
+  const ticket = params.get('ticket');
+  const loginError = params.get('error');
+  if (ticket || loginError) history.replaceState(null, '', location.pathname);
+
+  root.replaceChildren(skeleton(2));
+  try { st.types = (await loadJSON('reports.json')).types || {}; }
+  catch (e) { st.typesError = true; }
+
+  if (ticket) {
+    try {
+      const out = await applyFetch('/auth/session', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ticket }) });
+      ApplyAuth.set(out.token);
+    } catch (e) { st.meError = e.message; }
+  } else if (loginError) {
+    st.meError = loginError === 'denied' ? 'Login was cancelled.' : 'Login did not work. Please try again.';
+  }
+  if (ApplyAuth.get()) {
+    try { st.user = (await applyFetch('/apply/me')).user; }
+    catch (e) { if (e.status === 401) ApplyAuth.set(null); else st.meError = st.meError || e.message; }
+  }
+
+  function render() {
+    const layout = el('div', { class: 'apply-layout' });
+    const left = el('section', { class: 'apply-positions' });
+    const right = el('aside', { class: 'apply-side' });
+
+    left.appendChild(el('h2', { class: 'apply-h', text: 'Open a report' }));
+    if (st.online === false) {
+      left.appendChild(el('div', { class: 'callout warn apply-down' }, [el('strong', { text: 'Reports are temporarily closed' }), ' due to connection errors. Nexus could not be reached right now. Try again in a little while.']));
+    } else if (st.typesError) {
+      left.appendChild(el('div', { class: 'callout warn' }, ['The list of report types could not be loaded. Refresh the page in a minute.']));
+    }
+
+    REPORT_TYPES.forEach((t, i) => {
+      const f = st.types[t.key] && typeof st.types[t.key] === 'object' ? st.types[t.key] : { open: false };
+      const open = f.open === true;
+      const usable = open && st.online === true;
+      const card = el('article', { class: 'pos-card' + (open ? '' : ' closed') + (usable ? '' : ' locked'), style: '--pc:' + t.color + ';--i:' + i });
+      card.appendChild(el('div', { class: 'pos-top' }, [
+        el('span', { class: 'report-ico', 'aria-hidden': 'true', text: t.icon }),
+        el('h3', { text: t.name }),
+        el('span', { class: 'tag ' + (open ? 'resolved' : ''), text: open ? 'Open' : 'Closed' })
+      ]));
+      card.appendChild(el('p', { class: 'pos-desc', text: typeof f.description === 'string' && f.description ? f.description : t.desc }));
+      if (!open) {
+        card.appendChild(el('div', { class: 'pos-notice' }, ['This report type is closed right now.' + (f.note ? ' ' + f.note : '')]));
+      } else {
+        const btn = el('button', { class: 'btn btn-primary pos-btn', type: 'button', text: st.user ? 'Open a ticket' : 'Log in to report' });
+        if (!usable) { btn.disabled = true; btn.textContent = st.online === null ? 'Checking Nexus…' : 'Temporarily closed'; }
+        btn.addEventListener('click', () => {
+          if (!usable) return;
+          if (!st.user) { location.href = loginUrl; return; }
+          st.notice = t.key;
+          render();
+        });
+        const actions = el('div', { class: 'pos-actions' }, [btn]);
+        if (st.notice === t.key) actions.appendChild(el('span', { class: 'soon-badge', text: 'Report tickets coming soon' }));
+        card.appendChild(actions);
+      }
+      left.appendChild(card);
+    });
+
+    const box = el('div', { class: 'mine' });
+    box.appendChild(el('h2', { class: 'apply-h', text: 'Your reports' }));
+    if (st.meError) box.appendChild(el('p', { class: 'hint apply-err', text: st.meError }));
+    if (!st.user) {
+      box.appendChild(el('div', { class: 'mine-login' }, [
+        el('p', { text: 'Log in with Discord to open a report and to see your open and past report tickets. Nexus only sees your username and avatar.' }),
+        el('a', { class: 'btn btn-primary', href: loginUrl, text: 'Log in with Discord' })
+      ]));
+    } else {
+      const who = el('div', { class: 'mine-user' });
+      if (st.user.avatar) who.appendChild(el('img', { src: st.user.avatar, alt: '', width: '36', height: '36' }));
+      else who.appendChild(el('span', { class: 'mine-ava', text: initials(st.user.name || '?') }));
+      who.appendChild(el('div', { class: 'mine-name' }, [el('strong', { text: st.user.name || 'You' }), el('span', { text: 'Logged in with Discord' })]));
+      const out = el('button', { class: 'btn btn-outline mine-out', type: 'button', text: 'Log out' });
+      out.addEventListener('click', async () => {
+        try { await applyFetch('/auth/logout', { method: 'POST' }); } catch (e) {}
+        ApplyAuth.set(null); st.user = null; render();
+      });
+      who.appendChild(out);
+      box.appendChild(who);
+      box.appendChild(el('h3', { class: 'mine-h', text: 'Open' }));
+      box.appendChild(el('p', { class: 'hint', text: 'No open report tickets.' }));
+      box.appendChild(el('h3', { class: 'mine-h', text: 'Past' }));
+      box.appendChild(el('p', { class: 'hint', text: 'No closed report tickets yet.' }));
+    }
+    right.appendChild(box);
+    layout.append(left, right);
+    root.replaceChildren(layout);
+    reveal(root);
+  }
+
+  Live.subscribe(live => {
+    const online = !live.error && !!(live.stats && live.stats.online);
+    if (online === st.online) return;
+    st.online = online;
+    render();
+  });
+  if (st.online === null) render();
 }
 
 async function initApply() {
@@ -1666,6 +1808,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFilter();
   initProjects();
   initApply();
+  initReport();
   initMarquee();
   reveal(document);
 });
