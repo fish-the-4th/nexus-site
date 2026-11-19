@@ -2,8 +2,8 @@
   "bots": [
     { "id": "nexus", "name": "Nexus", "badge": "Best all-rounder", "logo": "logo.png", "highlight": true },
     { "id": "mee6", "name": "MEE6", "logo": "mee6.logo.png" },
-    { "id": "Dyno", "name": "Dyno", "logo": "dyno.logo.png" },
-    { "id": "Carl", "name": "Carl Bot", "logo": "carl.logo.png" }
+    { "id": "dyno", "name": "Dyno", "logo": "dyno.logo.png" },
+    { "id": "carl", "name": "Carl Bot", "logo": "carl.logo.png" }
   ],
   "rows": [
     {
