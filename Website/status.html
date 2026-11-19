@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Status - Nexus</title>
-<meta name="description" content="Live status and incident history for Nexus.">
+<title>Status and changelog - Nexus</title>
+<meta name="description" content="Live status for Nexus, past incidents, and the changelog of every version.">
+<meta property="og:title" content="Nexus status and changelog">
+<meta property="og:description" content="Is Nexus running right now? See incidents and every update.">
 <link rel="icon" type="image/png" href="../logo.png">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -13,15 +15,28 @@
 <div id="site-nav"></div>
 
 <header class="page-hero">
-  <div class="wrap narrow">
-    <h1>Nexus status</h1>
+  <div class="wrap">
+    <p class="eyebrow">Live status</p>
+    <div class="status-hero">
+      <span class="dot" id="status-dot" aria-hidden="true"></span>
+      <h1 id="status-headline">Checking status…</h1>
+    </div>
     <p>What's running, what isn't, and what we're doing about it. This page is updated by hand, so it reflects what the team knows.</p>
+    <div class="status-meta" id="status-meta"></div>
   </div>
 </header>
 
-<main class="wrap narrow" style="padding-bottom:70px">
-  <div id="status-root"><p class="empty">Loading status...</p></div>
+<main class="wrap" style="padding-bottom:70px">
+  <div id="status-root"></div>
   <div class="callout" style="margin-top:34px">Something wrong that isn't listed here? Let us know in the <a data-link="support" href="#" style="color:var(--cyan)">support server</a>.</div>
+
+  <section class="section" id="changelog" style="padding-top:70px">
+    <div class="section-head">
+      <h2>Changelog</h2>
+      <p>New features and fixes, newest first.</p>
+    </div>
+    <div id="changelog-root"></div>
+  </section>
 </main>
 
 <div id="site-footer"></div>
