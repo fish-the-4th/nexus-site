@@ -439,6 +439,17 @@ function worst(states) {
   return states.reduce((w, s) => STATE_RANK[s] > STATE_RANK[w] ? s : w, 'operational');
 }
 
+// An open incident counts as active until the end of its day, or until its "ends" day
+// if it has one. After that it stays on the calendar but stops changing the status.
+function isIncidentActive(i) {
+  if (!i || i.status === 'resolved') return false;
+  const last = String(i.ends || i.date || '').slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(last)) return true;
+  const n = new Date();
+  const today = n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0') + '-' + String(n.getDate()).padStart(2, '0');
+  return last >= today;
+}
+
 const Live = {
   stats: null,
   error: null,
@@ -455,7 +466,7 @@ const Live = {
   async start() {
     try {
       const data = await loadJSON('status.json');
-      this.incidents = (data.incidents || []).filter(i => i && i.status !== 'resolved');
+      this.incidents = (data.incidents || []).filter(isIncidentActive);
     } catch (e) {}
     await this.refresh();
     const tick = () => { if (!document.hidden) this.refresh(); };
@@ -656,7 +667,7 @@ async function initStatus() {
     if (/^\d{4}-\d{2}-\d{2}$/.test(key)) (notes[key] = notes[key] || []).push(i);
   });
 
-  const active = incidents.filter(i => i.status !== 'resolved');
+  const active = incidents.filter(isIncidentActive);
   if (incHost) {
     incHost.replaceChildren();
     if (active.length) active.forEach(i => incHost.appendChild(renderIncident(i)));
