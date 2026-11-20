@@ -5,7 +5,7 @@ const NEXUS = {
   invite:  'https://discord.com/oauth2/authorize?client_id=1516923666787602725&permissions=8&integration_type=0&scope=bot',
   support: 'https://discord.gg/grVrz6TrsY',
   topgg:   'https://top.gg/bot/1516923666787602725',
-  api:     'https://nexus-bot.wispbyte.org'
+  api:     'http://127.0.0.1:8767'
 };
 
 const REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -109,7 +109,8 @@ const NAV = [
     ['about', 'about.html', 'About Nexus', 'What it is, how it works, plus the FAQ.'],
     ['status', 'status.html', 'Status', 'Live status and a calendar of uptime.'],
     ['', 'docs.html#/commands', 'Command list', 'Every command, searchable, in the docs.'],
-    ['changelog', 'changelog.html', 'Changelog', 'What changed, and when.']
+    ['changelog', 'changelog.html', 'Changelog', 'What changed, and when.'],
+    ['tools', 'tools.html', 'Tools', 'The libraries Nexus is built with, and why.']
   ] },
   { id: 'docs', label: 'Docs', icon: 'docs', items: [
     ['docs', 'docs.html', 'Documentation', 'Guides for every feature, step by step.'],
@@ -334,7 +335,7 @@ function buildChrome() {
           el('div', { class: 'footer-brand' }, [el('img', { src: ROOT + 'logo.png', alt: '' }), 'Nexus']),
           el('p', { class: 'footer-note', text: 'Built on logic, built for everyone.' })
         ]),
-        col('Information', [['about.html', 'About Nexus'], ['about.html#faq', 'FAQ'], ['status.html', 'Status'], ['docs.html#/commands', 'Command list'], ['changelog.html', 'Changelog'], ['privacy.html', 'Privacy']]),
+        col('Information', [['about.html', 'About Nexus'], ['about.html#faq', 'FAQ'], ['status.html', 'Status'], ['docs.html#/commands', 'Command list'], ['changelog.html', 'Changelog'], ['tools.html', 'Tools'], ['privacy.html', 'Privacy']]),
         col('Docs', [['docs.html', 'Documentation'], ['docs.html#/getting-started', 'Getting started'], ['docs.html#/troubleshooting', 'Troubleshooting']]),
         col('Community', [['staff.html', 'Staff team'], ['support.html', 'Support'], ['projects.html', 'Projects']]),
         col('Tickets', [['apply.html', 'Apply'], ['report.html', 'Report'], ['appeal.html', 'Appeals']])
@@ -992,6 +993,42 @@ async function initChangelog() {
     });
     root.appendChild(more);
   }
+  reveal(root);
+}
+
+// Only plain web links from the data file are turned into links.
+const safeUrl = u => /^https:\/\/[^\s"'<>]+$/i.test(String(u || '')) ? String(u) : '';
+
+async function initTools() {
+  const root = document.getElementById('tools-root');
+  if (!root) return;
+  root.replaceChildren(skeleton(3));
+  let groups;
+  try { groups = await loadJSON('tools.json'); }
+  catch (e) { root.replaceChildren(el('p', { class: 'empty', text: 'The tools list could not be loaded right now. Try again in a minute.' })); return; }
+
+  root.replaceChildren();
+  (Array.isArray(groups) ? groups : []).forEach(group => {
+    const items = Array.isArray(group.items) ? group.items : [];
+    if (!items.length) return;
+    const section = el('section', { class: 'tool-group' });
+    if (group.title) section.appendChild(el('h2', { class: 'faq-group', text: group.title }));
+    if (group.intro) section.appendChild(el('p', { class: 'tool-intro', text: group.intro }));
+    const grid = el('div', { class: 'tool-grid' });
+    items.forEach(item => {
+      const card = el('div', { class: 'tool-card reveal-me' });
+      const head = el('div', { class: 'tool-head' }, [el('h3', { text: item.name || 'Untitled' })]);
+      const url = safeUrl(item.link);
+      if (url) head.appendChild(el('a', { class: 'tool-link', href: url, target: '_blank', rel: 'noopener noreferrer', 'aria-label': 'Open ' + (item.name || 'link'), text: 'Open ↗' }));
+      card.appendChild(head);
+      if (item.what) card.appendChild(el('p', { class: 'tool-what', text: item.what }));
+      if (item.why) card.appendChild(el('p', { class: 'tool-why' }, [el('b', { text: 'Why Nexus uses it: ' }), item.why]));
+      grid.appendChild(card);
+    });
+    section.appendChild(grid);
+    root.appendChild(section);
+  });
+  if (!root.children.length) root.appendChild(el('p', { class: 'empty', text: 'Nothing here yet.' }));
   reveal(root);
 }
 
@@ -1905,6 +1942,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCommands();
   initDocs();
   initChangelog();
+  initTools();
   initFaq();
   initFilter();
   initProjects();
