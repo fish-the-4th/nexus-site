@@ -1,0 +1,135 @@
+{
+  "tools": [
+    {
+      "name": "Wispbyte",
+      "link": "https://wispbyte.com/",
+      "what": "A free hosting service, primarily used for Minecraft servers and Discord bots.",
+      "why": "Running Nexus locally would be near impossible due to the pain of having a device online 24/7. A hosting server makes this process a lot easier."
+    },
+    {
+      "name": "Github",
+      "link": "https://github.com/",
+      "what": "A cloud-based developer platform used to manage software code.",
+      "why": "Nexus needed a place it store it`s website, this website is currently hosted on a open source repository in Github."
+    },
+    {
+      "name": "Claude",
+      "link": "https://claude.ai",
+      "what": "A website with family of large language models and an AI assistant developed to help with writing, analysis, coding, research, and task automation.",
+      "why": "Due to the controversies of AI generated content, I decided not to go into this project with fully using AI. Myself isn`t the greatest coder due to how late I started practicing it, AI is NOT used for the entire project though I have used to assist with my poor skills of coding. I personally estimate the bot to be 15-25% AI generated the other part being from an actual human (Myself). The website is a bit more AI generated which I estimate about 30%-40% to be generated."
+    },
+    {
+      "name": "Discord Developer Portal",
+      "link": "https://discord.com/developers/home",
+      "what": "The central hub where developers create and manage bots, apps, and games built on Discord.",
+      "why": "I think this is quite obvious, Nexus is created though the developer portal and needs this tool to exist."
+    }
+  ],
+  "libraries": [
+    {
+      "name": "discord.py",
+      "link": "https://discordpy.readthedocs.io/en/stable/",
+      "what": "Connects to Discord and builds commands, buttons and layouts.",
+      "why": "Base and main library for the bot, the bot is written in this."
+    },
+    {
+      "name": "aiohttp",
+      "link": "https://docs.aiohttp.org/en/stable/",
+      "what": "Async web requests and a small web server.",
+      "why": "It runs the dashboard API and the application and report forms, and fetches the site’s JSON files."
+    },
+    {
+      "name": "matplotlib",
+      "link": "https://matplotlib.org/",
+      "what": "Draws charts.",
+      "why": "It makes the stats graphs, and supplies the font the games use for images."
+    },
+    {
+      "name": "Pillow",
+      "link": "https://pypi.org/project/pillow/",
+      "what": "Creates and edits images.",
+      "why": "It draws the game boards and pictures."
+    },
+    {
+      "name": "deep-translator",
+      "link": "https://pypi.org/project/deep-translator/",
+      "what": "Translates text through Google Translate.",
+      "why": "Needed to run the translate command."
+    },
+    {
+      "name": "asyncio",
+      "link": "https://docs.python.org/3/library/asyncio.html",
+      "what": "Runs many tasks at once.",
+      "why": "It keeps one slow task from holding up everyone else."
+    },
+    {
+      "name": "sqlite3",
+      "link": "https://www.sqlite.org/",
+      "what": "A file-based database.",
+      "why": "It stores cases, settings, tickets, giveaways and more; the database service used to store everything that isn`t in memory."
+    },
+    {
+      "name": "time",
+      "link": "https://docs.python.org/3/library/time.html",
+      "what": "Clocks and durations.",
+      "why": "They time mutes, bans, cooldowns, reminders and the 30-day stats cleanup."
+    },
+    {
+      "name": "re",
+      "link": "https://docs.python.org/3/library/re.html",
+      "what": "Text pattern matching.",
+      "why": "AutoMod uses it to spot links, invites and blocked words."
+    },
+    {
+      "name": "random",
+      "link": "https://docs.python.org/3/library/random.html",
+      "what": "Random choices.",
+      "why": "It picks giveaway winners and shuffles games."
+    },
+    {
+      "name": "io",
+      "link": "https://docs.python.org/3/library/io.html",
+      "what": "In-memory data.",
+      "why": "Charts and images are sent to Discord without temporary files."
+    },
+    {
+      "name": "json",
+      "link": "https://docs.python.org/3/library/json.html",
+      "what": "Reads and writes structured data.",
+      "why": "It loads the website’s question files and handles form data."
+    },
+    {
+      "name": "hashlib, hmac, secrets",
+      "what": "Hashing, safe comparison and random values.",
+      "why": "Security of users."
+    },
+    {
+      "name": "ipaddress",
+      "link": "https://docs.python.org/3/library/ipaddress.html",
+      "what": "Checks network addresses.",
+      "why": "The dashboard uses it for rate limiting."
+    },
+    {
+      "name": "threading",
+      "link": "https://docs.python.org/3/library/threading.html",
+      "what": "Runs a task on the side.",
+      "why": "It reads console input for the data wipe tool without pausing the bot."
+    },
+    {
+      "name": "urllib.parse",
+      "link": "https://docs.python.org/3/library/urllib.parse.html",
+      "what": "Splits web addresses.",
+      "why": "AutoMod reads link domains with it, and the dashboard uses it for URLs."
+    },
+    {
+      "name": "collections, dataclasses, typing, contextlib",
+      "what": "Data structures and code organization.",
+      "why": "AutoMod tracks spam and raids with collections, and games count choices with it."
+    },
+    {
+      "name": "os, sys, math, traceback",
+      "what": "System details, maths and error reports.",
+      "why": "os reads dashboard settings, sys controls console output, math rounds sizes when drawing, and traceback prints errors."
+    }
+  ]
+}
