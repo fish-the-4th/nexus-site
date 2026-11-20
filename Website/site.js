@@ -1,5 +1,5 @@
 const ROOT = '../';
-const DATA = '../Data/';
+const DATA = '../Data/'
 
 const NEXUS = {
   invite:  'https://discord.com/oauth2/authorize?client_id=1516923666787602725&permissions=8&integration_type=0&scope=bot',
