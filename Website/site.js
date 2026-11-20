@@ -1003,17 +1003,22 @@ async function initTools() {
   const root = document.getElementById('tools-root');
   if (!root) return;
   root.replaceChildren(skeleton(3));
-  let groups;
-  try { groups = await loadJSON('tools.json'); }
+  let data;
+  try { data = await loadJSON('tools.json'); }
   catch (e) { root.replaceChildren(el('p', { class: 'empty', text: 'The tools list could not be loaded right now. Try again in a minute.' })); return; }
 
+  // Two fixed sections, in this order.
+  const groups = [
+    { title: 'Tools', intro: 'The programs and services Nexus runs on.', items: data && data.tools },
+    { title: 'Libraries', intro: 'The code Nexus uses to do its work.', items: data && data.libraries }
+  ];
   root.replaceChildren();
-  (Array.isArray(groups) ? groups : []).forEach(group => {
+  groups.forEach(group => {
     const items = Array.isArray(group.items) ? group.items : [];
     if (!items.length) return;
     const section = el('section', { class: 'tool-group' });
-    if (group.title) section.appendChild(el('h2', { class: 'faq-group', text: group.title }));
-    if (group.intro) section.appendChild(el('p', { class: 'tool-intro', text: group.intro }));
+    section.appendChild(el('h2', { class: 'faq-group', text: group.title }));
+    section.appendChild(el('p', { class: 'tool-intro', text: group.intro }));
     const grid = el('div', { class: 'tool-grid' });
     items.forEach(item => {
       const card = el('div', { class: 'tool-card reveal-me' });
