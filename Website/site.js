@@ -5,7 +5,7 @@ const NEXUS = {
   invite:  'https://discord.com/oauth2/authorize?client_id=1516923666787602725&permissions=8&integration_type=0&scope=bot',
   support: 'https://discord.gg/grVrz6TrsY',
   topgg:   'https://top.gg/bot/1516923666787602725',
-  api:     'http://127.0.0.1:8767'
+  api:     'https://nexus-bot.wispbyte.org'
 };
 
 const REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
