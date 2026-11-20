@@ -4,7 +4,13 @@
       "title": "Restarting",
       "status": "maintenance",
       "date": "2026-11-19",
-      "message": "Bot will sometimes shut on and off, Nexus us currently being tested"
+      "message": "Bot will sometimes shut on and off, Nexus us currently being tested for different"
+    },
+    {
+      "title": "Finished",
+      "status": "resolved",
+      "date": "2026-11-20",
+      "message": "All testing is finished as the recent 1.4 update was released"
     }
   ]
 }
