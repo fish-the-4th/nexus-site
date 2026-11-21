@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; connect-src 'self' https://nexus-bot.wispbyte.org; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus - Discord Bot</title>
+<meta name="description" content="Nexus is a Discord bot for moderation, protection, engagement and stats, all in one place.">
+<meta property="og:title" content="Nexus - Discord Bot">
+<meta property="og:description" content="Moderation, protection, engagement and stats, all in one bot.">
+<link rel="icon" type="image/png" href="../logo.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="home">
+
+<div id="site-nav"></div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <a id="status-pill" class="status-pill" href="status.html" style="display:none"></a>
+        <h1 class="rise" style="--d:180ms">One bot, <span class="gradient-text">everything</span> your server needs.</h1>
+        <p class="lead rise" style="--d:260ms">Nexus handles all your server's tasks. No need for 10 different bots when everything you need is centered in one place.</p>
+        <div class="actions rise" style="--d:340ms">
+          <a class="btn btn-primary btn-lg" data-link="invite" href="#">Add Nexus to your server</a>
+          <a class="btn btn-outline btn-lg" href="docs.html">Read the docs</a>
+        </div>
+        <div class="home-stats" id="home-stats" style="display:none"></div>
+      </div>
+      <div class="orbit rise" style="--d:200ms" aria-hidden="true">
+        <div class="ring"><i>🛡️</i><i class="b">🎫</i></div>
+        <div class="ring"><i>🚨</i><i class="r">📊</i></div>
+        <div class="ring"><i>🎮</i><i class="l">📋</i></div>
+        <div class="core"><img src="../logo.png" alt=""></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="chip-card"><span class="e">🛡️</span><span><b>Moderation</b><small>Cases, warns, bans</small></span></span>
+    <span class="chip-card"><span class="e">🚨</span><span><b>AutoMod</b><small>Spam and scam links</small></span></span>
+    <span class="chip-card"><span class="e">🔐</span><span><b>Autoroles</b><small>Join roles, timed roles</small></span></span>
+    <span class="chip-card"><span class="e">🎫</span><span><b>Tickets</b><small>Private support channels</small></span></span>
+    <span class="chip-card"><span class="e">📊</span><span><b>Stats</b><small>Messages and voice, 30 days</small></span></span>
+    <span class="chip-card"><span class="e">📋</span><span><b>Logging</b><small>Nine routable categories</small></span></span>
+    <span class="chip-card"><span class="e">🎮</span><span><b>Games</b><small>10 built-in games</small></span></span>
+    <span class="chip-card"><span class="e">⏰</span><span><b>Reminders</b><small>Plain time formats</small></span></span>
+    <span class="chip-card"><span class="e">🌐</span><span><b>Translation</b><small>50+ languages</small></span></span>
+    <span class="chip-card"><span class="e">⭐</span><span><b>Starboard</b><small>Pin community favourites</small></span></span>
+    <span class="chip-card"><span class="e">🎁</span><span><b>Giveaways</b><small>Custom winners and rerolls</small></span></span>
+    <span class="chip-card"><span class="e">📝</span><span><b>Staff notes</b><small>Private context on members</small></span></span>
+  </div>
+</div>
+
+<section class="section" id="features">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>What Nexus does</h2>
+      <p>The core systems your server will actually use, all built in from day one.</p>
+    </div>
+
+    <div class="bento">
+      <article class="tile wide">
+        <div class="glow" style="background:#5865F2"></div>
+        <div class="ico">🛡️</div>
+        <h3>Moderation</h3>
+        <p>The backbone of any Discord server. Every infraction gets a case number, and members can be banned even outside the server if you don't want them joining. Nexus always checks the role hierarchy first, so lower roles can't act on higher ones.</p>
+        <div class="cmds"><code>kick</code><code>ban</code><code>mute</code><code>warn</code><code>purge</code><code>cases</code><code>myhistory</code></div>
+      </article>
+
+      <article class="tile wide">
+        <div class="glow" style="background:#ed4245"></div>
+        <div class="ico">🚨</div>
+        <h3>AutoMod</h3>
+        <p>Works quietly in the background. It catches message spam, blocks known scam links, and can lock the whole server down automatically if it detects a raid. Every type has its own sensitivity, adjustable from 1 to 10.</p>
+        <div class="cmds"><code>automod setup</code><code>automod raidend</code><code>automods</code></div>
+      </article>
+
+      <article class="tile">
+        <div class="ico">🔐</div>
+        <h3>Autoroles</h3>
+        <p>Give new members a role the moment they join, keep someone's roles if they leave and come back, or hand out a role that removes itself once time's up.</p>
+        <div class="cmds"><code>joinroles</code><code>role persist</code><code>timed role</code></div>
+      </article>
+
+      <article class="tile">
+        <div class="ico">🎫</div>
+        <h3>Tickets</h3>
+        <p>Members open a private ticket channel with a single click. Staff can bring people in or out, and close it once it's handled.</p>
+        <div class="cmds"><code>ticket setup</code><code>ticket panel</code><code>ticket close</code></div>
+      </article>
+
+      <article class="tile">
+        <div class="ico">📊</div>
+        <h3>Stats</h3>
+        <p>Find out who's actually active. Message and voice activity over the last 30 days, as a graph, for one person, one channel, or the whole server. See who joined or left, and which invite brought them in.</p>
+        <div class="cmds"><code>stats user</code><code>stats server</code><code>stats invite</code></div>
+      </article>
+
+      <article class="tile wide">
+        <div class="glow" style="background:#4fc3e0"></div>
+        <div class="ico">📋</div>
+        <h3>Logging</h3>
+        <p>Nine separate logging categories, from messages and users to moderation actions and role changes, each routable to its own channel so nothing gets lost in one giant feed.</p>
+        <div class="cmds"><code>log</code><code>logs</code><code>logging ignore</code></div>
+      </article>
+
+      <article class="tile wide">
+        <div class="glow" style="background:#8b5cf6"></div>
+        <div class="ico">🎮</div>
+        <h3>Games</h3>
+        <p>Ten games are built right in, from trivia and blackjack to hangman, Connect Four and 2048. One command pulls up the whole menu, and every game keeps your stats across servers.</p>
+        <div class="cmds"><code>games</code><code>games stats</code></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="extras">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Everything else</h2>
+      <p>Smaller tools that round the bot out.</p>
+    </div>
+    <div class="grid three">
+      <div class="card"><span class="icon">⏰</span><h4>Reminders</h4><p>Set a reminder in plain time formats like <code>1h30m</code>.</p></div>
+      <div class="card"><span class="icon">🌐</span><h4>Translation</h4><p>Translate messages across 50+ languages without leaving Discord.</p></div>
+      <div class="card"><span class="icon">⭐</span><h4>Starboard</h4><p>React to pin community favourites to their own channel.</p></div>
+      <div class="card"><span class="icon">🎁</span><h4>Giveaways</h4><p>Host giveaways with custom durations, winner counts and rerolls.</p></div>
+      <div class="card"><span class="icon">📝</span><h4>Staff notes</h4><p>Leave private notes on a member for moderation context.</p></div>
+      <div class="card"><span class="icon">✏️</span><h4>Custom prefix</h4><p>Change the command prefix to whatever fits your server.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="compare">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Nexus vs. the popular bots</h2>
+      <p>Why run three bots and pay for premium when one does it all for free? Here's how Nexus stacks up.</p>
+    </div>
+    <div id="cmp-root"><div class="skeleton"><i></i><i></i><i></i></div></div>
+  </div>
+</section>
+
+<section class="section" id="start">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Up and running in a few minutes</h2>
+      <p>No account, no dashboard to log into. Everything happens in Discord.</p>
+    </div>
+    <div class="journey">
+      <div class="card"><h4>Add Nexus to your server</h4><p>Use the invite button and pick the server you manage. Make sure Nexus's role sits above the roles it will need to manage.</p></div>
+      <div class="card"><h4>Type <code>-commands</code></h4><p>It opens a menu with every command grouped by category, only visible to you.</p></div>
+      <div class="card"><h4>Set up what you need</h4><p>Start with a log channel, then switch on AutoMod or tickets when you're ready. The docs walk through each one.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="resources">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Resources</h2>
+      <p>Everything you might need once Nexus is in your server.</p>
+    </div>
+    <div class="grid three">
+      <a class="card" href="docs.html"><span class="icon">📖</span><h4>Documentation</h4><p>Setup guides, the full command list and answers to common questions.</p></a>
+      <a class="card" href="status.html"><span class="icon">🟢</span><h4>Live status</h4><p>See if Nexus is running right now, and how every day went.</p></a>
+      <a class="card" href="support.html"><span class="icon">💬</span><h4>Support</h4><p>Fixes for common problems, and a way to reach the team.</p></a>
+      <a class="card" href="staff.html"><span class="icon">👥</span><h4>Meet the team</h4><p>The people who build Nexus and look after the community.</p></a>
+      <a class="card" href="about.html"><span class="icon">✨</span><h4>About Nexus</h4><p>What Nexus is, how it works, and why it exists.</p></a>
+      <a class="card" data-link="topgg" href="#"><span class="icon">⭐</span><h4>Leave a review</h4><p>Enjoying Nexus? A review on top.gg helps other servers find it.</p></a>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <div class="cta-band reveal-me">
+      <span class="orb" style="left:-60px;top:-80px;background:#5865F2"></span>
+      <span class="orb" style="right:-60px;bottom:-100px;background:#4fc3e0;animation-delay:-4s"></span>
+      <h2>Ready to add Nexus?</h2>
+      <p>It only takes one click, and you can start small with just moderation or AutoMod if you'd rather ease into it.</p>
+      <div class="actions">
+        <a class="btn btn-primary btn-lg" data-link="invite" href="#">Add Nexus to your server</a>
+        <a class="btn btn-outline btn-lg" data-link="support" href="#">Get support</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="site.js"></script>
+</body>
+</html>
