@@ -297,3 +297,7 @@ textarea.search { resize: vertical; min-height: 60px; }
 .dash-tab.on { background: var(--blurple); color: #fff; cursor: default; box-shadow: 0 6px 20px rgba(88, 101, 242, .35); }
 .page-hero[hidden] { display: none; }
 body[data-page="dashboard"] .page-hero[hidden] + main { padding-top: 110px; }
+
+/* No cursor-following glow on the dashboard */
+.spot::before { display: none !important; }
+
