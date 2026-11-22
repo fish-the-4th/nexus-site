@@ -252,7 +252,6 @@ textarea.search { resize: vertical; min-height: 60px; }
   .dash-title h2 { font-size: 23px; }
 }
 
-/* ---------- Newer admin pages ---------- */
 .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px 16px; }
 .dash-field { display: flex; flex-direction: column; min-width: 0; }
 .dash-field .search, .dash-field select { width: 100%; }
@@ -285,8 +284,6 @@ textarea.search { resize: vertical; min-height: 60px; }
 .down-icon { font-size: 44px; display: block; margin-bottom: 6px; animation: float 4s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .log-card, .down-icon { animation: none; } .row-out { transition: none; } }
 
-
-/* Server header: name on the left, You / Manage server on the right */
 .server-nav { margin-bottom: 22px; }
 .server-nav-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .server-nav .dash-title { margin-bottom: 0; }
@@ -298,6 +295,5 @@ textarea.search { resize: vertical; min-height: 60px; }
 .page-hero[hidden] { display: none; }
 body[data-page="dashboard"] .page-hero[hidden] + main { padding-top: 110px; }
 
-/* No cursor-following glow on the dashboard */
 .spot::before { display: none !important; }
 
