@@ -23,10 +23,6 @@
         "a": "No, Nexus is not discontinued and is still being worked on till this day. There is no plan to shutdown/discontinue Nexus for the far future."
       },
       {
-        "q": "Which library is used to code Nexus?",
-        "a": "Discord.py is used for Nexus"
-      },
-      {
         "q": "Is Nexus open source?",
         "a": "No, none of Nexus`s code will be open to the public. Though the website is open source on GitHub.."
       }
