@@ -110,7 +110,6 @@ const NAV = [
     ['status', 'status.html', 'Status', 'Is Nexus up right now, and how every day went.'],
     ['changelog', 'changelog.html', 'Changelog', 'What changed, and when.'],
     ['tools', 'tools.html', 'Tools', 'What Nexus is built with, and why.'],
-    ['stats', 'stats.html', 'Stats', 'Coming soon.'],
     ['features', 'features.html', 'Features', 'Coming soon.']
   ] },
   { id: 'docs', label: 'Docs', icon: 'docs', items: [
@@ -336,7 +335,7 @@ function buildChrome() {
           el('div', { class: 'footer-brand' }, [el('img', { src: ROOT + 'logo.png', alt: '' }), 'Nexus']),
           el('p', { class: 'footer-note', text: 'Built on logic, built for everyone.' })
         ]),
-        col('Information', [['about.html', 'About Nexus'], ['status.html', 'Status'], ['changelog.html', 'Changelog'], ['tools.html', 'Tools'], ['stats.html', 'Stats'], ['features.html', 'Features']]),
+        col('Information', [['about.html', 'About Nexus'], ['status.html', 'Status'], ['changelog.html', 'Changelog'], ['tools.html', 'Tools'], ['features.html', 'Features']]),
         col('Docs', [['docs.html', 'Documentation'], ['docs.html#/getting-started', 'Getting started'], ['docs.html#/troubleshooting', 'Troubleshooting'], ['docs.html#/commands', 'Command list'], ['docs.html#/privacy', 'Privacy']]),
         col('Community', [['staff.html', 'Staff team'], ['support.html', 'Support'], ['projects.html', 'Projects']]),
         col('Premium', [['premium.html', 'Premium Plans'], ['custombots.html', 'Custom Bots']])
@@ -414,12 +413,32 @@ function animateNumber(node, to) {
   if (from !== 0) { node.classList.remove('bump'); void node.offsetWidth; node.classList.add('bump'); }
 }
 
-function initMarquee() {
-  document.querySelectorAll('.marquee-track').forEach(track => {
-    if (track.dataset.cloned) return;
-    track.dataset.cloned = '1';
-    Array.from(track.children).forEach(c => { const k = c.cloneNode(true); k.setAttribute('aria-hidden', 'true'); track.appendChild(k); });
-  });
+function memberCount(n) {
+  return n.toLocaleString('en-US') + (n === 1 ? ' member' : ' members');
+}
+
+function serverChip(s) {
+  const icon = typeof s.icon === 'string' && s.icon.indexOf('https://cdn.discordapp.com/') === 0 ? s.icon : null;
+  const name = String(s.name || 'Server');
+  const mark = icon
+    ? el('img', { class: 'gi', src: icon, alt: '', width: '34', height: '34', loading: 'lazy', referrerpolicy: 'no-referrer' })
+    : el('span', { class: 'gi', text: name.charAt(0).toUpperCase() });
+  return el('span', { class: 'chip-card' }, [mark, el('span', {}, [el('b', { text: name }), el('small', { text: memberCount(Number(s.members) || 0) })])]);
+}
+
+async function initMarquee() {
+  const belt = document.getElementById('belt');
+  const track = document.getElementById('belt-track');
+  if (!belt || !track) return;
+  let servers = [];
+  try { servers = (await loadAPI('/public/servers')).servers || []; } catch (e) {}
+  servers = servers.filter(s => s && typeof s === 'object').slice(0, 12);
+  if (servers.length < 3) return;
+  const chips = servers.map(serverChip);
+  while (chips.length < 8) servers.forEach(s => chips.push(serverChip(s)));
+  chips.forEach(c => track.appendChild(c));
+  Array.from(track.children).forEach(c => { const k = c.cloneNode(true); k.setAttribute('aria-hidden', 'true'); track.appendChild(k); });
+  belt.hidden = false;
 }
 
 const STATE_LABEL = {
