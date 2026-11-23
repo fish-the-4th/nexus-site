@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Documentation - Nexus</title>
 <meta name="description" content="Guides for every part of Nexus: setup, moderation, AutoMod, logging, tickets, roles, stats, games and more.">
-<link rel="icon" type="image/png" href="../logo.png">
+<link rel="icon" type="image/png" href="../Assets/Logo/logo.png">
 <link rel="stylesheet" href="style.css">
 </head>
 <body data-page="docs">
@@ -87,7 +87,7 @@
     <a class="card" href="#/tickets"><span class="icon">🎫</span><h4>Tickets</h4><p>Private support channels members open with one click.</p></a>
     <a class="card" href="#/roles"><span class="icon">🎭</span><h4>Roles</h4><p>Join roles, roles that come back, and roles that expire.</p></a>
     <a class="card" href="#/stats"><span class="icon">📊</span><h4>Stats</h4><p>Thirty days of activity, turned into graphs.</p></a>
-    <a class="card" href="#/games"><span class="icon">🎮</span><h4>Games</h4><p>Ten games to play against Nexus or a friend.</p></a>
+    <a class="card" href="#/games"><span class="icon">🎮</span><h4>Games</h4><p>Eight games to play against Nexus or a friend.</p></a>
     <a class="card" href="#/giveaways"><span class="icon">🎉</span><h4>Giveaways and starboard</h4><p>Run giveaways and celebrate the best messages.</p></a>
     <a class="card" href="#/utilities"><span class="icon">🧰</span><h4>Everyday tools</h4><p>Reminders, translation, lookups and server info.</p></a>
   </div>
@@ -575,7 +575,7 @@ I will remind you: in 2 hours</div></div>
   <div class="grid three">
     <div class="card"><h4>Giveaways</h4><p>Entries by reaction, automatic winners, rerolls.</p></div>
     <div class="card"><h4>Starboard</h4><p>Reposts the best messages from the event.</p></div>
-    <div class="card"><h4>Games</h4><p>Ten games members can play against each other.</p></div>
+    <div class="card"><h4>Games</h4><p>Eight games members can play against each other.</p></div>
     <div class="card"><h4>Timed roles</h4><p>An event role that removes itself when it's over.</p></div>
     <div class="card"><h4>Reminders</h4><p>Let people set a reminder for the start.</p></div>
     <div class="card"><h4>Slowmode and lock</h4><p>Keep a busy event channel manageable.</p></div>
@@ -616,7 +616,7 @@ I will remind you: in 2 hours</div></div>
     <li>Pick a channel and run <code>-games</code> to open the menu.</li>
     <li>Choose a game, then either play Nexus on a difficulty or challenge a friend from the menu.</li>
     <li>Players can rematch right after a game. <code>-games stats</code> shows wins and streaks, which makes a simple leaderboard.</li>
-    <li>For a bigger event, run a bracket by hand: use Tic-Tac-Toe, Connect Four or Card Battle for head-to-head rounds.</li>
+    <li>For a bigger event, run a bracket by hand: use Tic-Tac-Toe, Connect Four or Rock Paper Scissors for head-to-head rounds.</li>
   </ol>
 
   <h2>Keep the channel tidy</h2>
@@ -1380,7 +1380,7 @@ New winner(s): @Jordan</div></div>
 <article class="doc-page" data-doc="games" data-title="Games">
   <div class="doc-crumb">For members</div>
   <h1>Games</h1>
-  <p class="lead">Nexus has ten games built in. Pick one from a menu, choose how hard Nexus plays, or challenge a friend. Nothing to install, and every result goes on your personal record.</p>
+  <p class="lead">Nexus has eight games built in. Pick one from a menu, choose how hard Nexus plays, or challenge a friend. Nothing to install, and every result goes on your personal record.</p>
 
   <h2>Starting a game</h2>
   <p>Anyone can play. Type <code>-games</code> to open the menu, or jump straight to a game by name.</p>
@@ -1410,7 +1410,7 @@ Drop discs into the columns. First to link four in any direction wins. You play 
   </ul>
   <p>The menu belongs to the person who opened it. If someone else presses its buttons, Nexus tells them to run <code>-games</code> for their own.</p>
 
-  <h2>The ten games</h2>
+  <h2>The eight games</h2>
   <div class="table-wrap">
   <table class="ref">
     <thead><tr><th>Game</th><th>Play with</th><th>How it works</th><th>Short names</th></tr></thead>
@@ -1419,12 +1419,10 @@ Drop discs into the columns. First to link four in any direction wins. You play 
       <tr><td>🔴 Connect Four</td><td>Nexus or a friend</td><td>Drop discs into columns and link four in any direction. You play 🔴 and go first.</td><td><code>c4</code> <code>cf</code></td></tr>
       <tr><td>✌️ Rock Paper Scissors</td><td>Nexus or a friend</td><td>First to 3 round wins. Ties are replayed. Picks stay secret until both players lock in.</td><td><code>rps</code></td></tr>
       <tr><td>🃏 Blackjack</td><td>Solo</td><td>Get closer to 21 than the dealer without going over. Hit to draw, stand to hold.</td><td><code>bj</code> <code>21</code></td></tr>
-      <tr><td>⚔️ Card Battle</td><td>Nexus or a friend</td><td>Five cards each, one per round, higher card wins and aces are high. Once per game you can mark a round as Double for 2 points. Your hand stays private.</td><td><code>cards</code> <code>cb</code> <code>war</code></td></tr>
       <tr><td>🔢 2048</td><td>Solo</td><td>Slide the board with the arrows and merge equal tiles. Reach 2048 to win, or keep going for a higher score.</td><td><code>2048</code> <code>puzzle</code></td></tr>
       <tr><td>🧠 Trivia</td><td>Nexus or a friend</td><td>Five questions with four answers each. Correct answers score points and faster answers score more. A friend gets the same questions.</td><td><code>quiz</code></td></tr>
       <tr><td>🎯 Number Guess</td><td>Nexus or a friend</td><td>Nexus picks a secret number. You take turns guessing, and every guess narrows the range for both players.</td><td><code>guess</code> <code>ng</code></td></tr>
       <tr><td>🪢 Hangman</td><td>Nexus or a friend</td><td>Pick letters to uncover the word before the drawing is finished, or risk a full guess. Against a friend, they choose the word.</td><td><code>hm</code></td></tr>
-      <tr><td>🔤 Word Scramble</td><td>Nexus or a friend</td><td>Five rounds of unscrambling a word before the timer runs out. Against a friend it's a race: the first correct answer takes the round.</td><td><code>scramble</code> <code>ws</code></td></tr>
     </tbody>
   </table>
   </div>
