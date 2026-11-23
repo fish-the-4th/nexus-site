@@ -105,14 +105,19 @@ function svgIcon(name, cls) {
 }
 
 const NAV = [
-  { id: 'about', label: 'About', icon: 'about', items: [
-    ['about', 'about.html', 'About Nexus', 'What it is and why it exists.'],
-    ['faq', 'faq.html', 'FAQ', 'Answers to the questions people ask most.']
+  { id: 'info', label: 'Information', icon: 'about', items: [
+    ['about', 'about.html', 'About Nexus', 'What it is, why it exists, and the FAQ.'],
+    ['status', 'status.html', 'Status', 'Is Nexus up right now, and how every day went.'],
+    ['changelog', 'changelog.html', 'Changelog', 'What changed, and when.'],
+    ['tools', 'tools.html', 'Tools', 'What Nexus is built with, and why.'],
+    ['stats', 'stats.html', 'Stats', 'Coming soon.'],
+    ['features', 'features.html', 'Features', 'Coming soon.']
   ] },
   { id: 'docs', label: 'Docs', icon: 'docs', items: [
     ['docs', 'docs.html', 'Documentation', 'Guides for every feature, step by step.'],
     ['', 'docs.html#/getting-started', 'Getting started', 'Your first five minutes with Nexus.'],
     ['', 'docs.html#/troubleshooting', 'Troubleshooting', 'Fixes for the usual problems.'],
+    ['', 'docs.html#/commands', 'Command list', 'Every command, searchable.'],
     ['', 'docs.html#/privacy', 'Privacy', 'What Nexus keeps, and what it never does.']
   ] },
   { id: 'community', label: 'Community', icon: 'community', items: [
@@ -120,11 +125,9 @@ const NAV = [
     ['support', 'support.html', 'Support', 'Quick fixes, and where to get help.'],
     ['projects', 'projects.html', 'Projects', 'What has launched and what is coming.']
   ] },
-  { id: 'info', label: 'Information', icon: 'info', items: [
-    ['status', 'status.html', 'Status', 'Is Nexus up right now, and how every day went.'],
-    ['', 'docs.html#/commands', 'Command list', 'Every command, searchable.'],
-    ['changelog', 'changelog.html', 'Changelog', 'What changed, and when.'],
-    ['tools', 'tools.html', 'Tools', 'What Nexus is built with, and why.']
+  { id: 'premium', label: 'Premium', icon: 'star', items: [
+    ['premium', 'premium.html', 'Premium Plans', 'Coming soon.'],
+    ['custombots', 'custombots.html', 'Custom Bots', 'Coming soon.']
   ] }
 ];
 
@@ -333,10 +336,10 @@ function buildChrome() {
           el('div', { class: 'footer-brand' }, [el('img', { src: ROOT + 'logo.png', alt: '' }), 'Nexus']),
           el('p', { class: 'footer-note', text: 'Built on logic, built for everyone.' })
         ]),
-        col('About', [['about.html', 'About Nexus'], ['faq.html', 'FAQ'], ['privacy.html', 'Privacy']]),
-        col('Docs', [['docs.html', 'Documentation'], ['docs.html#/getting-started', 'Getting started'], ['docs.html#/troubleshooting', 'Troubleshooting']]),
+        col('Information', [['about.html', 'About Nexus'], ['status.html', 'Status'], ['changelog.html', 'Changelog'], ['tools.html', 'Tools'], ['stats.html', 'Stats'], ['features.html', 'Features']]),
+        col('Docs', [['docs.html', 'Documentation'], ['docs.html#/getting-started', 'Getting started'], ['docs.html#/troubleshooting', 'Troubleshooting'], ['docs.html#/commands', 'Command list'], ['docs.html#/privacy', 'Privacy']]),
         col('Community', [['staff.html', 'Staff team'], ['support.html', 'Support'], ['projects.html', 'Projects']]),
-        col('Information', [['status.html', 'Status'], ['docs.html#/commands', 'Command list'], ['changelog.html', 'Changelog'], ['tools.html', 'Tools']])
+        col('Premium', [['premium.html', 'Premium Plans'], ['custombots.html', 'Custom Bots']])
       ]),
       el('div', { class: 'footer-bottom' }, [
         el('span', { text: 'Nexus is an independent project and is not affiliated with Discord Inc.' }),
@@ -354,7 +357,7 @@ function buildChrome() {
   });
 }
 
-const REVEAL_SELECTOR = '.section-head, .tile, .card, .member, .component, .incident, .tl-item, details.faq, .cmp-scroll, .cmp-verdict, .cta-band, .quote, .marquee, .staff-section > h2, .reveal-me, .project, .app-card, .cal-wrap';
+const REVEAL_SELECTOR = '.section-head, .tile, .card, .member, .component, .incident, .tl-item, details.faq, .cmp-scroll, .cmp-verdict, .cta-band, .quote, .marquee, .staff-section > h2, .reveal-me, .project, .app-card, .cal-wrap, .feat-row, .soon';
 let revealObserver = null;
 
 function reveal(scope) {
@@ -437,8 +440,6 @@ function worst(states) {
   return states.reduce((w, s) => STATE_RANK[s] > STATE_RANK[w] ? s : w, 'operational');
 }
 
-// An open incident counts as active until the end of its day, or until its "ends" day
-// if it has one. After that it stays on the calendar but stops changing the status.
 function isIncidentActive(i) {
   if (!i || i.status === 'resolved') return false;
   const last = String(i.ends || i.date || '').slice(0, 10);
@@ -1005,7 +1006,6 @@ async function initChangelog() {
   reveal(root);
 }
 
-// Only plain web links from the data file are turned into links.
 const safeUrl = u => /^https:\/\/[^\s"'<>]+$/i.test(String(u || '')) ? String(u) : '';
 
 async function initTools() {
@@ -1016,7 +1016,6 @@ async function initTools() {
   try { data = await loadJSON('tools.json'); }
   catch (e) { root.replaceChildren(el('p', { class: 'empty', text: 'The tools list could not be loaded right now. Try again in a minute.' })); return; }
 
-  // Two fixed sections, in this order.
   const groups = [
     { title: 'Tools', intro: 'The programs and services Nexus runs on.', items: data && data.tools },
     { title: 'Libraries', intro: 'The code Nexus uses to do its work.', items: data && data.libraries }
@@ -1097,15 +1096,12 @@ function initials(name) {
   return parts.map(p => p.charAt(0).toUpperCase()).join('') || '?';
 }
 
-/* Staff page: four groups (buttons) and Current / Former (slider).
-   staff.json holds the current team and retired.json the former one. Each file has a list of sections
-   per group: { "staff": [...], "helpers": [...], "ambassadors": [...], "testers": [...] }.
-   An older file with just { "sections": [...] } is read as the Staff group. */
 const TEAM_GROUPS = [
   { key: 'staff', label: 'Staff', icon: '🛡️' },
   { key: 'helpers', label: 'Helpers', icon: '🤝' },
   { key: 'ambassadors', label: 'Ambassadors', icon: '📣' },
-  { key: 'testers', label: 'Testers', icon: '🧪' }
+  { key: 'testers', label: 'Testers', icon: '🧪' },
+  { key: 'council', label: 'Suggestion Council', icon: '💡' }
 ];
 
 function teamGroups(data) {
@@ -1129,7 +1125,13 @@ function segmented(items, current, onPick, opts) {
     box.appendChild(b);
     return b;
   });
-  const place = () => { const b = buttons.find(x => x.classList.contains('on')); if (b) { ind.style.width = b.offsetWidth + 'px'; ind.style.transform = 'translateX(' + (b.offsetLeft - 5) + 'px)'; } };
+  const place = () => {
+    const b = buttons.find(x => x.classList.contains('on'));
+    if (!b) return;
+    ind.style.width = b.offsetWidth + 'px';
+    ind.style.transform = 'translateX(' + (b.offsetLeft - 5) + 'px)';
+    if (box.scrollWidth > box.clientWidth) box.scrollLeft = Math.max(0, b.offsetLeft - (box.clientWidth - b.offsetWidth) / 2);
+  };
   function pick(key) {
     buttons.forEach((b, i) => { const on = items[i].key === key; b.classList.toggle('on', on); b.setAttribute('aria-selected', on ? 'true' : 'false'); });
     place();
