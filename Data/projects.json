@@ -18,12 +18,27 @@
     {
       "name": "Anti-Nuke Features",
       "description": "New features to stop corrupt or hacked moderators/admins from ruining your server.",
-      "status": "consideration"
+      "status": "planned"
     },
     {
       "name": "Tickets Expansion",
       "description": "A expansion on how tickets work, such as more panels, advanced permissions, transcripting, more logging options, and much more.",
       "status": "development"
+    },
+    {
+      "name": "Reaction Roles",
+      "description": "Give server members quick access to roles with a simple click as a reaction, fully customizable.",
+      "status": "development"
+    },
+    {
+      "name": "Permission Manager",
+      "description": "Change command access with a quick command that changes what permission, roles, or members have access to a selected command.",
+      "status": "launched"
+    },
+    {
+      "name": "Social Notifications",
+      "description": "Send a video in a selected channel whenever your favorite content creators post online.",
+      "status": "consideration"
     }
   ]
 }
