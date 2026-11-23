@@ -356,7 +356,7 @@ function buildChrome() {
   });
 }
 
-const REVEAL_SELECTOR = '.section-head, .tile, .card, .member, .component, .incident, .tl-item, details.faq, .cmp-scroll, .cmp-verdict, .cta-band, .quote, .marquee, .staff-section > h2, .reveal-me, .project, .app-card, .cal-wrap, .feat-row, .soon, .feature, .feature-foot';
+const REVEAL_SELECTOR = '.section-head, .tile, .card, .member, .component, .incident, .tl-item, details.faq, .cmp-scroll, .cmp-verdict, .cta-band, .quote, .marquee, .staff-section > h2, .reveal-me, .project, .app-card, .cal-wrap, .feat-row, .soon, .fx-foot';
 let revealObserver = null;
 
 function reveal(scope) {
@@ -442,69 +442,66 @@ async function initMarquee() {
 }
 
 function initFeatures() {
-  const bar = document.getElementById('ftabs');
-  if (!bar) return;
-  const tabs = Array.from(bar.querySelectorAll('a.ftab'));
-  const pairs = tabs.map(a => [a, document.getElementById((a.getAttribute('href') || '').slice(1))]).filter(p => p[1]);
-  if (!pairs.length) return;
+  const root = document.getElementById('fx');
+  if (!root) return;
+  const items = Array.from(root.querySelectorAll('a.fx-item'));
+  const panels = Array.from(root.querySelectorAll('.fx-panel'));
+  if (!items.length || items.length !== panels.length) return;
+  const ids = panels.map(p => p.id);
+  root.classList.add('fx-js');
 
-  let activeId = '';
-  let lockUntil = 0;
-
-  function mark(id) {
-    if (id === activeId) return;
-    activeId = id;
-    pairs.forEach(([a, s]) => {
-      const on = s.id === id;
-      a.classList.toggle('on', on);
-      if (on) {
-        a.setAttribute('aria-current', 'true');
-        const left = a.offsetLeft - (bar.clientWidth - a.offsetWidth) / 2;
-        if (bar.scrollWidth > bar.clientWidth) bar.scrollTo({ left: Math.max(0, left), behavior: REDUCED ? 'auto' : 'smooth' });
-      } else {
-        a.removeAttribute('aria-current');
-      }
+  function show(id, opts) {
+    const i = ids.indexOf(id);
+    if (i < 0) return;
+    panels.forEach((p, k) => p.classList.toggle('on', k === i));
+    items.forEach((a, k) => {
+      a.classList.toggle('on', k === i);
+      if (k === i) a.setAttribute('aria-current', 'true');
+      else a.removeAttribute('aria-current');
     });
+    const rail = root.querySelector('.fx-rail');
+    const cur = items[i];
+    if (rail && rail.scrollWidth > rail.clientWidth) {
+      rail.scrollTo({ left: Math.max(0, cur.offsetLeft - (rail.clientWidth - cur.offsetWidth) / 2), behavior: (REDUCED || !(opts && opts.write)) ? 'auto' : 'smooth' });
+    }
+    if (opts && opts.write) {
+      try { history.replaceState(null, '', '#' + id); } catch (err) {}
+    }
+    if (opts && opts.scroll) {
+      const top = root.getBoundingClientRect().top + window.scrollY - 84;
+      if (window.scrollY > top) window.scrollTo({ top: Math.max(0, top), behavior: REDUCED ? 'auto' : 'smooth' });
+    }
   }
 
-  function edges() {
-    bar.classList.toggle('more-r', bar.scrollLeft + bar.clientWidth < bar.scrollWidth - 4);
-    bar.classList.toggle('more-l', bar.scrollLeft > 4);
-  }
-  bar.addEventListener('scroll', edges, { passive: true });
-  window.addEventListener('resize', edges);
-  edges();
-
-  pairs.forEach(([a, s]) => {
-    a.addEventListener('click', e => {
-      e.preventDefault();
-      lockUntil = Date.now() + 1100;
-      s.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
-      try { history.replaceState(null, '', '#' + s.id); } catch (err) {}
-      mark(s.id);
-      setTimeout(spy, 1150);
-    });
+  root.addEventListener('click', e => {
+    const a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    if (!a || !root.contains(a)) return;
+    const id = decodeURIComponent(a.getAttribute('href').slice(1));
+    if (ids.indexOf(id) < 0) return;
+    e.preventDefault();
+    show(id, { write: true, scroll: true });
   });
 
-  let queued = false;
-  function spy() {
-    queued = false;
-    if (Date.now() < lockUntil) return;
-    const line = window.innerHeight * 0.38;
-    let current = pairs[0][1];
-    pairs.forEach(p => { if (p[1].getBoundingClientRect().top <= line) current = p[1]; });
-    mark(current.id);
-  }
-  window.addEventListener('scroll', () => {
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(spy);
-  }, { passive: true });
+  root.querySelector('.fx-rail').addEventListener('keydown', e => {
+    const keys = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
+    if (!(e.key in keys)) return;
+    const at = items.indexOf(document.activeElement);
+    if (at < 0) return;
+    const next = items[(at + keys[e.key] + items.length) % items.length];
+    e.preventDefault();
+    next.focus();
+    show(ids[items.indexOf(next)], { write: true });
+  });
+
+  window.addEventListener('hashchange', () => {
+    show(decodeURIComponent((location.hash || '').slice(1)), {});
+  });
 
   const start = decodeURIComponent((location.hash || '').slice(1));
-  const first = pairs.find(p => p[1].id === start) || pairs[0];
-  mark(first[1].id);
-  if (start && first[1].id === start) setTimeout(() => first[1].scrollIntoView({ block: 'start' }), 60);
+  show(ids.indexOf(start) >= 0 ? start : ids[0], {});
+  if (ids.indexOf(start) >= 0) {
+    setTimeout(() => window.scrollTo({ top: Math.max(0, root.getBoundingClientRect().top + window.scrollY - 84), behavior: 'auto' }), 60);
+  }
 }
 
 const STATE_LABEL = {
