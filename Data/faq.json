@@ -7,7 +7,7 @@
         "a": "Nexus is solely developed by fish98547, I do not plan on adding any other developers to this project."
       },
       {
-        "q": "Will Nexus it soon be a requirement to pay for Nexus?",
+        "q": "Do I need to pay to use Nexus?",
         "a": "No! Nexus will always stay free. While a premium plan is in development that is for a expansion on features and not a lock for features, all features will remain free though limits will soon be put in place."
       },
       {
@@ -25,6 +25,14 @@
       {
         "q": "Is Nexus open source?",
         "a": "No, none of Nexus`s code will be open to the public. Though the website is open source on GitHub.."
+      },
+      {
+        "q": "Can I join the Nexus team?",
+        "a": "Of course, join out support server where we have links to the applications area. You may apply to join the team and support Nexus."
+      },
+      {
+        "q": "Can Nexus replace my other bots?",
+        "a": "Absolutely, Nexus was meant to clean up the clutter in your server with the 10 random bots conflicting with each other. Nexus is one central hub that serves your entire class."
       }
     ]
   }
