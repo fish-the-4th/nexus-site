@@ -1,18 +1,28 @@
 {
   "projects": [
     {
-      "name": "Bot-Leveling & EXP System",
+      "name": "Leveling & EXP System",
       "description": "A leveling system with exponential level as you progress. Server admins will be able to make level roles, you may also check the leaderboard for the top 10 users of the server in terms of EXP. Levels are not global across all servers.",
       "status": "planned"
     },
     {
-      "name": "Bot-Welcome & Goodbye Messages",
+      "name": "Welcome & Goodbye Messages",
       "description": "Messages can be set up to send when a user joins the server, messages can also be setup for when a user leaves.",
       "status": "consideration"
     },
     {
       "name": "Slash Commands",
-      "description": "Allow all commands to be supported though the in-built slash commands",
+      "description": "Allow all commands to be supported though the in-built slash commands.",
+      "status": "launched"
+    },
+    {
+      "name": "Anti-Nuke Features",
+      "description": "New features to stop corrupt or hacked moderators/admins from ruining your server.",
+      "status": "consideration"
+    },
+    {
+      "name": "Tickets Expansion",
+      "description": "A expansion on how tickets work, such as more panels, advanced permissions, transcripting, more logging options, and much more.",
       "status": "development"
     }
   ]
