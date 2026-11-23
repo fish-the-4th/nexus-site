@@ -6,7 +6,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Features - Nexus</title>
-<meta name="description" content="A full tour of what Nexus can do. Coming soon.">
+<meta name="description" content="A full tour of what Nexus can do, with an example of how each feature looks in Discord.">
 <link rel="icon" type="image/png" href="../logo.png">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -17,16 +17,178 @@
 <header class="page-hero">
   <div class="wrap narrow">
     <p class="eyebrow">Information · Features</p>
-    <h1>Features</h1>
-    <p>A closer look at everything Nexus can do, one feature at a time.</p>
+    <h1>Everything Nexus does</h1>
+    <p>One card for each feature, with what it does, how it works, and what it looks like in Discord.</p>
   </div>
 </header>
 
-<main class="wrap narrow">
-  <div class="soon">
-    <b>Coming soon</b>
-    <h2>Features is on its way</h2>
-    <p>This page is not ready yet. The home page lists every feature in short, and the docs cover each one in detail.</p>
+<main class="wrap wide">
+  <div class="ftabs-wrap">
+    <nav class="ftabs" id="ftabs" aria-label="Jump to a feature"><a class="ftab" href="#moderation" style="--acc:#e74c3c"><span aria-hidden="true">🛡️</span>Moderation</a><a class="ftab" href="#automod" style="--acc:#f0a32f"><span aria-hidden="true">🚨</span>AutoMod</a><a class="ftab" href="#autoroles" style="--acc:#3ba55d"><span aria-hidden="true">🔐</span>Autoroles</a><a class="ftab" href="#tickets" style="--acc:#3b9cf5"><span aria-hidden="true">🎫</span>Tickets</a><a class="ftab" href="#stats" style="--acc:#a371f7"><span aria-hidden="true">📊</span>Stats</a><a class="ftab" href="#logging" style="--acc:#1abc9c"><span aria-hidden="true">📋</span>Logging</a><a class="ftab" href="#games" style="--acc:#ff6fa8"><span aria-hidden="true">🎮</span>Games</a><a class="ftab" href="#info" style="--acc:#4fc3e0"><span aria-hidden="true">🔎</span>Info</a><a class="ftab" href="#reminders" style="--acc:#e67e22"><span aria-hidden="true">⏰</span>Reminders</a><a class="ftab" href="#translation" style="--acc:#6c7bff"><span aria-hidden="true">🌐</span>Translation</a><a class="ftab" href="#starboard" style="--acc:#f1c40f"><span aria-hidden="true">⭐</span>Starboard</a><a class="ftab" href="#giveaways" style="--acc:#9bd13f"><span aria-hidden="true">🎁</span>Giveaways</a><a class="ftab" href="#notes" style="--acc:#8aa4c8"><span aria-hidden="true">📝</span>Staff notes</a><a class="ftab" href="#access" style="--acc:#d46bff"><span aria-hidden="true">🔑</span>Command access</a><a class="ftab" href="#prefix" style="--acc:#4fe3a8"><span aria-hidden="true">✏️</span>Custom prefix</a></nav>
+  </div>
+
+  <div class="feature-list">
+    <section class="feature" id="moderation" style="--acc:#e74c3c">
+      <figure class="feature-shot"><a href="../Assets/features/moderation.png" target="_blank" rel="noopener" aria-label="Open the moderation image full size"><img src="../Assets/features/moderation.png" width="584" height="678" loading="lazy" alt="A staff channel where a moderator bans one member for three days and mutes another for 30 minutes, with Nexus replying with a case number each time, and the direct message the muted member receives."></a></figure>
+      <div class="feature-body">
+        <span class="feature-ico" aria-hidden="true">🛡️</span>
+        <h2>Moderation that keeps a record</h2>
+        <p class="feature-lead">Kick, ban, mute and warn with a case number on every action, so the team can always see what happened and why.</p>
+        <ul class="feature-points"><li>Every kick, ban, mute and warn is saved as a case with its own number, like <code>4821-7390-1156</code>.</li><li>The member gets a private message with the action, the reason and the case number. You can switch it off, or hide the case number, from the dashboard.</li><li>Bans can be timed, like <code>-ban @user 3d reason</code>, and lift themselves when the time is up. Mutes run from 1 minute up to 28 days.</li><li>Bans and mutes work on people who aren't in the server too. A saved mute starts the moment the person joins.</li><li>Role checks on every action: you can't act on someone at or above your top role, and Nexus won't try if their role sits above its own.</li><li>Search with <code>-cases</code>, open one with <code>-caseinfo</code>, and undo a mistake with <code>-casedelete</code>, which also lifts the ban or mute. Members can read their own record with <code>-myhistory</code>.</li><li>Channel tools are included: <code>-purge</code> clears up to 100 messages from a member, and <code>-lock</code>, <code>-unlock</code> and <code>-slowmode</code> calm a channel.</li></ul>
+        <div class="cmds"><code>-ban</code><code>-kick</code><code>-mute</code><code>-warn</code><code>-cases</code><code>-purge</code></div>
+      </div>
+    </section>
+    <section class="feature flip" id="automod" style="--acc:#f0a32f">
+      <figure class="feature-shot"><a href="../Assets/features/automod.png" target="_blank" rel="noopener" aria-label="Open the automod image full size"><img src="../Assets/features/automod.png" width="584" height="595" loading="lazy" alt="A general channel where Nexus tells a member that a link was removed, and an AutoMod log channel with an entry for the flagged scam link and an entry for a raid lockdown that started after ten joins in thirty seconds."></a></figure>
+      <div class="feature-body">
+        <span class="feature-ico" aria-hidden="true">🚨</span>
+        <h2>Protection that works while you&#x27;re away</h2>
+        <p class="feature-lead">Spam, scam links and raids are dealt with automatically, and every action is posted to a log channel.</p>
+        <ul class="feature-points"><li>Three protections, each with its own level from 1 to 10: spam, scam links and raids. Level 0 turns one off.</li><li>Spam: when a member sends too many messages too fast, Nexus removes them. At level 5 that is more than 6 messages in 10 seconds.</li><li>Scam links: messages with known scam and phishing domains are deleted, and edited messages are checked too, so a link can't be slipped in afterwards.</li><li>Raids: when too many people join at once (10 in 30 seconds at level 5), Nexus locks every text channel. Anyone who joins during the lockdown is kicked.</li><li>End a lockdown with <code>-automod raidend</code>. Every channel goes back exactly as it was before.</li><li>Choose roles and members AutoMod should ignore with <code>-automod whitelist</code>.</li><li>Each action is logged with the member, the channel and the level, in the channel you pick with <code>-automod logging</code>.</li></ul>
+        <div class="cmds"><code>-automod setup</code><code>-automod logging</code><code>-automod whitelist</code><code>-automod raidend</code><code>-automods</code></div>
+      </div>
+    </section>
+    <section class="feature" id="autoroles" style="--acc:#3ba55d">
+      <figure class="feature-shot"><a href="../Assets/features/autoroles.png" target="_blank" rel="noopener" aria-label="Open the autoroles image full size"><img src="../Assets/features/autoroles.png" width="584" height="735" loading="lazy" alt="A staff channel where join roles are set, a role is given to a member for seven days with the exact expiry date shown, and a role is saved so it returns if the member rejoins."></a></figure>
+      <div class="feature-body">
+        <span class="feature-ico" aria-hidden="true">🔐</span>
+        <h2>Roles that hand themselves out</h2>
+        <p class="feature-lead">Give roles when people join, bring them back when members return, and take them away on a timer.</p>
+        <ul class="feature-points"><li>Join roles go to every new member automatically. Set them with <code>-joinroles set @Member @Newcomer</code>.</li><li>Persistent roles are saved for a member and given back if they leave and come back.</li><li>Timed roles remove themselves when the time is up. Use <code>30m</code>, <code>2h</code>, <code>3d</code>, <code>1w</code>, <code>2mon</code> or <code>1y</code>, up to 5 years.</li><li>Add, remove, toggle or set roles on a member in one command, several roles at a time.</li><li>You can't hand out a role above your own, and Nexus skips roles it can't manage, so nothing gets out of hand.</li><li>Role changes come back as a short summary showing who was changed, which roles, and who did it.</li></ul>
+        <div class="cmds"><code>-joinroles</code><code>-role add</code><code>-role persist</code><code>-timed role add</code><code>-timed roles</code></div>
+      </div>
+    </section>
+    <section class="feature flip" id="tickets" style="--acc:#3b9cf5">
+      <figure class="feature-shot"><a href="../Assets/features/tickets.png" target="_blank" rel="noopener" aria-label="Open the tickets image full size"><img src="../Assets/features/tickets.png" width="584" height="566" loading="lazy" alt="A support channel with a ticket panel and a green Create Ticket button, and a private ticket channel where Nexus pings the support role, posts a welcome message with Claim and Close buttons, and confirms a staff member claimed it."></a></figure>
+      <div class="feature-body">
+        <span class="feature-ico" aria-hidden="true">🎫</span>
+        <h2>Private tickets in one click</h2>
+        <p class="feature-lead">Members press one button to open a private channel with your team. Setup is a single command.</p>
+        <ul class="feature-points"><li>Run <code>-ticket setup</code> with a support role, a category and a log channel, then <code>-ticket panel</code> to post the button.</li><li>Each ticket is a private channel, hidden from everyone except the member and your support role.</li><li>One open ticket per member, so the queue stays tidy.</li><li>Staff claim a ticket with a button, and bring people in or out with <code>-ticket add</code> and <code>-ticket remove</code>.</li><li>Close a ticket with the button or <code>-ticket close</code>. The channel is deleted after 5 seconds and the log shows who opened and who closed it.</li><li>The panel, setup and open tickets can also be managed from the dashboard.</li></ul>
+        <div class="cmds"><code>-ticket setup</code><code>-ticket panel</code><code>-ticket add</code><code>-ticket close</code></div>
+      </div>
+    </section>
+    <section class="feature" id="stats" style="--acc:#a371f7">
+      <figure class="feature-shot"><a href="../Assets/features/stats.png" target="_blank" rel="noopener" aria-label="Open the stats image full size"><img src="../Assets/features/stats.png" width="584" height="454" loading="lazy" alt="A staff channel where the server stats command returns total messages, total voice time and member count, with a bar and line chart of messages and voice hours for each of the last 30 days."></a></figure>
+      <div class="feature-body">
+        <span class="feature-ico" aria-hidden="true">📊</span>
+        <h2>Thirty days of activity, charted</h2>
+        <p class="feature-lead">See who is active, where, and how the server is growing, with charts built straight into Discord.</p>
+        <ul class="feature-points"><li>Messages and voice time are counted for the last 30 days, per member and per channel.</li><li><code>-stats user</code> shows a member's totals, their rank in text and voice, their top 3 channels and a daily chart.</li><li><code>-stats server</code> charts the whole server, and <code>-stats top</code> lists the top 3 members and channels for text and voice.</li><li><code>-stats channel</code> shows how many members have posted in a channel and who posts the most.</li><li><code>-stats members</code> charts joins and leaves with the net change, and <code>-stats invite</code> shows how many people an invite brought in.</li><li>Only counts are stored: who, where and when. The content of messages is never saved.</li></ul>
+        <div class="cmds"><code>-stats user</code><code>-stats server</code><code>-stats top</code><code>-stats members</code><code>-stats invite</code></div>
+      </div>
+    </section>
+    <section class="feature flip" id="logging" style="--acc:#1abc9c">
+      <figure class="feature-shot"><a href="../Assets/features/logging.png" target="_blank" rel="noopener" aria-label="Open the logging image full size"><img src="../Assets/features/logging.png" width="584" height="710" loading="lazy" alt="A staff channel showing the logging setup, with nine categories each pointing to a log channel or switched off, and a message log entry showing a member editing a message from &quot;who wants to play at 8?&quot; to &quot;who wants to play at 9?&quot;."></a></figure>
+      <div class="feature-body">
+        <span class="feature-ico" aria-hidden="true">📋</span>
+        <h2>Nine kinds of log, each in its own channel</h2>
+        <p class="feature-lead">Messages, members, voice, roles and more are logged, and you choose where each one goes.</p>
+        <ul class="feature-points"><li>Nine categories: messages, users, expressions, channels, voice, moderation, invites, applications and roles. Each goes to its own channel, or stays off.</li><li>Edited messages show what they said before and after. Deleted messages show the author, the channel and what was written.</li><li>Joins and leaves show the account age and the member count. Kicks and bans show who did it and why.</li><li>Voice joins, leaves and moves, role and channel changes, and invites created or deleted are all recorded.</li><li>Warns, mutes, unwarns and unmutes are logged with their case numbers, and so are cases that get voided.</li><li>Leave out people you do not want logged, like bots or staff, with <code>-logging ignore add</code>.</li></ul>
+        <div class="cmds"><code>-log</code><code>-logs</code><code>-log remove</code><code>-logging ignore add</code></div>
+      </div>
+    </section>
+    <section class="feature" id="games" style="--acc:#ff6fa8">
+      <figure class="feature-shot"><a href="../Assets/features/games.png" target="_blank" rel="noopener" aria-label="Open the games image full size"><img src="../Assets/features/games.png" width="584" height="730" loading="lazy" alt="A games channel where a member opens the Connect Four lobby with difficulty and friend pickers and a green Play vs Nexus button, then checks a game record of twelve wins, seven losses and two draws."></a></figure>
+      <div class="feature-body">
+        <span class="feature-ico" aria-hidden="true">🎮</span>
+        <h2>Games without leaving Discord</h2>
+        <p class="feature-lead">Pick a game from a menu, then play Nexus or challenge a friend. Your record follows you across servers.</p>
+        <ul class="feature-points"><li>Tic-Tac-Toe, Connect Four, Rock Paper Scissors, Blackjack, 2048, Trivia, Number Guess and Hangman.</li><li><code>-games</code> opens a menu, and short names jump straight in: <code>-games c4</code>, <code>-games ttt</code> or <code>-games bj</code>.</li><li>Pick Easy, Medium or Hard. The lobby spells out what each level changes before you start.</li><li>Most games can be played against a friend you choose from a list. They have a minute to accept.</li><li>Blackjack and 2048 are solo, since the dealer or the board is the opponent.</li><li>Wins, losses, draws, streaks and best scores are kept with <code>-games stats</code>, across every server Nexus is in.</li><li>The menu belongs to whoever opened it, so nobody else can press your buttons.</li></ul>
+        <div class="cmds"><code>-games</code><code>-games stats</code><code>-games connect4</code><code>-games ttt</code></div>
+      </div>
+    </section>
+    <section class="feature flip" id="info" style="--acc:#4fc3e0">
+      <figure class="feature-shot"><a href="../Assets/features/info.png" target="_blank" rel="noopener" aria-label="Open the info image full size"><img src="../Assets/features/info.png" width="584" height="641" loading="lazy" alt="A bot commands channel where Nexus answers a server info request with the owner, creation date, member, role and channel counts, and a member count request that splits 1426 members into 1398 people and 28 bots."></a></figure>
+      <div class="feature-body">
+        <span class="feature-ico" aria-hidden="true">🔎</span>
+        <h2>Look up anything about your server</h2>
+        <p class="feature-lead">Quick answers about members, roles, channels and the server, without opening a single menu.</p>
+        <ul class="feature-points"><li><code>-userinfo</code> shows when an account was made, when the member joined, their top role and every role they have.</li><li><code>-serverinfo</code> covers the owner, creation date, members, roles, channels, emojis, boosts and verification level.</li><li><code>-servermembercount</code> splits the total into people and bots, and <code>-serverchannelcount</code> splits channels into text, voice and categories.</li><li><code>-roleinfo</code> shows a role's members, position and colour, and which key permissions it allows or denies.</li><li><code>-channelinfo</code>, <code>-emojiinfo</code> and <code>-stickerinfo</code> give the details of one channel, emoji or sticker.</li><li><code>-avatarinfo</code>, <code>-bannerinfo</code> and <code>-servericoninfo</code> link to the image in PNG, JPG and WEBP, plus GIF when it is animated.</li><li>Find someone by ID or username with <code>-search</code>. ID lookups work even for people who are not in the server.</li></ul>
+        <div class="cmds"><code>-userinfo</code><code>-serverinfo</code><code>-roleinfo</code><code>-avatarinfo</code><code>-search</code></div>
+      </div>
+    </section>
+    <section class="feature" id="reminders" style="--acc:#e67e22">
+      <figure class="feature-shot"><a href="../Assets/features/reminders.png" target="_blank" rel="noopener" aria-label="Open the reminders image full size"><img src="../Assets/features/reminders.png" width="584" height="524" loading="lazy" alt="A general channel where a member sets a two hour reminder and Nexus confirms the exact time, then two hours later pings the member with the reminder and the time it was set."></a></figure>
+      <div class="feature-body">
+        <span class="feature-ico" aria-hidden="true">⏰</span>
+        <h2>Reminders that find you</h2>
+        <p class="feature-lead">Tell Nexus what to remember and when, in short times like 2h or 1h30m.</p>
+        <ul class="feature-points"><li>Set one with <code>-reminder create 2h submit the club report</code>. Times can be combined, like <code>1h30m</code>, up to a year.</li><li>The confirmation shows exactly when it will go off, in your own time zone.</li><li>Nexus pings you in the channel you set it in. If that channel is gone, you get a direct message instead.</li><li>Keep up to 25 reminders at once, see them with <code>-reminder list</code> and remove one from a menu with <code>-reminder delete</code>.</li></ul>
+        <div class="cmds"><code>-reminder create</code><code>-reminder list</code><code>-reminder delete</code></div>
+      </div>
+    </section>
+    <section class="feature flip" id="translation" style="--acc:#6c7bff">
+      <figure class="feature-shot"><a href="../Assets/features/translation.png" target="_blank" rel="noopener" aria-label="Open the translation image full size"><img src="../Assets/features/translation.png" width="584" height="570" loading="lazy" alt="A general channel where one member translates a welcome message from English to Spanish and another translates a French question into English, each with the original and the translation shown in the reply."></a></figure>
+      <div class="feature-body">
+        <span class="feature-ico" aria-hidden="true">🌐</span>
+        <h2>Translate without leaving the chat</h2>
+        <p class="feature-lead">Translate any message between languages by name and see the original next to the result.</p>
+        <ul class="feature-points"><li>Say the language it is in, the language you want, then the text: <code>-translate English Spanish Good morning!</code>.</li><li>Works with the names of more than 50 languages, from English and Spanish to Japanese, Arabic and Swahili.</li><li>The reply shows the original and the translation together, for up to 1,000 characters at a time.</li><li>Translations come from Google Translate, and the reply says so.</li></ul>
+        <div class="cmds"><code>-translate</code></div>
+      </div>
+    </section>
+    <section class="feature" id="starboard" style="--acc:#f1c40f">
+      <figure class="feature-shot"><a href="../Assets/features/starboard.png" target="_blank" rel="noopener" aria-label="Open the starboard image full size"><img src="../Assets/features/starboard.png" width="584" height="564" loading="lazy" alt="A staff channel where the starboard is set to a star emoji, a member posting about a 3D model that receives a star, and the starboard channel where Nexus posts a copy with a jump link, the source channel and the reaction count."></a></figure>
+      <div class="feature-body">
+        <span class="feature-ico" aria-hidden="true">⭐</span>
+        <h2>A wall for your best messages</h2>
+        <p class="feature-lead">Choose an emoji and a channel. The first time someone reacts with it, Nexus copies that message there.</p>
+        <ul class="feature-points"><li>Set it up with <code>-starboard setup ⭐ #starboard</code>. Any normal emoji or server emoji works.</li><li>The post shows who wrote it, what they said, the first image attached, a link back to the message, the channel and the reaction count.</li><li>Each message is posted once, and reactions inside the starboard channel itself are ignored.</li><li>It posts as soon as the emoji is added, so pick one your members use on purpose.</li><li>Check the current setup any time with <code>-starboard</code>.</li></ul>
+        <div class="cmds"><code>-starboard setup</code><code>-starboard</code></div>
+      </div>
+    </section>
+    <section class="feature flip" id="giveaways" style="--acc:#9bd13f">
+      <figure class="feature-shot"><a href="../Assets/features/giveaways.png" target="_blank" rel="noopener" aria-label="Open the giveaways image full size"><img src="../Assets/features/giveaways.png" width="584" height="747" loading="lazy" alt="A giveaways channel with a two hour Discord Nitro giveaway and its reaction count, then the winner announcement two hours later, followed by a reroll that picks a different winner."></a></figure>
+      <div class="feature-body">
+        <span class="feature-ico" aria-hidden="true">🎁</span>
+        <h2>Giveaways that run themselves</h2>
+        <p class="feature-lead">Start one with a length, a winner count and a prize. Members enter with a reaction and Nexus picks the winners.</p>
+        <ul class="feature-points"><li>Start one with <code>-giveaway start 2h 1 Discord Nitro</code>. Lengths like <code>10m</code>, <code>2h</code> or <code>1d</code> go up to 30 days, with 1 to 20 winners.</li><li>Members enter by reacting with 🎉. Bots and people who have left the server are skipped when winners are picked.</li><li>When time is up, winners are announced with a mention and the original post is updated to show it ended.</li><li>End one early with <code>-giveaway end</code>, or pick someone else with <code>-giveaway reroll</code>.</li><li>Giveaways are saved, so one still ends on time after a restart.</li><li>You can also start and manage them from the dashboard.</li></ul>
+        <div class="cmds"><code>-giveaway start</code><code>-giveaway end</code><code>-giveaway reroll</code></div>
+      </div>
+    </section>
+    <section class="feature" id="notes" style="--acc:#8aa4c8">
+      <figure class="feature-shot"><a href="../Assets/features/notes.png" target="_blank" rel="noopener" aria-label="Open the staff notes image full size"><img src="../Assets/features/notes.png" width="584" height="558" loading="lazy" alt="A staff channel where a moderator adds a note about a member and then lists his notes, showing two notes with who wrote each one, when, and the note text."></a></figure>
+      <div class="feature-body">
+        <span class="feature-ico" aria-hidden="true">📝</span>
+        <h2>Private notes for your team</h2>
+        <p class="feature-lead">Leave context for the next moderator, like why someone was spoken to and what to watch for.</p>
+        <ul class="feature-points"><li><code>-note add @user text</code> saves a note of up to 300 characters, with your name and the time.</li><li><code>-notes @user</code> lists every note, 8 to a page, with Previous and Next buttons.</li><li>Remove one by its number with <code>-note remove @user 2</code>.</li><li>Only staff with the Kick Members permission can read or write notes. Members never see them.</li><li>Notes belong to the server they were written in, and work on people who have left too.</li></ul>
+        <div class="cmds"><code>-note add</code><code>-notes</code><code>-note remove</code></div>
+      </div>
+    </section>
+    <section class="feature flip" id="access" style="--acc:#d46bff">
+      <figure class="feature-shot"><a href="../Assets/features/access.png" target="_blank" rel="noopener" aria-label="Open the command access image full size"><img src="../Assets/features/access.png" width="584" height="497" loading="lazy" alt="A staff channel where an admin lets the Moderators role use the ban command, changes the permission needed for slowmode to Manage Messages, and then checks who has access to the ban command."></a></figure>
+      <div class="feature-body">
+        <span class="feature-ico" aria-hidden="true">🔑</span>
+        <h2>You decide who can run what</h2>
+        <p class="feature-lead">Move any command to a different role, person or permission, without touching Discord's own settings.</p>
+        <ul class="feature-points"><li><code>-permission ban @Moderators</code> lets a role use <code>-ban</code> even without the Ban Members permission. Run it again to take it away.</li><li><code>-permission slowmode Manage Messages</code> swaps the permission a command needs.</li><li>Give a command to one person the same way, by mentioning them.</li><li><code>-permission ban</code> on its own shows who has access to that command.</li><li>Only administrators can change access, and a few sensitive commands can never be changed.</li><li>The dashboard has a Command access page for the same settings.</li></ul>
+        <div class="cmds"><code>-permission</code></div>
+      </div>
+    </section>
+    <section class="feature" id="prefix" style="--acc:#4fe3a8">
+      <figure class="feature-shot"><a href="../Assets/features/prefix.png" target="_blank" rel="noopener" aria-label="Open the custom prefix image full size"><img src="../Assets/features/prefix.png" width="584" height="584" loading="lazy" alt="A staff channel where an admin checks the prefix and changes it from a dash to an exclamation mark, then a bot commands channel where a member uses the new prefix and another mentions Nexus to ask for it."></a></figure>
+      <div class="feature-body">
+        <span class="feature-ico" aria-hidden="true">✏️</span>
+        <h2>A prefix that fits your server</h2>
+        <p class="feature-lead">Change the character before commands. Members can always mention Nexus instead.</p>
+        <ul class="feature-points"><li><code>-prefix set !</code> changes it for your server. Up to 5 characters, with no spaces.</li><li><code>-prefix</code> shows the current one, and mentioning Nexus works whatever the prefix is, so nobody gets locked out.</li><li>Each server has its own prefix, so two servers can use different ones.</li><li>Most commands also work as slash commands, so the prefix never gets in the way.</li></ul>
+        <div class="cmds"><code>-prefix</code><code>-prefix set</code></div>
+      </div>
+    </section>
+  </div>
+
+  <p class="feature-foot">The server, the members and the numbers in these images are made up. The wording, buttons and layout follow what Nexus really sends.</p>
+
+  <div class="cta-band feature-cta">
+    <h2>Ready to try it?</h2>
+    <p>Add Nexus to a server, then type <code>-commands</code> to see everything it can do. The docs walk through each feature step by step.</p>
+    <div class="actions">
+      <a class="btn btn-primary btn-lg" data-link="invite" href="#">Add Nexus to your server</a>
+      <a class="btn btn-outline btn-lg" href="docs.html">Read the docs</a>
+    </div>
   </div>
 </main>
 
