@@ -11,11 +11,6 @@
       "status": "consideration"
     },
     {
-      "name": "Website-Reports & Appeals",
-      "description": "Currently working on a report system that allows users to report others incase of rule violations. Appeals can be used to resolve these issues",
-      "status": "development"
-    },
-    {
       "name": "Slash Commands",
       "description": "Allow all commands to be supported though the in-built slash commands",
       "status": "development"
