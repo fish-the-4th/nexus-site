@@ -1,6 +1,3 @@
-// Another site must not show the dashboard inside a frame: it could hide it under a fake page and get
-// an admin to click real buttons (clickjacking). GitHub Pages can't send X-Frame-Options, so the page
-// checks for itself, hides everything and tries to break out of the frame.
 const FRAMED = (() => { try { return window.top !== window.self; } catch (e) { return true; } })();
 if (FRAMED) {
   document.documentElement.style.display = 'none';
@@ -20,7 +17,6 @@ function setToken(t) {
   try { if (t) sessionStorage.setItem(TOKEN_KEY, t); else sessionStorage.removeItem(TOKEN_KEY); } catch (e) {}
 }
 
-// Links from the bot may only point at Discord; anything else is dropped.
 function safeDiscordUrl(url) {
   return typeof url === 'string' && /^https:\/\/(discord\.com|discord\.gg|ptb\.discord\.com|canary\.discord\.com)\//.test(url) ? url : null;
 }
@@ -73,7 +69,6 @@ function fmtMinutes(m) {
 }
 
 async function dashFetch(path, options) {
-  // No cookies, no redirects, nothing cached: the login token only ever goes to the Nexus API.
   const opts = Object.assign({ headers: {}, credentials: 'omit', redirect: 'error', cache: 'no-store', referrerPolicy: 'no-referrer' }, options || {});
   opts.headers = Object.assign({}, opts.headers);
   const token = getToken();
@@ -104,6 +99,7 @@ function send(method, path, body) {
 function setHero(show) {
   const hero = document.querySelector('.page-hero');
   if (hero) hero.hidden = !show;
+  document.body.classList.toggle('dash-app', !show);
 }
 
 function showLogin(message, isError) {
@@ -127,51 +123,6 @@ function showLogin(message, isError) {
       el('small', { text: p[2] })
     ])))
   ]));
-}
-
-function userBar(user) {
-  setHero(false);
-  const bar = el('div', { class: 'dash-bar' });
-  const who = el('div', { class: 'dash-user' });
-  const pic = safeIcon(user.avatar);
-  if (pic) who.appendChild(el('img', { src: pic, alt: '' }));
-  who.appendChild(el('span', { text: user.name }));
-  const out = el('button', { class: 'btn btn-outline', type: 'button', text: 'Log out' });
-  out.addEventListener('click', async () => {
-    try { await dashFetch('/auth/logout', { method: 'POST' }); } catch (e) {}
-    setToken(null);
-    showLogin('You are logged out.');
-  });
-  bar.appendChild(who);
-  bar.appendChild(out);
-  return bar;
-}
-
-function backButton(label, onClick) {
-  const b = el('button', { class: 'dash-back', type: 'button', text: '← ' + label });
-  b.addEventListener('click', onClick);
-  return b;
-}
-
-function serverNav(user, guild, current) {
-  const back = el('button', { class: 'dash-back', type: 'button', text: '← All servers' });
-  back.addEventListener('click', () => showGuilds(user));
-  const tabs = el('div', { class: 'dash-tabs', role: 'tablist' });
-  const tab = (key, label, open) => {
-    const b = el('button', { class: 'dash-tab' + (key === current ? ' on' : ''), type: 'button', role: 'tab',
-                             'aria-selected': key === current ? 'true' : 'false', text: label });
-    if (key !== current) b.addEventListener('click', open);
-    tabs.appendChild(b);
-  };
-  tab('me', 'You', () => showProfile(user, guild));
-  if (guild.admin) tab('admin', 'Manage server', () => showAdmin(user, guild, 'general'));
-  return el('div', { class: 'server-nav' }, [
-    back,
-    el('div', { class: 'server-nav-row' }, [
-      el('div', { class: 'dash-title' }, [guildIcon(guild), el('h2', { text: guild.name })]),
-      tabs
-    ])
-  ]);
 }
 
 function guildIcon(guild) {
@@ -225,40 +176,193 @@ function section(id, title, hint, kids) {
   return s;
 }
 
-function layout(root, groups) {
-  const side = el('nav', { class: 'dash-side', 'aria-label': 'Sections' });
-  const main = el('div', { class: 'dash-main' });
-  groups.forEach(g => {
-    if (g.title) {
-      const head = el('button', { class: 'side-head' + (g.active ? ' on' : '') + (g.danger ? ' side-danger' : ''), type: 'button', text: g.title });
-      if (g.onClick) head.addEventListener('click', g.onClick);
-      else head.disabled = true;
-      side.appendChild(head);
+const DASH_ICONS = {
+  user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>',
+  chart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V11M12 20V4M19 20v-6"/></svg>',
+  gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h8M18 6h2M4 12h2M12 12h8M4 18h10M20 18h0"/><circle cx="15" cy="6" r="2.2"/><circle cx="9" cy="12" r="2.2"/><circle cx="17" cy="18" r="2.2"/></svg>',
+  shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 6v6c0 4.4 3.1 7.6 7.5 9 4.4-1.4 7.5-4.6 7.5-9V6z"/><path d="m9 12 2.2 2.2L15.5 10"/></svg>',
+  log: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l5 5v13H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/></svg>',
+  tag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.2"/></svg>',
+  lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+  menu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>',
+  logout: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/></svg>'
+};
+
+function dIcon(name, cls) {
+  const s = el('span', { 'aria-hidden': 'true', class: 'svg-i' + (cls ? ' ' + cls : '') });
+  s.innerHTML = DASH_ICONS[name] || ICONS[name] || '';
+  return s;
+}
+
+let GUILDS = null;
+function loadGuilds(force) {
+  if (force || !GUILDS) {
+    const p = dashFetch('/api/guilds').then(d => d.guilds || []);
+    p.catch(() => { if (GUILDS === p) GUILDS = null; });
+    GUILDS = p;
+  }
+  return GUILDS;
+}
+
+function outsideGuard(wrap, close) {
+  const onDoc = e => { if (!wrap.contains(e.target)) close(); };
+  const onKey = e => { if (e.key === 'Escape') close(); };
+  return {
+    on() { document.addEventListener('click', onDoc); document.addEventListener('keydown', onKey); },
+    off() { document.removeEventListener('click', onDoc); document.removeEventListener('keydown', onKey); }
+  };
+}
+
+function serverSwitch(user, guild) {
+  const wrap = el('div', { class: 'srv' });
+  const btn = el('button', { class: 'srv-btn', type: 'button', 'aria-haspopup': 'true', 'aria-expanded': 'false' });
+  if (guild) btn.appendChild(guildIcon(guild));
+  btn.appendChild(el('span', { class: 'srv-name', text: guild ? guild.name : 'Choose a server' }));
+  btn.appendChild(dIcon('caret', 'caret'));
+  const search = textInput('', { placeholder: 'Find a server', 'aria-label': 'Find a server' });
+  const list = el('div', { class: 'srv-list' });
+  const all = el('button', { class: 'srv-all', type: 'button', text: 'All servers' });
+  const menu = el('div', { class: 'srv-menu', hidden: '' }, [search, list, all]);
+  let servers = [];
+  const guard = outsideGuard(wrap, () => set(false));
+
+  function draw() {
+    const q = search.value.trim().toLowerCase();
+    const shown = servers.filter(g => !q || g.name.toLowerCase().includes(q));
+    list.replaceChildren();
+    if (!shown.length) list.appendChild(el('p', { class: 'srv-empty', text: servers.length ? 'No server matches that.' : 'No servers found.' }));
+    shown.forEach(g => {
+      const kids = [guildIcon(g), el('span', { class: 'srv-item-name', text: g.name })];
+      if (g.admin) kids.push(el('span', { class: 'gtag', text: 'Admin' }));
+      const b = el('button', { class: 'srv-item' + (guild && g.id === guild.id ? ' on' : ''), type: 'button' }, kids);
+      b.addEventListener('click', () => { set(false); if (!guild || g.id !== guild.id) showChooser(user, g); });
+      list.appendChild(b);
+    });
+  }
+
+  function set(open) {
+    menu.hidden = !open;
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    wrap.classList.toggle('open', open);
+    if (!open) { guard.off(); return; }
+    guard.on();
+    list.replaceChildren(el('p', { class: 'srv-empty', text: 'Loading...' }));
+    loadGuilds().then(g => { servers = g; draw(); if (!menu.hidden) search.focus(); })
+      .catch(e => list.replaceChildren(el('p', { class: 'srv-empty', text: e.message })));
+  }
+
+  btn.addEventListener('click', e => { e.stopPropagation(); set(menu.hidden); });
+  search.addEventListener('input', draw);
+  all.addEventListener('click', () => { set(false); showGuilds(user); });
+  wrap.append(btn, menu);
+  return wrap;
+}
+
+function userMenu(user) {
+  const pic = safeIcon(user.avatar);
+  const out = el('button', { class: 'app-out', type: 'button' }, [dIcon('logout'), el('span', { text: 'Log out' })]);
+  out.addEventListener('click', async () => {
+    try { await dashFetch('/auth/logout', { method: 'POST' }); } catch (e) {}
+    setToken(null);
+    GUILDS = null;
+    showLogin('You are logged out.');
+  });
+  const kids = [];
+  if (pic) kids.push(el('img', { src: pic, alt: '' }));
+  kids.push(el('span', { class: 'app-user-name', text: user.name }), out);
+  return el('div', { class: 'app-user' }, kids);
+}
+
+function openSection(user, guild, key) {
+  if (key === 'me') return showProfile(user, guild);
+  if (key === 'stats') return showStats(user, guild);
+  return showAdmin(user, guild, key);
+}
+
+function appFrame(user, guild, active) {
+  setHero(false);
+  const root = dashClear();
+  const app = el('div', { class: 'app' + (guild ? '' : ' no-side') });
+  const page = el('div', { class: 'app-page' });
+  const scroller = el('main', { class: 'app-main' }, [page]);
+  const frame = { page: page, sub: null };
+
+  const menuBtn = el('button', { class: 'app-icon app-menu', type: 'button', 'aria-label': 'Open the menu', 'aria-expanded': 'false' }, [dIcon('menu')]);
+  const brand = el('a', { class: 'app-brand', href: 'index.html', 'aria-label': 'Nexus home' }, [
+    el('img', { src: ROOT + 'logo.png', alt: '', width: '28', height: '28' }), el('span', { text: 'Nexus' })
+  ]);
+  app.appendChild(el('header', { class: 'app-top' }, [menuBtn, brand, serverSwitch(user, guild), el('span', { class: 'app-grow' }), userMenu(user)]));
+
+  const body = el('div', { class: 'app-body' });
+  const closeNav = () => { app.classList.remove('nav-open'); menuBtn.setAttribute('aria-expanded', 'false'); };
+  menuBtn.addEventListener('click', () => {
+    const open = !app.classList.contains('nav-open');
+    app.classList.toggle('nav-open', open);
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  if (guild) {
+    const side = el('nav', { class: 'app-side', 'aria-label': 'Dashboard sections' });
+    const node = item => {
+      const on = item.key === active;
+      const attrs = { class: 'side-item' + (on ? ' on' : ''), type: 'button' };
+      if (on) attrs['aria-current'] = 'page';
+      const b = el('button', attrs, [dIcon(item.icon), el('span', { text: item.label })]);
+      const sub = el('div', { class: 'side-sub' });
+      if (on) frame.sub = sub;
+      else b.addEventListener('click', () => openSection(user, guild, item.key));
+      return el('div', { class: 'side-node' }, [b, sub]);
+    };
+    side.appendChild(el('p', { class: 'side-label', text: 'You' }));
+    side.appendChild(node({ key: 'me', label: 'My dashboard', icon: 'user' }));
+    side.appendChild(node({ key: 'stats', label: 'My stats', icon: 'chart' }));
+    if (guild.admin) {
+      side.appendChild(el('p', { class: 'side-label', text: 'Server' }));
+      Object.keys(ADMIN_PAGES).filter(k => k !== 'privacy').forEach(k => {
+        side.appendChild(node({ key: k, label: ADMIN_PAGES[k].title, icon: ADMIN_PAGES[k].icon }));
+      });
+      side.appendChild(el('div', { class: 'side-grow' }));
+      side.appendChild(el('div', { class: 'side-bottom' }, [node({ key: 'privacy', label: ADMIN_PAGES.privacy.title, icon: ADMIN_PAGES.privacy.icon })]));
     }
-    (g.items || []).forEach(item => {
-      const link = el('a', { href: '#' + item.id, text: item.label });
-      link.addEventListener('click', e => {
+    body.appendChild(side);
+  }
+  const scrim = el('div', { class: 'app-scrim' });
+  scrim.addEventListener('click', closeNav);
+  body.append(scrim, scroller);
+  app.appendChild(body);
+  root.appendChild(app);
+
+  frame.head = (title, sub) => {
+    const h = el('div', { class: 'page-head' }, [el('h1', { text: title })]);
+    if (sub) h.appendChild(el('p', { class: 'hint', text: sub }));
+    page.appendChild(h);
+    return h;
+  };
+
+  frame.sections = items => {
+    if (!frame.sub || !items || items.length < 2) return;
+    const links = items.map(item => {
+      const a = el('a', { href: '#' + item.id, text: item.label });
+      a.addEventListener('click', e => {
         e.preventDefault();
         const target = document.getElementById(item.id);
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        side.querySelectorAll('a').forEach(a => a.classList.toggle('on', a === link));
+        if (target) target.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
+        closeNav();
       });
-      side.appendChild(link);
+      frame.sub.appendChild(a);
+      return a;
     });
-  });
-  root.appendChild(el('div', { class: 'dash-layout' }, [side, main]));
-  if ('IntersectionObserver' in window) {
+    links[0].classList.add('on');
+    if (!('IntersectionObserver' in window)) return;
     const spy = new IntersectionObserver(entries => {
       entries.forEach(en => {
-        if (!en.isIntersecting) return;
-        side.querySelectorAll('a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + en.target.id));
+        if (en.isIntersecting) links.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + en.target.id));
       });
-    }, { rootMargin: '-110px 0px -65% 0px' });
-    const watch = () => main.querySelectorAll('.dash-section').forEach(s => { if (!s._watched) { s._watched = true; spy.observe(s); } });
-    new MutationObserver(watch).observe(main, { childList: true });
-    watch();
-  }
-  return main;
+    }, { root: scroller, rootMargin: '0px 0px -65% 0px' });
+    items.forEach(item => { const t = document.getElementById(item.id); if (t) spy.observe(t); });
+  };
+
+  return frame;
 }
 
 function chip(text, onRemove) {
@@ -293,23 +397,23 @@ function textInput(value, attrs) {
 }
 
 async function showGuilds(user) {
-  const root = dashClear();
-  root.appendChild(userBar(user));
-  const wait = loading(root, 'Loading your servers...');
-  let data;
+  const frame = appFrame(user, null, null);
+  const page = frame.page;
+  const head = frame.head('Choose a server', 'Pick a server to see your own stats there, or to manage Nexus if you are an admin.');
+  const wait = loading(page, 'Loading your servers...');
+  let guilds;
   try {
-    data = await dashFetch('/api/guilds');
+    guilds = await loadGuilds(true);
   } catch (e) {
-    return failInto(root, e, [userBar(user)]);
+    return failInto(page, e, [head]);
   }
   wait.remove();
-  root.appendChild(el('h3', { text: 'Choose a server', style: 'margin-bottom:12px' }));
-  if (!data.guilds.length) {
-    root.appendChild(el('div', { class: 'callout', text: 'No servers found. You need to be in a server that has Nexus.' }));
+  if (!guilds.length) {
+    page.appendChild(el('div', { class: 'callout', text: 'No servers found. You need to be in a server that has Nexus.' }));
     return;
   }
   const list = el('div', { class: 'guild-list' });
-  data.guilds.forEach((g, i) => {
+  guilds.forEach((g, i) => {
     const meta = el('span', { class: 'gmeta', text: g.members + ' members' });
     if (g.admin) meta.appendChild(el('span', { class: 'gtag', text: 'Admin' }));
     const card = el('button', { class: 'guild-card spot', type: 'button', style: '--i:' + i }, [
@@ -319,7 +423,7 @@ async function showGuilds(user) {
     card.addEventListener('click', () => showChooser(user, g));
     list.appendChild(card);
   });
-  root.appendChild(list);
+  page.appendChild(list);
 }
 
 function showChooser(user, guild) {
@@ -365,19 +469,17 @@ const USER_SECTIONS = [
 ];
 
 async function showProfile(user, guild) {
-  const root = dashClear();
-  const back = serverNav(user, guild, 'me');
-  root.appendChild(userBar(user));
-  root.appendChild(back);
-  const wait = loading(root, 'Loading your dashboard...');
+  const frame = appFrame(user, guild, 'me');
+  const main = frame.page;
+  const head = frame.head('My dashboard', guild.name);
+  const wait = loading(main, 'Loading your dashboard...');
   let data;
   try {
     data = await dashFetch(guildPath(guild.id, '/me'));
   } catch (e) {
-    return failInto(root, e, [userBar(user), back]);
+    return failInto(main, e, [head]);
   }
   wait.remove();
-  const main = layout(root, [{ title: 'My dashboard', items: USER_SECTIONS }]);
   const m = data.member;
   const s = data.stats;
 
@@ -420,6 +522,7 @@ async function showProfile(user, guild) {
   const access = section('u-access', 'Command access', 'What you can use in this server, based on your roles and any changes the admins made.');
   const games = section('u-games', 'Game stats', 'Your results across every server. Games are not tied to one server.');
   [reminders, giveaways, access, games].forEach(x => { x.appendChild(el('p', { class: 'empty', text: 'Loading...' })); main.appendChild(x); });
+  frame.sections(USER_SECTIONS);
 
   dashFetch(guildPath(guild.id, '/me/extras')).then(extra => {
     fillReminders(reminders, extra.reminders);
@@ -559,21 +662,18 @@ function topList(items, format, emptyText) {
 }
 
 async function showStats(user, guild) {
-  const root = dashClear();
-  const back = backButton('My dashboard', () => showProfile(user, guild));
-  root.appendChild(userBar(user));
-  root.appendChild(back);
+  const frame = appFrame(user, guild, 'stats');
+  const root = frame.page;
+  const head = frame.head('My stats', guild.name);
   const wait = loading(root, 'Loading your stats...');
   let data;
   try {
     data = await dashFetch(guildPath(guild.id, '/me/stats'));
   } catch (e) {
-    return failInto(root, e, [userBar(user), back]);
+    return failInto(root, e, [head]);
   }
   wait.remove();
   const s = data.summary;
-  root.appendChild(el('div', { class: 'dash-title' }, [guildIcon(guild), el('h2', { text: 'Your stats in ' + guild.name })]));
-
   root.appendChild(el('div', { class: 'stat-grid', style: 'margin-bottom:16px' }, [
     statTile(s.messages_7d, 'messages this week'),
     statTile(s.messages_30d, 'messages in 30 days'),
@@ -605,38 +705,39 @@ async function showStats(user, guild) {
 }
 
 const ADMIN_PAGES = {
-  general: { title: 'General', items: [
+  general: { title: 'General', icon: 'gear', items: [
     { id: 'a-prefix', label: 'Prefix' },
     { id: 'a-errors', label: 'Error log' },
     { id: 'a-access', label: 'Command access' }
   ] },
-  moderation: { title: 'Moderation', items: [
+  moderation: { title: 'Moderation', icon: 'shield', items: [
     { id: 'a-modsettings', label: 'Settings' },
     { id: 'a-immunity', label: 'Immune roles' },
     { id: 'a-cases', label: 'Case search' },
     { id: 'a-notes', label: 'Notes' },
     { id: 'a-automod', label: 'AutoMod' }
   ] },
-  tickets: { title: 'Tickets', items: [
+  tickets: { title: 'Tickets', icon: 'ticket', items: [
     { id: 'a-ticket-setup', label: 'Setup' },
     { id: 'a-ticket-panel', label: 'Ticket panel' },
     { id: 'a-ticket-open', label: 'Open tickets' }
   ] },
-  logging: { title: 'Logging', items: [
+  logging: { title: 'Logging', icon: 'log', items: [
     { id: 'a-log-channels', label: 'Log channels' },
     { id: 'a-log-ignore', label: 'Ignored members' }
   ] },
-  roles: { title: 'Autoroles', items: [
+  roles: { title: 'Autoroles', icon: 'tag', items: [
     { id: 'a-join-roles', label: 'Join roles' },
     { id: 'a-persist', label: 'Persistent roles' },
     { id: 'a-timed', label: 'Timed roles' }
   ] },
-  community: { title: 'Starboard & giveaways', items: [
+  community: { title: 'Starboard & giveaways', icon: 'star', items: [
     { id: 'a-starboard', label: 'Starboard' },
     { id: 'a-gw-new', label: 'New giveaway' },
     { id: 'a-gw-list', label: 'Giveaways' }
   ] },
-  danger: { title: 'Danger zone', danger: true, items: [
+  privacy: { title: 'Privacy', icon: 'lock', items: [
+    { id: 'a-listing', label: 'Website listing' },
     { id: 'a-wipe', label: 'Data wipe' }
   ] }
 };
@@ -647,33 +748,24 @@ const ADMIN_BUILDERS = {
   logging: (m, g, d) => buildLogging(m, g, d),
   roles: (m, g, d) => buildRoles(m, g, d),
   community: (m, g, d) => buildCommunity(m, g, d),
-  danger: (m, g, d) => buildDanger(m, g, d)
+  privacy: (m, g, d) => buildPrivacy(m, g, d)
 };
 
 async function showAdmin(user, guild, page) {
-  const root = dashClear();
-  const back = serverNav(user, guild, 'admin');
-  root.appendChild(userBar(user));
-  root.appendChild(back);
-  const wait = loading(root, 'Loading settings...');
+  const frame = appFrame(user, guild, page);
+  const main = frame.page;
+  const head = frame.head(ADMIN_PAGES[page].title, guild.name);
+  const wait = loading(main, 'Loading settings...');
   let data;
   try {
     data = await dashFetch(guildPath(guild.id, '/' + page));
   } catch (e) {
-    return failInto(root, e, [userBar(user), back]);
+    return failInto(main, e, [head]);
   }
   wait.remove();
-  const groups = Object.keys(ADMIN_PAGES).map(key => ({
-    title: ADMIN_PAGES[key].title,
-    active: key === page,
-    danger: !!ADMIN_PAGES[key].danger,
-    onClick: key === page ? null : () => showAdmin(user, guild, key),
-    items: key === page ? ADMIN_PAGES[key].items : []
-  }));
-  const main = layout(root, groups);
   main.reload = () => showAdmin(user, guild, page);
   ADMIN_BUILDERS[page](main, guild, data);
-  window.scrollTo(0, 0);
+  frame.sections(ADMIN_PAGES[page].items);
 }
 
 function buildGeneral(main, guild, data) {
@@ -994,7 +1086,6 @@ function buildModeration(main, guild, data) {
   main.appendChild(amPanel);
 }
 
-/* ---------- shared bits for the newer admin pages ---------- */
 function emptyRow(text) {
   return el('p', { class: 'hint', style: 'padding:12px 14px;margin:0', text: text });
 }
@@ -1007,7 +1098,6 @@ function discordLink(href, text) {
   return el('a', { class: 'inline', href: url, target: '_blank', rel: 'noopener noreferrer', text: text || 'Open in Discord' });
 }
 
-/* ---------- Tickets ---------- */
 function buildTickets(main, guild, data) {
   const cfg = data.config;
   const cat = select(data.categories, 'No category (top of the channel list)');
@@ -1068,7 +1158,6 @@ function buildTickets(main, guild, data) {
   main.appendChild(openPanel);
 }
 
-/* ---------- Logging ---------- */
 function buildLogging(main, guild, data) {
   const panel = section('a-log-channels', 'Log channels', 'Pick a channel for each kind of event. Leave one on "Off" to not log it. Changes take effect within a few seconds. This is the same as -log.');
   const grid = el('div', { class: 'log-grid' });
@@ -1113,7 +1202,6 @@ function buildLogging(main, guild, data) {
   main.appendChild(ign);
 }
 
-/* ---------- Autoroles ---------- */
 function buildRoles(main, guild, data) {
   const usable = data.roles.filter(r => r.assignable);
   let join = data.join.slice();
@@ -1178,7 +1266,6 @@ function buildRoles(main, guild, data) {
   main.appendChild(timedPanel);
 }
 
-/* ---------- Starboard & giveaways ---------- */
 function buildCommunity(main, guild, data) {
   const sb = data.starboard;
   const emoji = textInput(sb.emoji, { maxlength: '100', 'aria-label': 'Starboard emoji', style: 'max-width:180px' });
@@ -1242,10 +1329,20 @@ function buildCommunity(main, guild, data) {
   main.appendChild(listPanel);
 }
 
-/* ---------- Danger zone ---------- */
-function buildDanger(main, guild, data) {
-  const panel = section('a-wipe', '⚠️ Data wipe', 'Ask for everything Nexus has stored about this server to be permanently deleted: cases, notes, stats, and every setting. Nexus stays in the server and starts fresh. Each server can only make one request.');
-  panel.classList.add('danger-zone');
+function buildPrivacy(main, guild, data) {
+  const listed = toggle('Show this server on the Nexus website', data.listed);
+  const listMsg = status();
+  listed.input.addEventListener('change', async () => {
+    const want = listed.input.checked;
+    listed.input.disabled = true;
+    const done = want ? 'Saved. This server can appear on the website again.' : 'Saved. This server is hidden from the website.';
+    const out = await run(null, listMsg, () => send('PUT', guildPath(guild.id, '/privacy/listing'), { listed: want }), done);
+    if (!out) listed.input.checked = !want;
+    listed.input.disabled = false;
+  });
+  main.appendChild(section('a-listing', 'Website listing', 'The Nexus home page shows the servers with the most members, with their name, icon and member count. Turn this off to keep this server off it. A change can take up to five minutes to show.', [listed, listMsg]));
+
+  const panel = section('a-wipe', 'Data wipe', 'Ask for everything Nexus has stored about this server to be permanently deleted: cases, notes, stats, and every setting. Nexus stays in the server and starts fresh. Each server can only make one request.');
   const list = el('div', { class: 'case-list' });
   const names = { pending: ['monitoring', 'Waiting to be processed'], completed: ['resolved', 'Completed'] };
   if (!data.requests.length) list.appendChild(emptyRow('This server has no data wipe requests.'));
@@ -1275,7 +1372,7 @@ function buildDanger(main, guild, data) {
     const msg = status();
     go.addEventListener('click', async () => {
       if (!confirm('Last check: once processed, all of this server\'s Nexus data is deleted for good. There is no undo. Continue?')) return;
-      const out = await run(go, msg, () => send('POST', guildPath(guild.id, '/danger/wipe'), { confirm: confirmBox.value.trim() }), 'Request created.');
+      const out = await run(go, msg, () => send('POST', guildPath(guild.id, '/privacy/wipe'), { confirm: confirmBox.value.trim() }), 'Request created.');
       if (out) setTimeout(() => main.reload(), 900);
     });
     panel.append(
@@ -1287,7 +1384,6 @@ function buildDanger(main, guild, data) {
   main.appendChild(panel);
 }
 
-/* ---------- offline notice ---------- */
 function showOffline() {
   setHero(true);
   const root = dashClear();
@@ -1326,7 +1422,6 @@ async function initDashboard() {
   const error = params.get('error');
   if (ticket || error) history.replaceState(null, '', location.pathname);
 
-  // When Nexus is down, nothing here can work, so say so instead of showing the login.
   if (!(await waitForLive(8000))) {
     showOffline();
     let resumed = false;
