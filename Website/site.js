@@ -110,7 +110,7 @@ const NAV = [
     ['status', 'status.html', 'Status', 'Is Nexus up right now, and how every day went.'],
     ['changelog', 'changelog.html', 'Changelog', 'What changed, and when.'],
     ['tools', 'tools.html', 'Tools', 'What Nexus is built with, and why.'],
-    ['features', 'features.html', 'Features', 'Coming soon.']
+    ['features', 'features.html', 'Features', 'Everything Nexus does, with examples.']
   ] },
   { id: 'docs', label: 'Docs', icon: 'docs', items: [
     ['docs', 'docs.html', 'Documentation', 'Guides for every feature, step by step.'],
@@ -249,7 +249,7 @@ function buildChrome() {
   if (navHost) {
     const nav = el('nav', { class: 'site-nav', 'aria-label': 'Main' });
     const brand = el('a', { class: 'nav-brand', href: 'index.html', 'aria-label': 'Nexus home' }, [
-      el('img', { src: ROOT + 'logo.png', alt: '', width: '30', height: '30' }), el('span', { text: 'Nexus' })
+      el('img', { src: ROOT + 'Assets/Logo/logo.png', alt: '', width: '30', height: '30' }), el('span', { text: 'Nexus' })
     ]);
     const list = el('div', { class: 'nav-links' });
     NAV.forEach(group => {
@@ -332,7 +332,7 @@ function buildChrome() {
     const wrap = el('div', { class: 'wrap' }, [
       el('div', { class: 'footer-grid footer-grid-5' }, [
         el('div', {}, [
-          el('div', { class: 'footer-brand' }, [el('img', { src: ROOT + 'logo.png', alt: '' }), 'Nexus']),
+          el('div', { class: 'footer-brand' }, [el('img', { src: ROOT + 'Assets/Logo/logo.png', alt: '' }), 'Nexus']),
           el('p', { class: 'footer-note', text: 'Built on logic, built for everyone.' })
         ]),
         col('Information', [['about.html', 'About Nexus'], ['status.html', 'Status'], ['changelog.html', 'Changelog'], ['tools.html', 'Tools'], ['features.html', 'Features']]),
@@ -356,7 +356,7 @@ function buildChrome() {
   });
 }
 
-const REVEAL_SELECTOR = '.section-head, .tile, .card, .member, .component, .incident, .tl-item, details.faq, .cmp-scroll, .cmp-verdict, .cta-band, .quote, .marquee, .staff-section > h2, .reveal-me, .project, .app-card, .cal-wrap, .feat-row, .soon';
+const REVEAL_SELECTOR = '.section-head, .tile, .card, .member, .component, .incident, .tl-item, details.faq, .cmp-scroll, .cmp-verdict, .cta-band, .quote, .marquee, .staff-section > h2, .reveal-me, .project, .app-card, .cal-wrap, .feat-row, .soon, .feature, .feature-foot';
 let revealObserver = null;
 
 function reveal(scope) {
@@ -439,6 +439,72 @@ async function initMarquee() {
   chips.forEach(c => track.appendChild(c));
   Array.from(track.children).forEach(c => { const k = c.cloneNode(true); k.setAttribute('aria-hidden', 'true'); track.appendChild(k); });
   belt.hidden = false;
+}
+
+function initFeatures() {
+  const bar = document.getElementById('ftabs');
+  if (!bar) return;
+  const tabs = Array.from(bar.querySelectorAll('a.ftab'));
+  const pairs = tabs.map(a => [a, document.getElementById((a.getAttribute('href') || '').slice(1))]).filter(p => p[1]);
+  if (!pairs.length) return;
+
+  let activeId = '';
+  let lockUntil = 0;
+
+  function mark(id) {
+    if (id === activeId) return;
+    activeId = id;
+    pairs.forEach(([a, s]) => {
+      const on = s.id === id;
+      a.classList.toggle('on', on);
+      if (on) {
+        a.setAttribute('aria-current', 'true');
+        const left = a.offsetLeft - (bar.clientWidth - a.offsetWidth) / 2;
+        if (bar.scrollWidth > bar.clientWidth) bar.scrollTo({ left: Math.max(0, left), behavior: REDUCED ? 'auto' : 'smooth' });
+      } else {
+        a.removeAttribute('aria-current');
+      }
+    });
+  }
+
+  function edges() {
+    bar.classList.toggle('more-r', bar.scrollLeft + bar.clientWidth < bar.scrollWidth - 4);
+    bar.classList.toggle('more-l', bar.scrollLeft > 4);
+  }
+  bar.addEventListener('scroll', edges, { passive: true });
+  window.addEventListener('resize', edges);
+  edges();
+
+  pairs.forEach(([a, s]) => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      lockUntil = Date.now() + 1100;
+      s.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
+      try { history.replaceState(null, '', '#' + s.id); } catch (err) {}
+      mark(s.id);
+      setTimeout(spy, 1150);
+    });
+  });
+
+  let queued = false;
+  function spy() {
+    queued = false;
+    if (Date.now() < lockUntil) return;
+    const line = window.innerHeight * 0.38;
+    let current = pairs[0][1];
+    pairs.forEach(p => { if (p[1].getBoundingClientRect().top <= line) current = p[1]; });
+    mark(current.id);
+  }
+  window.addEventListener('scroll', () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(spy);
+  }, { passive: true });
+
+  const start = decodeURIComponent((location.hash || '').slice(1));
+  const first = pairs.find(p => p[1].id === start) || pairs[0];
+  mark(first[1].id);
+  if (start && first[1].id === start) setTimeout(() => first[1].scrollIntoView({ block: 'start' }), 60);
 }
 
 const STATE_LABEL = {
@@ -589,7 +655,7 @@ async function initCompare() {
   const headRow = el('tr', {}, [el('th', { class: 'cmp-corner' })]);
   bots.forEach(b => {
     const logo = el('div', { class: 'cmp-logo' });
-    if (b.logo) logo.appendChild(el('img', { src: ROOT + b.logo, alt: '' }));
+    if (b.logo) logo.appendChild(el('img', { src: ROOT + 'Assets/Logo/' + b.logo, alt: '' }));
     else logo.textContent = (b.name || '?').charAt(0);
     headRow.appendChild(el('th', { class: 'cmp-col-head' + (b.highlight ? ' win' : ''), scope: 'col' }, [
       el('span', { class: 'cmp-col-name', text: b.name }),
@@ -1217,7 +1283,7 @@ function renderStaffSections(root, sections) {
       members.forEach(m => {
         const color = safeColor(m.color);
         const card = el('div', { class: 'member', style: '--rc:' + color });
-        const avatarSrc = m.avatar && !/^https?:/.test(m.avatar) ? ROOT + m.avatar : m.avatar;
+        const avatarSrc = m.avatar && !/^https?:/.test(m.avatar) ? ROOT + 'Assets/Avatars/' + m.avatar : m.avatar;
         const name = m.displayName || m.username || 'Unknown';
         let av;
         if (m.avatar) {
@@ -1508,5 +1574,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initFilter();
   initProjects();
   initMarquee();
+  initFeatures();
   reveal(document);
 });
