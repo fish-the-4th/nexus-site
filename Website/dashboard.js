@@ -113,7 +113,7 @@ function showLogin(message, isError) {
   ];
   root.appendChild(el('div', { class: 'login-card' }, [
     el('div', { class: 'login-glow', 'aria-hidden': 'true' }),
-    el('img', { class: 'login-logo', src: ROOT + 'logo.png', alt: '' }),
+    el('img', { class: 'login-logo', src: ROOT + 'Assets/Logo/logo.png', alt: '' }),
     el('h2', { text: 'Log in to continue' }),
     el('p', { class: 'hint', text: 'Nexus only asks for your Discord username and avatar. It never sees your password, email or server list.' }),
     el('a', { class: 'btn btn-primary btn-lg', href: DASH_API + '/auth/login', text: 'Log in with Discord' }),
@@ -289,7 +289,7 @@ function appFrame(user, guild, active) {
 
   const menuBtn = el('button', { class: 'app-icon app-menu', type: 'button', 'aria-label': 'Open the menu', 'aria-expanded': 'false' }, [dIcon('menu')]);
   const brand = el('a', { class: 'app-brand', href: 'index.html', 'aria-label': 'Nexus home' }, [
-    el('img', { src: ROOT + 'logo.png', alt: '', width: '28', height: '28' }), el('span', { text: 'Nexus' })
+    el('img', { src: ROOT + 'Assets/Logo/logo.png', alt: '', width: '28', height: '28' }), el('span', { text: 'Nexus' })
   ]);
   app.appendChild(el('header', { class: 'app-top' }, [menuBtn, brand, serverSwitch(user, guild), el('span', { class: 'app-grow' }), userMenu(user)]));
 
