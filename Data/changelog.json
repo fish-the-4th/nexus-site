@@ -48,7 +48,7 @@
     "text": "- All commands are no longer just prefixes, all commands now are supported with slash commands"
   },
   {
-    "title": "1.4.2",
+    "title": "Version 1.4.2",
     "type": "new",
     "date": "2026-11-23",
     "text": "- New games: Word scramble, Minesweeper, and care battle\n- Stats now have an option to choose the timeframe: 7d, 14d, 30d, 60d, 90d (d=Days)"
