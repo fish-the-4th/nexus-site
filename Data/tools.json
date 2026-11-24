@@ -72,7 +72,7 @@
       "name": "time",
       "link": "https://docs.python.org/3/library/time.html",
       "what": "Clocks and durations.",
-      "why": "They time mutes, bans, cooldowns, reminders and the 30-day stats cleanup."
+      "why": "They time mutes, bans, cooldowns, reminders and the 90-day stats cleanup."
     },
     {
       "name": "re",
