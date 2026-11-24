@@ -39,6 +39,11 @@
       "name": "Social Notifications",
       "description": "Send a video in a selected channel whenever your favorite content creators post online.",
       "status": "consideration"
+    },
+    {
+      "name": "Social Media",
+      "description": "Create a Official social media account to post promotional videos or videos covering what is in updates. Mostly likely a YouTube account",
+      "status": "consideration"
     }
   ]
 }
