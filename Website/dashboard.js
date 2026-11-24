@@ -701,7 +701,7 @@ async function showStats(user, guild) {
       topList(data.top_voice, x => fmtMinutes(x.minutes), 'No voice time in the last 30 days.')
     ])
   ]));
-  root.appendChild(el('p', { class: 'hint', text: 'Stats cover the last 30 days. Older activity is deleted automatically.' }));
+  root.appendChild(el('p', { class: 'hint', text: 'This page shows the last 30 days. Nexus keeps up to 90 days of activity and deletes anything older automatically.' }));
 }
 
 const ADMIN_PAGES = {
