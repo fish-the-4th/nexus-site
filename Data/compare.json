@@ -1,112 +1,241 @@
 {
   "bots": [
-    { "id": "nexus", "name": "Nexus", "badge": "Best all-rounder", "logo": "logo.png", "highlight": true },
-    { "id": "mee6", "name": "MEE6", "logo": "mee6.logo.png" },
-    { "id": "dyno", "name": "Dyno", "logo": "dyno.logo.png" },
-    { "id": "carl", "name": "Carl Bot", "logo": "carl.logo.png" }
+    {
+      "id": "nexus",
+      "name": "Nexus",
+      "badge": "Best all-rounder",
+      "logo": "logo.png",
+      "highlight": true
+    },
+    {
+      "id": "mee6",
+      "name": "MEE6",
+      "logo": "mee6.logo.png"
+    },
+    {
+      "id": "dyno",
+      "name": "Dyno",
+      "logo": "dyno.logo.png"
+    },
+    {
+      "id": "carl",
+      "name": "Carl Bot",
+      "logo": "carl.logo.png"
+    }
   ],
   "rows": [
     {
       "label": "Price",
       "icon": "💰",
       "cells": {
-        "nexus": { "text": "Free, every feature", "tone": "good" },
-        "mee6": { "text": "Barely Free + Paid Premium" },
-        "dyno": { "text": "Free + Paid Premium" },
-        "carl": { "text": "Free + Paid Premium" }
+        "nexus": {
+          "text": "Free, every feature",
+          "tone": "good"
+        },
+        "mee6": {
+          "text": "Barely Free + Paid Premium"
+        },
+        "dyno": {
+          "text": "Free + Paid Premium"
+        },
+        "carl": {
+          "text": "Free + Paid Premium"
+        }
       }
     },
     {
       "label": "All-in-one",
       "icon": "🧩",
       "cells": {
-        "nexus": { "dots": 5, "text": "Very high" },
-        "mee6": { "dots": 4, "text": "High" },
-        "dyno": { "dots": 4, "text": "High" },
-        "carl": { "dots": 3, "text": "Moderate" }
+        "nexus": {
+          "text": "Very high",
+          "dots": 5
+        },
+        "mee6": {
+          "text": "High",
+          "dots": 4
+        },
+        "dyno": {
+          "text": "High",
+          "dots": 4
+        },
+        "carl": {
+          "text": "Moderate",
+          "dots": 3
+        }
       }
     },
     {
       "label": "Moderation and AutoMod",
       "icon": "🛡️",
       "cells": {
-        "nexus": { "dots": 3, "text": "Moderate" },
-        "mee6": { "dots": 5, "text": "Very High" },
-        "dyno": { "dots": 3, "text": "Moderate" },
-        "carl": { "dots": 4, "text": "High" }
+        "nexus": {
+          "text": "Moderate",
+          "dots": 3
+        },
+        "mee6": {
+          "text": "Very High",
+          "dots": 5
+        },
+        "dyno": {
+          "text": "Moderate",
+          "dots": 3
+        },
+        "carl": {
+          "text": "High",
+          "dots": 4
+        }
       }
     },
     {
       "label": "Tickets",
       "icon": "🎫",
       "cells": {
-        "nexus": { "dots": 2, "text": "Limited" },
-        "mee6": { "dots": 3, "text": "Moderate" },
-        "dyno": { "dots": 3, "text": "Moderate" },
-        "carl": { "dots": 4, "text": "High" }
+        "nexus": {
+          "text": "Limited",
+          "dots": 2
+        },
+        "mee6": {
+          "text": "Moderate",
+          "dots": 3
+        },
+        "dyno": {
+          "text": "Moderate",
+          "dots": 3
+        },
+        "carl": {
+          "text": "High",
+          "dots": 4
+        }
       }
     },
     {
       "label": "Server stats and graphs",
       "icon": "📊",
       "cells": {
-        "nexus": { "dots": 5, "text": "Very high" },
-        "mee6": { "dots": 3, "text": "Moderate" },
-        "dyno": { "dots": 3, "text": "Moderate" },
-        "carl": { "dots": 3, "text": "Moderate" }
+        "nexus": {
+          "text": "Very high",
+          "dots": 5
+        },
+        "mee6": {
+          "text": "Moderate",
+          "dots": 3
+        },
+        "dyno": {
+          "text": "Moderate",
+          "dots": 3
+        },
+        "carl": {
+          "text": "Moderate",
+          "dots": 3
+        }
       }
     },
     {
       "label": "Games",
       "icon": "🎮",
       "cells": {
-        "nexus": { "dots": 5, "text": "10 games" },
-        "mee6": { "dots": 1, "text": "Few" },
-        "dyno": { "dots": 3, "text": "Basic games" },
-        "carl": { "dots": 1, "text": "Few" }
+        "nexus": {
+          "text": "12 games",
+          "dots": 5
+        },
+        "mee6": {
+          "text": "Few",
+          "dots": 1
+        },
+        "dyno": {
+          "text": "Basic games",
+          "dots": 3
+        },
+        "carl": {
+          "text": "Few",
+          "dots": 1
+        }
       }
     },
     {
       "label": "Privacy",
       "icon": "🔒",
       "cells": {
-        "nexus": { "text": "Fully transparent on data collection", "tone": "good", "shield": true },
-        "mee6": { "text": "See their policy", "tone": "neutral" },
-        "dyno": { "text": "See their policy", "tone": "neutral" },
-        "carl": { "text": "See their policy", "tone": "neutral" }
+        "nexus": {
+          "text": "Fully transparent on data collection",
+          "tone": "good",
+          "shield": true
+        },
+        "mee6": {
+          "text": "See their policy",
+          "tone": "neutral"
+        },
+        "dyno": {
+          "text": "See their policy",
+          "tone": "neutral"
+        },
+        "carl": {
+          "text": "See their policy",
+          "tone": "neutral"
+        }
       }
     },
     {
       "label": "Members see their own stats",
       "icon": "👤",
       "cells": {
-        "nexus": { "text": "Yes, on the dashboard", "tone": "good" },
-        "mee6": { "text": "Leveling only" },
-        "dyno": { "text": "No" },
-        "carl": { "text": "No" }
+        "nexus": {
+          "text": "Yes, on the dashboard",
+          "tone": "good"
+        },
+        "mee6": {
+          "text": "Leveling only"
+        },
+        "dyno": {
+          "text": "No"
+        },
+        "carl": {
+          "text": "No"
+        }
       }
     },
     {
       "label": "Setup time",
       "icon": "⏱️",
       "cells": {
-        "nexus": { "text": "Minutes" },
-        "mee6": { "text": "Minutes" },
-        "dyno": { "text": "Minutes" },
-        "carl": { "text": "Minutes" }
+        "nexus": {
+          "text": "Minutes"
+        },
+        "mee6": {
+          "text": "Minutes"
+        },
+        "dyno": {
+          "text": "Minutes"
+        },
+        "carl": {
+          "text": "Minutes"
+        }
       }
     },
     {
       "label": "Leveling and XP",
       "icon": "⭐",
       "cells": {
-        "nexus": { "text": "Coming soon", "tone": "soon" },
-        "mee6": { "dots": 5, "text": "Very high" },
-        "dyno": { "dots": 1, "text": "Low" },
-        "carl": { "dots": 3, "text": "Moderate" }
+        "nexus": {
+          "text": "Coming soon",
+          "tone": "soon"
+        },
+        "mee6": {
+          "text": "Very high",
+          "dots": 5
+        },
+        "dyno": {
+          "text": "Low",
+          "dots": 1
+        },
+        "carl": {
+          "text": "Moderate",
+          "dots": 3
+        }
       }
     }
   ],
-  "verdict": "Nexus gives you moderation, AutoMod, tickets, stats, games and more in one bot, with nothing locked behind a paywall. Other bots are great at their one speciality, but most servers end up stacking several of them, often with a premium plan on top.",
+  "verdict": "Nexus gives you moderation, AutoMod, tickets, stats, games and more in one bot and none of these basic features are behind a paywall. Other bots are great at their one specialty, but most servers end up stacking several of them, often with a premium plan on top just to have the freedom to the most basic features.",
   "note": "Ratings are the Nexus team's own view of each bot's free features as of November 2026. Other bots change over time, so check their sites for the latest details. MEE6, Dyno and Carl-bot are trademarks of their owners and are not affiliated with Nexus."
 }
