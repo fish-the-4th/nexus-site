@@ -59,19 +59,19 @@
         <figure class="fx-shot"><a href="../Assets/Features/autoroles.png" target="_blank" rel="noopener" aria-label="Open the autoroles image full size"><img src="../Assets/Features/autoroles.png" width="584" height="735" loading="lazy" alt="A staff channel where join roles are set, a role is given to a member for seven days with the exact expiry date shown, and a role is saved so it returns if the member rejoins."></a></figure>
         <h3 class="fx-sub">How it works</h3>
         <ol class="fx-points"><li>Join roles go to every new member automatically. Set them with <code>-joinroles set @Member @Newcomer</code>.</li><li>Persistent roles are saved for a member and given back if they leave and come back.</li><li>Timed roles remove themselves when the time is up. Use <code>30m</code>, <code>2h</code>, <code>3d</code>, <code>1w</code>, <code>2mon</code> or <code>1y</code>, up to 5 years.</li><li>Add, remove, toggle or set roles on a member in one command, several roles at a time.</li><li>You can't hand out a role above your own, and Nexus skips roles it can't manage, so nothing gets out of hand.</li><li>Role changes come back as a short summary showing who was changed, which roles, and who did it.</li></ol>
-        <div class="fx-cmds"><span>Commands</span><code>-joinroles</code><code>-role add</code><code>-role persist</code><code>-timed role add</code><code>-timed roles</code></div>
+        <div class="fx-cmds"><span>Commands</span><code>joinroles</code><code>joinroles set</code><code>joinroles remove</code><code>role add</code><code>role remove</code><code>role removeall</code><code>role toggle</code><code>role set</code><code>role persist add</code><code>role persist remove</code><code>role persist toggle</code><code>role persist set</code><code>timed role add</code><code>timed role remove</code><code>timed roles</code></div>
         <div class="fx-steps"><a class="fx-step" href="#automod"><small>Previous</small><b>AutoMod</b></a><a class="fx-step next" href="#logging"><small>Next</small><b>Logging</b></a></div>
       </article>
       <article class="fx-panel" id="logging" style="--acc:#1abc9c">
         <header class="fx-head">
           <span class="fx-ico" aria-hidden="true">📋</span>
-          <div><p class="fx-kicker">Protect · 4 of 15</p><h2>Nine kinds of log, each in its own channel</h2></div>
+          <div><p class="fx-kicker">Protection · 4 of 15</p><h2>Nine kinds of log, each in its own channel</h2></div>
         </header>
         <p class="fx-lead">Messages, members, voice, roles and more are logged, and you choose where each one goes.</p>
         <figure class="fx-shot"><a href="../Assets/Features/logging.png" target="_blank" rel="noopener" aria-label="Open the logging image full size"><img src="../Assets/Features/logging.png" width="584" height="710" loading="lazy" alt="A staff channel showing the logging setup, with nine categories each pointing to a log channel or switched off, and a message log entry showing a member editing a message from &quot;who wants to play at 8?&quot; to &quot;who wants to play at 9?&quot;."></a></figure>
         <h3 class="fx-sub">How it works</h3>
         <ol class="fx-points"><li>Nine categories: messages, users, expressions, channels, voice, moderation, invites, applications and roles. Each goes to its own channel, or stays off.</li><li>Edited messages show what they said before and after. Deleted messages show the author, the channel and what was written.</li><li>Joins and leaves show the account age and the member count. Kicks and bans show who did it and why.</li><li>Voice joins, leaves and moves, role and channel changes, and invites created or deleted are all recorded.</li><li>Warns, mutes, unwarns and unmutes are logged with their case numbers, and so are cases that get voided.</li><li>Leave out people you do not want logged, like bots or staff, with <code>-logging ignore add</code>.</li></ol>
-        <div class="fx-cmds"><span>Commands</span><code>-log</code><code>-logs</code><code>-log remove</code><code>-logging ignore add</code></div>
+        <div class="fx-cmds"><span>Commands</span><code>log</code><code>logs</code><code>log remove</code><code>logging ignore add</code><code>log ignore remove</code></div>
         <div class="fx-steps"><a class="fx-step" href="#autoroles"><small>Previous</small><b>Autoroles</b></a><a class="fx-step next" href="#tickets"><small>Next</small><b>Tickets</b></a></div>
       </article>
       <article class="fx-panel" id="tickets" style="--acc:#3b9cf5">
