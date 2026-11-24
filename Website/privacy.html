@@ -17,14 +17,14 @@
 <header class="page-hero">
   <div class="wrap narrow">
     <h1>Privacy</h1>
-    <p>What Nexus keeps, why it keeps it, how long it stays, and how to ask for it to be removed. Last updated 18 November 2026.</p>
+    <p>What Nexus keeps, why it keeps it, how long it stays, and how to ask for it to be removed. Last updated 23 November 2026.</p>
   </div>
 </header>
 
 <main class="wrap narrow prose" style="padding-bottom:70px">
 
   <div class="callout">
-    <strong>The short version.</strong> Nexus stores your server's settings, moderation records and a few small things for features like reminders and games. It does not store the text of your messages. Activity counts and join records are deleted after 30 days. Everything else stays until it's removed or the server's data is wiped.
+    <strong>The short version.</strong> Nexus stores your server's settings, moderation records and a few small things for features like reminders and games. It does not store the text of your messages. Activity counts and join records are deleted after 90 days. Everything else stays until it's removed or the server's data is wiped.
   </div>
 
   <nav class="toc-inline" aria-label="On this page">
@@ -50,9 +50,9 @@
       <tr><td>Moderation cases</td><td>Case number, the moderator and the member (ID and name), the time, the action, the reason and the length if there was one.</td><td>Until a moderator deletes the case, or a wipe</td></tr>
       <tr><td>Saved mutes and timed bans</td><td>Who, in which server, and when it ends, linked to a case number. This is what lets Nexus finish a mute or a ban after a restart.</td><td>Until it ends or is cancelled</td></tr>
       <tr><td>Staff notes</td><td>Who the note is about, who wrote it (ID and name), the text and the time.</td><td>Until a moderator removes it, or a wipe</td></tr>
-      <tr><td>Message activity</td><td>One entry per message with the user ID, channel ID and time. The message itself is not saved, only the fact that it was sent.</td><td>30 days</td></tr>
-      <tr><td>Voice activity</td><td>User ID, channel ID, how long the session lasted and when.</td><td>30 days</td></tr>
-      <tr><td>Joins and leaves</td><td>User ID, whether they joined or left, which invite they used and when.</td><td>30 days</td></tr>
+      <tr><td>Message activity</td><td>One entry per message with the user ID, channel ID and time. The message itself is not saved, only the fact that it was sent. Stats commands can show the last 7, 14, 30, 60 or 90 days of it.</td><td>90 days</td></tr>
+      <tr><td>Voice activity</td><td>User ID, channel ID, how long the session lasted and when.</td><td>90 days</td></tr>
+      <tr><td>Joins and leaves</td><td>User ID, whether they joined or left, which invite they used and when.</td><td>90 days</td></tr>
       <tr><td>Invite list</td><td>Invite codes, who created each one and how many times it has been used. This is how Nexus knows which invite someone came through.</td><td>While the server uses Nexus, until a wipe</td></tr>
       <tr><td>Roles</td><td>Join roles, roles that persist when someone leaves and returns (server, user, role), and timed roles with their expiry.</td><td>Persistent roles until removed. Timed roles until they expire.</td></tr>
       <tr><td>Tickets</td><td>The ticket channel, the server and who opened it. What people say inside a ticket stays in the Discord channel and is not copied into Nexus.</td><td>While the ticket exists</td></tr>
@@ -103,7 +103,7 @@
 
   <h2 id="how-long">How long it's kept</h2>
   <ul>
-    <li><strong style="color:var(--text)">30 days:</strong> message activity, voice activity, and join and leave records. Older entries are deleted automatically.</li>
+    <li><strong style="color:var(--text)">90 days:</strong> message activity, voice activity, and join and leave records. Older entries are deleted automatically. Stats commands let you look back 7, 14, 30, 60 or 90 days of it.</li>
     <li><strong style="color:var(--text)">Until it ends:</strong> timed roles, saved mutes, timed bans and reminders.</li>
     <li><strong style="color:var(--text)">Until someone removes it:</strong> cases, staff notes and persistent roles.</li>
     <li><strong style="color:var(--text)">Until a wipe:</strong> everything else tied to a server.</li>
@@ -123,7 +123,7 @@
   <ul>
     <li>Run <code>-automod setup [type] 0</code> to switch an AutoMod type off.</li>
     <li>Use <code>-log remove [type]</code> to stop a kind of logging.</li>
-    <li>Stats start counting as soon as Nexus is in the server, and the only way to stop them is to remove Nexus. They never keep more than 30 days either way.</li>
+    <li>Stats start counting as soon as Nexus is in the server, and the only way to stop them is to remove Nexus. They never keep more than 90 days either way.</li>
   </ul>
 
   <h2 id="the-website">The website</h2>
