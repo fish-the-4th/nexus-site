@@ -42,9 +42,15 @@
     "text": "This update comes with a completely new website and systems, with now a dashboard\n- User dashboard, accessible to all users\n  - Provides basic information such as: activity statistics, active reminders, active giveaways, your command access and game statistics \n-  The Admin Dashboard: is meant for setting up server and Nexus’s features. Dashboard tabs:\n  - General (Prefix, error log, and permissions editor)\n  -  Moderation (Moderation settings, immune roles, case search, notes, and automod settings)\n  - Tickets (Setup, ticket panel, and currently open tickets)\n  - Logging (Logging channel and ignored users\n  - Autoroles (Join roles, persistent roles, and timed roles)\n  - Misc (Starboard and giveaways)"
   },
   {
-    "title": "Version 1.4",
+    "title": "Version 1.4.1",
     "type": "new",
     "date": "2026-11-20",
     "text": "- All commands are no longer just prefixes, all commands now are supported with slash commands"
+  },
+  {
+    "title": "1.4.2",
+    "type": "new",
+    "date": "2026-11-23",
+    "text": "- New games: Word scramble, Minesweeper, and care battle\n- Stats now have an option to choose the timeframe: 7d, 14d, 30d, 60d, 90d (d=Days)"
   }
 ]
