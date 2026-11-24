@@ -28,7 +28,7 @@
     {
       "name": "Reaction Roles",
       "description": "Give server members quick access to roles with a simple click as a reaction, fully customizable.",
-      "status": "development"
+      "status": "planned"
     },
     {
       "name": "Permission Manager",
