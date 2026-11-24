@@ -47,7 +47,7 @@
         <figure class="fx-shot"><a href="../Assets/Features/automod.png" target="_blank" rel="noopener" aria-label="Open the automod image full size"><img src="../Assets/Features/automod.png" width="584" height="595" loading="lazy" alt="A general channel where Nexus tells a member that a link was removed, and an AutoMod log channel with an entry for the flagged scam link and an entry for a raid lockdown that started after ten joins in thirty seconds."></a></figure>
         <h3 class="fx-sub">How it works</h3>
         <ol class="fx-points"><li>Three protections, each with its own level from 1 to 10: spam, scam links and raids. Level 0 turns one off.</li><li>Spam: when a member sends too many messages too fast, Nexus removes them. At level 5 that is more than 6 messages in 10 seconds.</li><li>Scam links: messages with known scam and phishing domains are deleted, and edited messages are checked too, so a link can't be slipped in afterwards.</li><li>Raids: when too many people join at once (10 in 30 seconds at level 5), Nexus locks every text channel. Anyone who joins during the lockdown is kicked.</li><li>End a lockdown with <code>-automod raidend</code>. Every channel goes back exactly as it was before.</li><li>Choose roles and members AutoMod should ignore with <code>-automod whitelist</code>.</li><li>Each action is logged with the member, the channel and the level, in the channel you pick with <code>-automod logging</code>.</li></ol>
-        <div class="fx-cmds"><span>Command:s</span><code>automod setup</code><code>automod logging</code><code>automod whitelist add</code><code>automod whitelist remove</code><code>automod raidend</code><code>automods</code></div>
+        <div class="fx-cmds"><span>Commands:</span><code>automod setup</code><code>automod logging</code><code>automod whitelist add</code><code>automod whitelist remove</code><code>automod raidend</code><code>automods</code></div>
         <div class="fx-steps"><a class="fx-step" href="#moderation"><small>Previous</small><b>Moderation</b></a><a class="fx-step next" href="#autoroles"><small>Next</small><b>Autoroles</b></a></div>
       </article>
       <article class="fx-panel" id="autoroles" style="--acc:#3ba55d">
@@ -71,56 +71,56 @@
         <figure class="fx-shot"><a href="../Assets/Features/logging.png" target="_blank" rel="noopener" aria-label="Open the logging image full size"><img src="../Assets/Features/logging.png" width="584" height="710" loading="lazy" alt="A staff channel showing the logging setup, with nine categories each pointing to a log channel or switched off, and a message log entry showing a member editing a message from &quot;who wants to play at 8?&quot; to &quot;who wants to play at 9?&quot;."></a></figure>
         <h3 class="fx-sub">How it works</h3>
         <ol class="fx-points"><li>Nine categories: messages, users, expressions, channels, voice, moderation, invites, applications and roles. Each goes to its own channel, or stays off.</li><li>Edited messages show what they said before and after. Deleted messages show the author, the channel and what was written.</li><li>Joins and leaves show the account age and the member count. Kicks and bans show who did it and why.</li><li>Voice joins, leaves and moves, role and channel changes, and invites created or deleted are all recorded.</li><li>Warns, mutes, unwarns and unmutes are logged with their case numbers, and so are cases that get voided.</li><li>Leave out people you do not want logged, like bots or staff, with <code>logging ignore add</code>.</li></ol>
-        <div class="fx-cmds"><span>Command:s</span><code>log</code><code>logs</code><code>log remove</code><code>logging ignore add</code><code>log ignore remove</code></div>
+        <div class="fx-cmds"><span>Commands:</span><code>log</code><code>logs</code><code>log remove</code><code>logging ignore add</code><code>log ignore remove</code></div>
         <div class="fx-steps"><a class="fx-step" href="#autoroles"><small>Previous</small><b>Autoroles</b></a><a class="fx-step next" href="#tickets"><small>Next</small><b>Tickets</b></a></div>
       </article>
       <article class="fx-panel" id="tickets" style="--acc:#3b9cf5">
         <header class="fx-head">
           <span class="fx-ico" aria-hidden="true">🎫</span>
-          <div><p class="fx-kicker">Manage · 5 of 15</p><h2>Private tickets in one click</h2></div>
+          <div><p class="fx-kicker">Management · 5 of 15</p><h2>Private tickets in one click</h2></div>
         </header>
         <p class="fx-lead">Members press one button to open a private channel with your team. Setup is a single command.</p>
         <figure class="fx-shot"><a href="../Assets/Features/tickets.png" target="_blank" rel="noopener" aria-label="Open the tickets image full size"><img src="../Assets/Features/tickets.png" width="584" height="566" loading="lazy" alt="A support channel with a ticket panel and a green Create Ticket button, and a private ticket channel where Nexus pings the support role, posts a welcome message with Claim and Close buttons, and confirms a staff member claimed it."></a></figure>
         <h3 class="fx-sub">How it works</h3>
         <ol class="fx-points"><li>Run <code>-ticket setup</code> with a support role, a category and a log channel, then <code>-ticket panel</code> to post the button.</li><li>Each ticket is a private channel, hidden from everyone except the member and your support role.</li><li>One open ticket per member, so the queue stays tidy.</li><li>Staff claim a ticket with a button, and bring people in or out with <code>-ticket add</code> and <code>-ticket remove</code>.</li><li>Close a ticket with the button or <code>-ticket close</code>. The channel is deleted after 5 seconds and the log shows who opened and who closed it.</li><li>The panel, setup and open tickets can also be managed from the dashboard.</li></ol>
-        <div class="fx-cmds"><span>Commands</span><code>-ticket setup</code><code>-ticket panel</code><code>-ticket add</code><code>-ticket close</code></div>
-        <div class="fx-steps"><a class="fx-step" href="#logging"><small>Previous</small><b>Logging</b></a><a class="fx-step next" href="#notes"><small>Next</small><b>Staff notes</b></a></div>
+        <div class="fx-cmds"><span>Commands:</span><code>ticket setup</code><code>ticket panel</code><code>ticket add</code><code>ticket remove</code><code>ticket close</code></div>
+        <div class="fx-steps"><a class="fx-step" href="#logging"><small>Previous</small><b>Logging</b></a><a class="fx-step next" href="#notes"><small>Next</small><b>Notes</b></a></div>
       </article>
       <article class="fx-panel" id="notes" style="--acc:#8aa4c8">
         <header class="fx-head">
           <span class="fx-ico" aria-hidden="true">📝</span>
-          <div><p class="fx-kicker">Manage · 6 of 15</p><h2>Private notes for your team</h2></div>
+          <div><p class="fx-kicker">Management · 6 of 15</p><h2>Private notes for your team</h2></div>
         </header>
         <p class="fx-lead">Leave context for the next moderator, like why someone was spoken to and what to watch for.</p>
         <figure class="fx-shot"><a href="../Assets/Features/notes.png" target="_blank" rel="noopener" aria-label="Open the staff notes image full size"><img src="../Assets/Features/notes.png" width="584" height="558" loading="lazy" alt="A staff channel where a moderator adds a note about a member and then lists his notes, showing two notes with who wrote each one, when, and the note text."></a></figure>
         <h3 class="fx-sub">How it works</h3>
         <ol class="fx-points"><li><code>-note add @user text</code> saves a note of up to 300 characters, with your name and the time.</li><li><code>-notes @user</code> lists every note, 8 to a page, with Previous and Next buttons.</li><li>Remove one by its number with <code>-note remove @user 2</code>.</li><li>Only staff with the Kick Members permission can read or write notes. Members never see them.</li><li>Notes belong to the server they were written in, and work on people who have left too.</li></ol>
-        <div class="fx-cmds"><span>Commands</span><code>-note add</code><code>-notes</code><code>-note remove</code></div>
-        <div class="fx-steps"><a class="fx-step" href="#tickets"><small>Previous</small><b>Tickets</b></a><a class="fx-step next" href="#access"><small>Next</small><b>Command access</b></a></div>
+        <div class="fx-cmds"><span>Commands:</span><code>note add</code><code>notes</code><code>note remove</code></div>
+        <div class="fx-steps"><a class="fx-step" href="#tickets"><small>Previous</small><b>Tickets</b></a><a class="fx-step next" href="#access"><small>Next</small><b>CPermissions</b></a></div>
       </article>
       <article class="fx-panel" id="access" style="--acc:#d46bff">
         <header class="fx-head">
           <span class="fx-ico" aria-hidden="true">🔑</span>
-          <div><p class="fx-kicker">Manage · 7 of 15</p><h2>You decide who can run what</h2></div>
+          <div><p class="fx-kicker">Management · 7 of 15</p><h2>You decide who can use what</h2></div>
         </header>
         <p class="fx-lead">Move any command to a different role, person or permission, without touching Discord's own settings.</p>
         <figure class="fx-shot"><a href="../Assets/Features/access.png" target="_blank" rel="noopener" aria-label="Open the command access image full size"><img src="../Assets/Features/access.png" width="584" height="497" loading="lazy" alt="A staff channel where an admin lets the Moderators role use the ban command, changes the permission needed for slowmode to Manage Messages, and then checks who has access to the ban command."></a></figure>
         <h3 class="fx-sub">How it works</h3>
         <ol class="fx-points"><li><code>-permission ban @Moderators</code> lets a role use <code>-ban</code> even without the Ban Members permission. Run it again to take it away.</li><li><code>-permission slowmode Manage Messages</code> swaps the permission a command needs.</li><li>Give a command to one person the same way, by mentioning them.</li><li><code>-permission ban</code> on its own shows who has access to that command.</li><li>Only administrators can change access, and a few sensitive commands can never be changed.</li><li>The dashboard has a Command access page for the same settings.</li></ol>
-        <div class="fx-cmds"><span>Commands</span><code>-permission</code></div>
-        <div class="fx-steps"><a class="fx-step" href="#notes"><small>Previous</small><b>Staff notes</b></a><a class="fx-step next" href="#prefix"><small>Next</small><b>Custom prefix</b></a></div>
+        <div class="fx-cmds"><span>Commands:</span><code>permission</code></div>
+        <div class="fx-steps"><a class="fx-step" href="#notes"><small>Previous</small><b>Notes</b></a><a class="fx-step next" href="#prefix"><small>Next</small><b>Custom prefix</b></a></div>
       </article>
       <article class="fx-panel" id="prefix" style="--acc:#4fe3a8">
         <header class="fx-head">
           <span class="fx-ico" aria-hidden="true">✏️</span>
-          <div><p class="fx-kicker">Manage · 8 of 15</p><h2>A prefix that fits your server</h2></div>
+          <div><p class="fx-kicker">Management · 8 of 15</p><h2>A prefix that fits your server</h2></div>
         </header>
         <p class="fx-lead">Change the character before commands. Members can always mention Nexus instead.</p>
         <figure class="fx-shot"><a href="../Assets/Features/prefix.png" target="_blank" rel="noopener" aria-label="Open the custom prefix image full size"><img src="../Assets/Features/prefix.png" width="584" height="584" loading="lazy" alt="A staff channel where an admin checks the prefix and changes it from a dash to an exclamation mark, then a bot commands channel where a member uses the new prefix and another mentions Nexus to ask for it."></a></figure>
         <h3 class="fx-sub">How it works</h3>
-        <ol class="fx-points"><li><code>-prefix set !</code> changes it for your server. Up to 5 characters, with no spaces.</li><li><code>-prefix</code> shows the current one, and mentioning Nexus works whatever the prefix is, so nobody gets locked out.</li><li>Each server has its own prefix, so two servers can use different ones.</li><li>Most commands also work as slash commands, so the prefix never gets in the way.</li></ol>
-        <div class="fx-cmds"><span>Commands</span><code>-prefix</code><code>-prefix set</code></div>
-        <div class="fx-steps"><a class="fx-step" href="#access"><small>Previous</small><b>Command access</b></a><a class="fx-step next" href="#giveaways"><small>Next</small><b>Giveaways</b></a></div>
+        <ol class="fx-points"><li><code>-prefix set !</code> changes it for your server. Up to 5 characters, with no spaces.</li><li><code>-prefix</code> shows the current one, and mentioning Nexus is a permanent prefix that never goes away.</li><li>Each server has its own prefix, so two servers can use different ones.</li><li>If your not a fan of text commands, all commands are also support with the in-built Discord slash commands.</li></ol>
+        <div class="fx-cmds"><span>Commands:</span><code>prefix</code><code>prefix set</code></div>
+        <div class="fx-steps"><a class="fx-step" href="#access"><small>Previous</small><b>Permissions</b></a><a class="fx-step next" href="#giveaways"><small>Next</small><b>Giveaways</b></a></div>
       </article>
       <article class="fx-panel" id="giveaways" style="--acc:#9bd13f">
         <header class="fx-head">
