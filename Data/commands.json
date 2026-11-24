@@ -291,36 +291,36 @@
   {
     "id": "stats",
     "name": "Stats",
-    "intro": "Activity from the last 30 days, turned into graphs.",
+    "intro": "Activity over the last 7, 14, 30, 60 or 90 days, turned into graphs. Add the number of days to the end of any stats command, or leave it off for 30.",
     "commands": [
       {
-        "usage": "-stats user [user]",
-        "example": "-stats user @Sam",
+        "usage": "-stats user [user] [days]",
+        "example": "-stats user @Sam 14",
         "perms": "None",
         "desc": "Shows a user's text and voice activity with a graph"
       },
       {
-        "usage": "-stats channel [channel]",
+        "usage": "-stats channel [channel] [days]",
         "perms": "None",
         "desc": "Shows a channel's activity with a graph"
       },
       {
-        "usage": "-stats invite [invite_code]",
+        "usage": "-stats invite [invite_code] [days]",
         "perms": "None",
-        "desc": "Shows who made an invite, when, how many people joined through it, and a 30-day graph"
+        "desc": "Shows who made an invite, when, how many people joined through it, and a graph"
       },
       {
-        "usage": "-stats top",
+        "usage": "-stats top [days]",
         "perms": "None",
         "desc": "Shows server-wide top members and channels"
       },
       {
-        "usage": "-stats server",
+        "usage": "-stats server [days]",
         "perms": "None",
         "desc": "Shows total server messages and voice hours with a graph"
       },
       {
-        "usage": "-stats members",
+        "usage": "-stats members [days]",
         "perms": "None",
         "desc": "Shows how many members joined and left, with a graph"
       }
@@ -527,7 +527,7 @@
   {
     "id": "games",
     "name": "Games",
-    "intro": "10 games, all picked from one menu. Play against Nexus or challenge a friend.",
+    "intro": "12 games, all picked from one menu. Play against Nexus or challenge a friend.",
     "commands": [
       {
         "usage": "-games",
@@ -546,6 +546,6 @@
         "desc": "Shows wins, losses, draws and best streaks for you or another user"
       }
     ],
-    "note": "Tic-Tac-Toe, Connect Four, Rock Paper Scissors, Blackjack, Card Battle, 2048, Trivia, Number Guess, Hangman and Word Scramble. Most games have Easy, Medium and Hard difficulties when you play against Nexus."
+    "note": "Tic-Tac-Toe, Connect Four, Rock Paper Scissors, Blackjack, Card Battle, 2048, Trivia, Number Guess, Hangman, Word Scramble, Higher or Lower and Minesweeper. Most games have Easy, Medium and Hard difficulties when you play against Nexus."
   }
 ]
