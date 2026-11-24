@@ -86,8 +86,8 @@
     <a class="card" href="#/logging"><span class="icon">📋</span><h4>Logging</h4><p>Nine kinds of events, each sent to the channel you choose.</p></a>
     <a class="card" href="#/tickets"><span class="icon">🎫</span><h4>Tickets</h4><p>Private support channels members open with one click.</p></a>
     <a class="card" href="#/roles"><span class="icon">🎭</span><h4>Roles</h4><p>Join roles, roles that come back, and roles that expire.</p></a>
-    <a class="card" href="#/stats"><span class="icon">📊</span><h4>Stats</h4><p>Thirty days of activity, turned into graphs.</p></a>
-    <a class="card" href="#/games"><span class="icon">🎮</span><h4>Games</h4><p>Eight games to play against Nexus or a friend.</p></a>
+    <a class="card" href="#/stats"><span class="icon">📊</span><h4>Stats</h4><p>Up to 90 days of activity, turned into graphs.</p></a>
+    <a class="card" href="#/games"><span class="icon">🎮</span><h4>Games</h4><p>Twelve games to play against Nexus or a friend.</p></a>
     <a class="card" href="#/giveaways"><span class="icon">🎉</span><h4>Giveaways and starboard</h4><p>Run giveaways and celebrate the best messages.</p></a>
     <a class="card" href="#/utilities"><span class="icon">🧰</span><h4>Everyday tools</h4><p>Reminders, translation, lookups and server info.</p></a>
   </div>
@@ -241,7 +241,7 @@
   <p>The Nexus owner can blacklist a user who abuses the bot. A blacklisted user gets a message the next time they try a command, and Nexus ignores them otherwise. If you think it's a mistake, ask in the <a class="inline" data-link="support" href="#">support server</a>.</p>
 
   <h2>Your server's data</h2>
-  <p>Settings, cases and the rest are stored per server and stay until they're removed or the server's data is wiped. Activity stats and join records are deleted after 30 days. The <a class="inline" href="privacy.html">privacy page</a> lists exactly what is kept.</p>
+  <p>Settings, cases and the rest are stored per server and stay until they're removed or the server's data is wiped. Activity stats and join records are deleted after 90 days. The <a class="inline" href="privacy.html">privacy page</a> lists exactly what is kept.</p>
 </article>
 
 <article class="doc-page" data-doc="time-formats" data-title="Time formats">
@@ -575,7 +575,7 @@ I will remind you: in 2 hours</div></div>
   <div class="grid three">
     <div class="card"><h4>Giveaways</h4><p>Entries by reaction, automatic winners, rerolls.</p></div>
     <div class="card"><h4>Starboard</h4><p>Reposts the best messages from the event.</p></div>
-    <div class="card"><h4>Games</h4><p>Eight games members can play against each other.</p></div>
+    <div class="card"><h4>Games</h4><p>Twelve games members can play against each other.</p></div>
     <div class="card"><h4>Timed roles</h4><p>An event role that removes itself when it's over.</p></div>
     <div class="card"><h4>Reminders</h4><p>Let people set a reminder for the start.</p></div>
     <div class="card"><h4>Slowmode and lock</h4><p>Keep a busy event channel manageable.</p></div>
@@ -1380,7 +1380,7 @@ New winner(s): @Jordan</div></div>
 <article class="doc-page" data-doc="games" data-title="Games">
   <div class="doc-crumb">For members</div>
   <h1>Games</h1>
-  <p class="lead">Nexus has eight games built in. Pick one from a menu, choose how hard Nexus plays, or challenge a friend. Nothing to install, and every result goes on your personal record.</p>
+  <p class="lead">Nexus has twelve games built in. Pick one from a menu, choose how hard Nexus plays, or challenge a friend. Nothing to install, and every result goes on your personal record.</p>
 
   <h2>Starting a game</h2>
   <p>Anyone can play. Type <code>-games</code> to open the menu, or jump straight to a game by name.</p>
@@ -1410,7 +1410,7 @@ Drop discs into the columns. First to link four in any direction wins. You play 
   </ul>
   <p>The menu belongs to the person who opened it. If someone else presses its buttons, Nexus tells them to run <code>-games</code> for their own.</p>
 
-  <h2>The eight games</h2>
+  <h2>The twelve games</h2>
   <div class="table-wrap">
   <table class="ref">
     <thead><tr><th>Game</th><th>Play with</th><th>How it works</th><th>Short names</th></tr></thead>
@@ -1423,6 +1423,10 @@ Drop discs into the columns. First to link four in any direction wins. You play 
       <tr><td>🧠 Trivia</td><td>Nexus or a friend</td><td>Five questions with four answers each. Correct answers score points and faster answers score more. A friend gets the same questions.</td><td><code>quiz</code></td></tr>
       <tr><td>🎯 Number Guess</td><td>Nexus or a friend</td><td>Nexus picks a secret number. You take turns guessing, and every guess narrows the range for both players.</td><td><code>guess</code> <code>ng</code></td></tr>
       <tr><td>🪢 Hangman</td><td>Nexus or a friend</td><td>Pick letters to uncover the word before the drawing is finished, or risk a full guess. Against a friend, they choose the word.</td><td><code>hm</code></td></tr>
+      <tr><td>⚔️ Card Battle</td><td>Nexus or a friend</td><td>Each player gets five cards and a trump suit. You take turns leading a card, and the other player sees it before answering. The stronger card wins the round and any trump beats the other suits. First to 3 round wins.</td><td><code>cb</code> <code>cards</code> <code>war</code></td></tr>
+      <tr><td>🔤 Word Scramble</td><td>Solo</td><td>Five scrambled words, one at a time. Type your answer, ask for a hint, or skip. Solve three to win, and fewer tries earn more points.</td><td><code>scramble</code> <code>ws</code></td></tr>
+      <tr><td>🎴 Higher or Lower</td><td>Solo</td><td>A card is showing. Call whether the next one is higher or lower and build a streak. Reach the target to win, or cash out early for a draw.</td><td><code>hilo</code> <code>hl</code></td></tr>
+      <tr><td>💣 Minesweeper</td><td>Solo</td><td>Open squares on a 4x5 grid without hitting a mine. A number shows how many mines touch that square, and flag mode marks the ones you've worked out. Your first tap is always safe.</td><td><code>mines</code> <code>ms</code></td></tr>
     </tbody>
   </table>
   </div>
@@ -1439,6 +1443,10 @@ Drop discs into the columns. First to link four in any direction wins. You play 
       <tr><td>2048</td><td>A roomy 5x5 board</td><td>The classic 4x4 board</td><td>4x4, and 4s appear three times as often</td></tr>
       <tr><td>Trivia</td><td>Easy questions, 20 seconds each</td><td>Tougher questions, 15 seconds</td><td>Hard questions, 12 seconds</td></tr>
       <tr><td>Hangman</td><td>8 lives, short words, category hint</td><td>6 lives, medium words, hint</td><td>5 lives, long words, no hint</td></tr>
+      <tr><td>Card Battle</td><td>Nexus plays cards at random</td><td>Nexus answers smartly about 60% of the time</td><td>Nexus answers with the cheapest card that wins and keeps its best cards back</td></tr>
+      <tr><td>Word Scramble</td><td>Short words, 3 tries each, category hint</td><td>Medium words, 3 tries each, hint</td><td>Long words, 2 tries each, no hint</td></tr>
+      <tr><td>Higher or Lower</td><td>5 in a row, odds shown, ties are safe</td><td>7 in a row, odds shown, ties are safe</td><td>10 in a row, no odds, a tie is a miss</td></tr>
+      <tr><td>Minesweeper</td><td>3 mines, and the first tap opens a clear patch</td><td>4 mines</td><td>6 mines</td></tr>
     </tbody>
   </table>
   </div>
@@ -1469,7 +1477,7 @@ Drop discs into the columns. First to link four in any direction wins. You play 
 🃏 Blackjack: 6W 3L 0D (Streak 2, best 4)
 🔢 2048: 1W 2L 0D (Best score 3,284)</div></div>
   </div>
-  <p>The record shows each game you've played, most played first, with your current and best win streak once it reaches two, and your best score for scored games like 2048. Games against Nexus and against friends both count.</p>
+  <p>The record shows each game you've played, most played first, with your current and best win streak once it reaches two, and your best score for scored games like 2048 and Word Scramble. Games against Nexus and against friends both count.</p>
 
   <h2>Tips for server owners</h2>
   <ul>
@@ -1482,7 +1490,7 @@ Drop discs into the columns. First to link four in any direction wins. You play 
 <article class="doc-page" data-doc="stats" data-title="Stats">
   <div class="doc-crumb">For members</div>
   <h1>Stats</h1>
-  <p class="lead">Stats shows how active your server is: who's talking, where, when people are in voice, how many joined and left, and which invites bring people in. It's a view of the last 30 days, with graphs.</p>
+  <p class="lead">Stats shows how active your server is: who's talking, where, when people are in voice, how many joined and left, and which invites bring people in. You choose how far back to look, from 7 days up to 90, and every view comes with graphs.</p>
 
   <h2>How it works</h2>
   <p>Once Nexus is in your server, it counts activity quietly in the background. It never stores what people say. It only records that a message happened, who sent it and in which channel, and how long people spent in voice channels.</p>
@@ -1491,7 +1499,7 @@ Drop discs into the columns. First to link four in any direction wins. You play 
     <li><strong>Voice.</strong> Time in a voice channel is added when someone leaves or switches channel. Visits shorter than 10 seconds aren't counted.</li>
     <li><strong>Joins and leaves.</strong> Counted from the moment Nexus joined, along with which invite was used.</li>
   </ul>
-  <div class="callout"><strong>Stats start when Nexus does.</strong> Nexus can't see activity from before it joined your server, so a brand-new server shows little until a few days have passed. Every stats page only covers the <strong>last 30 days</strong>.</div>
+  <div class="callout"><strong>Stats start when Nexus does.</strong> Nexus can't see activity from before it joined your server, so a brand-new server shows little until a few days have passed. Nexus keeps <strong>90 days</strong> of activity, so a stats page can never look back further than that. Without a choice from you, it shows the last 30 days.</div>
 
   <h2>The six views</h2>
   <p>Every stats command works for anyone, so members can look at the server's activity too.</p>
@@ -1499,12 +1507,12 @@ Drop discs into the columns. First to link four in any direction wins. You play 
   <table class="ref">
     <thead><tr><th>Command</th><th>What you see</th></tr></thead>
     <tbody>
-      <tr><td><code>-stats user [user]</code></td><td>Total messages and rank, top text channels, voice time and rank, top voice channels, and a graph of the last 30 days. Leave the user off to see yourself.</td></tr>
-      <tr><td><code>-stats channel [channel]</code></td><td>How many members have posted there, the total messages, the top members, and a graph.</td></tr>
-      <tr><td><code>-stats server</code></td><td>Total messages, total voice time, member count and a combined graph for the whole server.</td></tr>
-      <tr><td><code>-stats top</code></td><td>Leaderboards: top members and channels for text, and top members and channels for voice.</td></tr>
-      <tr><td><code>-stats members</code></td><td>How many people joined and left, the net change, the current member count, and a graph.</td></tr>
-      <tr><td><code>-stats invite [code]</code></td><td>Who made the invite, when, whether it's still active, total joins, joins in the last 30 days, and a graph.</td></tr>
+      <tr><td><code>-stats user [user] [days]</code></td><td>Total messages and rank, top text channels, voice time and rank, top voice channels, and a graph of the period. Leave the user off to see yourself.</td></tr>
+      <tr><td><code>-stats channel [channel] [days]</code></td><td>How many members have posted there, the total messages, the top members, and a graph.</td></tr>
+      <tr><td><code>-stats server [days]</code></td><td>Total messages, total voice time, member count and a combined graph for the whole server.</td></tr>
+      <tr><td><code>-stats top [days]</code></td><td>Leaderboards: top members and channels for text, and top members and channels for voice.</td></tr>
+      <tr><td><code>-stats members [days]</code></td><td>How many people joined and left, the net change, the current member count, and a graph.</td></tr>
+      <tr><td><code>-stats invite [code] [days]</code></td><td>Who made the invite, when, whether it's still active, total joins, joins in the period, and a graph.</td></tr>
     </tbody>
   </table>
   </div>
@@ -1520,6 +1528,22 @@ Activity from the last 30 days
 [ activity graph ]</div></div>
   </div>
 
+  <h2>Choosing how far back</h2>
+  <p>Every stats command takes an optional number of days on the end: <code>7</code>, <code>14</code>, <code>30</code>, <code>60</code> or <code>90</code>. Leave it off and you get 30 days. With slash commands, the same choice appears as a menu.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-stats server 60</div></div>
+    <div class="line bot"><span class="who">Nexus</span><div>📊 Server Activity | Lumen Lounge
+Combined activity for the whole server over the last 60 days
+[ activity graph ]
+Showing the last 60 days. Nexus keeps up to 90 days of activity.</div></div>
+  </div>
+  <ul>
+    <li>The title, the totals, the ranks and the graph all use the period you picked.</li>
+    <li>You can combine it with a user or a channel, like <code>-stats user @Sam 14</code> or <code>-stats channel #general 7</code>.</li>
+    <li>Graphs for 60 and 90 days space out their date labels so they stay readable.</li>
+    <li>Any other number gets a reply listing the choices. Nexus only keeps 90 days, so that is the longest you can look back.</li>
+  </ul>
+
   <h2>Invite stats</h2>
   <p>Invite tracking answers "which invite brought these people here?" Give <code>-stats invite</code> the code from an invite link, which is the part after <code>discord.gg/</code>.</p>
   <ul>
@@ -1530,7 +1554,7 @@ Activity from the last 30 days
 
   <h2>Reading the numbers well</h2>
   <ul>
-    <li>Ranks compare people within your server over the last 30 days only, so they move as people's habits change.</li>
+    <li>Ranks compare people within your server over the period you chose, so they move as people's habits change.</li>
     <li>The graph shows one point per day. A flat line means nobody was active, or Nexus hadn't started counting yet.</li>
     <li>Member counts come from joins and leaves Nexus witnessed, and the "current members" figure comes straight from Discord.</li>
   </ul>
@@ -1805,7 +1829,7 @@ Translated with Google Translate</div></div>
   <ul>
     <li><strong>Game buttons say it isn't your game.</strong> Menus belong to whoever opened them. Run <code>-games</code> for your own.</li>
     <li><strong>The buttons stopped working.</strong> Games and menus time out after a couple of minutes. Start again.</li>
-    <li><strong>Stats are empty.</strong> They start counting when Nexus joins and show 30 days at most. See <a class="inline" href="#/stats">Stats</a>.</li>
+    <li><strong>Stats are empty.</strong> They start counting when Nexus joins and show 90 days at most. See <a class="inline" href="#/stats">Stats</a>.</li>
     <li><strong>Invite stats show nothing.</strong> Nexus needs Manage Server to track invites, and the code has to belong to your server.</li>
   </ul>
 
