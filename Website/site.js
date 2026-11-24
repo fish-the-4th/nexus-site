@@ -1,5 +1,7 @@
-const ROOT = '../';
-const DATA = '../Data/';
+const UP = (document.body && /^(\.\.\/){1,3}$/.test(document.body.dataset.up || '')) ? document.body.dataset.up : '';
+const ROOT = UP + '../';
+const DATA = UP + '../Data/';
+const siteHref = href => (!href || /^(https?:|mailto:|#)/i.test(href)) ? href : UP + href;
 
 const NEXUS = {
   invite:  'https://discord.com/oauth2/authorize?client_id=1516923666787602725&permissions=8&integration_type=0&scope=bot',
@@ -123,7 +125,7 @@ const NAV = [
     ['staff', 'staff.html', 'Staff team', 'The people behind the bot.'],
     ['support', 'support.html', 'Support', 'Quick fixes, and where to get help.'],
     ['projects', 'projects.html', 'Projects', 'What has launched and what is coming.'],
-    ['blog', 'blog.html', 'Blog', 'Coming soon.']
+    ['blog', 'Blog/blog.html', 'Blog', 'Announcements and longer write-ups.']
   ] },
   { id: 'premium', label: 'Premium', icon: 'star', items: [
     ['premium', 'premium.html', 'Premium Plans', 'Coming soon.'],
@@ -217,7 +219,7 @@ function dropdown(label, items, opts) {
   if (opts.caret !== false) btn.appendChild(svgIcon('caret', 'caret'));
   const menu = el('div', { class: 'dd-menu', role: 'menu' });
   items.forEach((it, i) => {
-    const a = el('a', { href: it.href, role: 'menuitem', class: it.active ? 'active' : '', style: '--i:' + i });
+    const a = el('a', { href: siteHref(it.href), role: 'menuitem', class: it.active ? 'active' : '', style: '--i:' + i });
     if (it.icon) a.appendChild(svgIcon(it.icon, 'dd-ico'));
     a.appendChild(el('span', {}, [el('b', { text: it.label }), el('small', { text: it.desc })]));
     if (it.external) { a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener'); }
@@ -249,7 +251,7 @@ function buildChrome() {
   const navHost = document.getElementById('site-nav');
   if (navHost) {
     const nav = el('nav', { class: 'site-nav', 'aria-label': 'Main' });
-    const brand = el('a', { class: 'nav-brand', href: 'index.html', 'aria-label': 'Nexus home' }, [
+    const brand = el('a', { class: 'nav-brand', href: siteHref('index.html'), 'aria-label': 'Nexus home' }, [
       el('img', { src: ROOT + 'Assets/Logo/logo.png', alt: '', width: '30', height: '30' }), el('span', { text: 'Nexus' })
     ]);
     const list = el('div', { class: 'nav-links' });
@@ -259,7 +261,7 @@ function buildChrome() {
       })), { active: group.id === activeGroup }));
     });
 
-    const cta = el('a', { class: 'nav-cta' + (page === 'dashboard' ? ' active' : ''), href: 'dashboard.html' }, [svgIcon('dash'), el('span', { class: 'lbl', text: 'Dashboard' })]);
+    const cta = el('a', { class: 'nav-cta' + (page === 'dashboard' ? ' active' : ''), href: siteHref('dashboard.html') }, [svgIcon('dash'), el('span', { class: 'lbl', text: 'Dashboard' })]);
     const linkMenu = dropdown('', LINKS.map(([key, label, desc, icon]) => key === 'listings'
       ? { href: '#listing-sites', label, desc, icon, onClick: openListings }
       : { href: NEXUS[key], label, desc, icon, external: true }
@@ -273,7 +275,7 @@ function buildChrome() {
 
     const dock = el('nav', { class: 'dock', 'aria-label': 'Quick navigation' });
     const sheet = el('div', { class: 'dock-sheet', role: 'menu' });
-    dock.appendChild(el('a', { href: 'index.html', class: page === 'home' ? 'active' : '' }, [svgIcon('home'), el('span', { text: 'Home' })]));
+    dock.appendChild(el('a', { href: siteHref('index.html'), class: page === 'home' ? 'active' : '' }, [svgIcon('home'), el('span', { text: 'Home' })]));
     NAV.forEach(group => {
       const b = el('button', { type: 'button', class: group.id === activeGroup ? 'active' : '', 'aria-expanded': 'false' }, [svgIcon(group.icon), el('span', { text: group.id === 'info' ? 'Info' : group.label })]);
       b.addEventListener('click', e => {
@@ -282,7 +284,7 @@ function buildChrome() {
         dock.querySelectorAll('button').forEach(x => x.setAttribute('aria-expanded', 'false'));
         if (open) { sheet.classList.remove('open'); return; }
         sheet.replaceChildren(el('h6', { text: group.label }));
-        group.items.forEach(([id, href, label, desc], i) => sheet.appendChild(el('a', { href, class: id && id === page ? 'active' : '', style: '--i:' + i }, [el('b', { text: label }), el('small', { text: desc })])));
+        group.items.forEach(([id, href, label, desc], i) => sheet.appendChild(el('a', { href: siteHref(href), class: id && id === page ? 'active' : '', style: '--i:' + i }, [el('b', { text: label }), el('small', { text: desc })])));
         sheet.dataset.group = group.id;
         sheet.classList.add('open');
         b.setAttribute('aria-expanded', 'true');
@@ -326,7 +328,7 @@ function buildChrome() {
   if (footHost) {
     const f = el('footer', { class: 'site-footer' });
     const col = (title, items) => el('div', {}, [el('h6', { text: title })].concat(items.map(([href, label, ext]) => {
-      const a = el('a', { href: ext ? NEXUS[href] : href, text: label });
+      const a = el('a', { href: ext ? NEXUS[href] : siteHref(href), text: label });
       if (ext) { a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener'); }
       return a;
     })));
@@ -338,7 +340,7 @@ function buildChrome() {
         ]),
         col('Information', [['about.html', 'About Nexus'], ['status.html', 'Status'], ['changelog.html', 'Changelog'], ['tools.html', 'Tools'], ['features.html', 'Features']]),
         col('Docs', [['docs.html', 'Documentation'], ['docs.html#/getting-started', 'Getting started'], ['docs.html#/troubleshooting', 'Troubleshooting'], ['docs.html#/commands', 'Command list'], ['docs.html#/privacy', 'Privacy']]),
-        col('Community', [['staff.html', 'Staff team'], ['support.html', 'Support'], ['projects.html', 'Projects'], ['blog.html', 'Blog']]),
+        col('Community', [['staff.html', 'Staff team'], ['support.html', 'Support'], ['projects.html', 'Projects'], ['Blog/blog.html', 'Blog']]),
         col('Premium', [['premium.html', 'Premium Plans'], ['custombots.html', 'Custom Bots']])
       ]),
       el('div', { class: 'footer-bottom' }, [
@@ -1353,12 +1355,23 @@ function initTabs() {
   }
 }
 
-const PROJECT_GROUPS = [
-  ['launched', 'Launched', 'Live and ready to use.'],
-  ['development', 'In development', 'Being built right now.'],
-  ['planned', 'Planned', 'Decided on, coming later.'],
-  ['consideration', 'In consideration', 'Ideas being weighed up.']
+const PROJECT_STAGES = [
+  { key: 'consideration', short: 'Idea', title: 'Ideas', hint: 'Being weighed up. Nothing is promised yet.', group: 'Still an idea' },
+  { key: 'planned', short: 'Planned', title: 'Planned', hint: 'Decided on and lined up for later.', group: 'Lined up next' },
+  { key: 'development', short: 'Building', title: 'Building', hint: 'Being worked on right now.', group: 'Being built right now' },
+  { key: 'launched', short: 'Live', title: 'Live', hint: 'Shipped and ready to use.', group: 'Already live' }
 ];
+const PROJECT_ORDER = ['development', 'planned', 'consideration', 'launched'];
+
+function projectTrack(stage) {
+  const at = PROJECT_STAGES.findIndex(s => s.key === stage);
+  const track = el('div', { class: 'pj-track', 'aria-hidden': 'true' });
+  PROJECT_STAGES.forEach((s, i) => {
+    if (i) track.appendChild(el('i', { class: 'pj-link' + (i <= at ? ' on' : '') }));
+    track.appendChild(el('span', { class: 'pj-node' + (i < at ? ' done' : '') + (i === at ? ' now' : ''), title: s.short }));
+  });
+  return track;
+}
 
 async function initProjects() {
   const root = document.getElementById('projects-root');
@@ -1367,30 +1380,80 @@ async function initProjects() {
   let data;
   try { data = await loadJSON('projects.json'); }
   catch (e) { root.replaceChildren(el('p', { class: 'empty', text: 'Projects could not be loaded right now. Try again in a minute.' })); return; }
-  const projects = Array.isArray(data.projects) ? data.projects : [];
-  const board = el('div', { class: 'board' });
-  PROJECT_GROUPS.forEach(([key, title, hint]) => {
-    const items = projects.filter(p => p && p.status === key);
-    const col = el('section', { class: 'board-col col-' + key, id: 'projects-' + key }, [
-      el('div', { class: 'board-head' }, [el('span', { class: 'board-dot' }), el('h2', { text: title }), el('span', { class: 'count', text: String(items.length) })]),
-      el('p', { class: 'hint', text: hint })
-    ]);
-    if (!items.length) col.appendChild(el('p', { class: 'board-empty', text: 'Nothing here right now.' }));
-    items.forEach(p => {
-      const card = el('article', { class: 'project' }, [el('h3', { text: String(p.name || 'Untitled') })]);
-      if (p.description) card.appendChild(el('p', { text: String(p.description) }));
-      const meta = el('div', { class: 'project-meta' });
-      if (p.date) meta.appendChild(el('span', { text: fmtDate(String(p.date)) }));
-      (Array.isArray(p.tags) ? p.tags : []).slice(0, 4).forEach(t => meta.appendChild(el('span', { class: 'chip-tag', text: String(t) })));
-      if (meta.children.length) card.appendChild(meta);
-      col.appendChild(card);
-    });
-    board.appendChild(col);
-  });
-  root.replaceChildren(board);
-  reveal(root);
-}
+  const projects = (Array.isArray(data.projects) ? data.projects : []).filter(p => p && PROJECT_STAGES.some(s => s.key === p.status));
+  const count = key => projects.filter(p => p.status === key).length;
+  let filter = '';
+  let query = '';
 
+  const pipe = el('div', { class: 'pj-pipe', role: 'tablist', 'aria-label': 'Filter by stage' });
+  const stageBtns = PROJECT_STAGES.map((s, i) => {
+    const b = el('button', { type: 'button', class: 'pj-stage st-' + s.key, role: 'tab', 'aria-selected': 'false', style: '--i:' + i }, [
+      el('span', { class: 'pj-step', text: String(i + 1).padStart(2, '0') }),
+      el('b', { class: 'pj-num', text: String(count(s.key)) }),
+      el('span', { class: 'pj-label', text: s.title }),
+      el('small', { text: s.hint })
+    ]);
+    b.addEventListener('click', () => { filter = filter === s.key ? '' : s.key; draw(); });
+    pipe.appendChild(b);
+    return b;
+  });
+
+  const total = projects.length || 1;
+  const bar = el('div', { class: 'pj-bar', 'aria-hidden': 'true' }, PROJECT_STAGES.map(s => {
+    const seg = el('span', { class: 'st-' + s.key });
+    seg.style.flexGrow = String(count(s.key) / total);
+    return seg;
+  }));
+
+  const search = el('input', { type: 'search', class: 'pj-search', placeholder: 'Search projects', 'aria-label': 'Search projects' });
+  search.addEventListener('input', () => { query = search.value.trim().toLowerCase(); draw(); });
+  const clear = el('button', { type: 'button', class: 'pj-clear', text: 'Show everything' });
+  clear.addEventListener('click', () => { filter = ''; query = ''; search.value = ''; draw(); });
+  const status = el('p', { class: 'pj-status' });
+  const tools = el('div', { class: 'pj-tools' }, [status, clear, search]);
+  const list = el('div', { class: 'pj-list' });
+
+  const row = p => {
+    const s = PROJECT_STAGES.find(x => x.key === p.status);
+    const main = el('div', { class: 'pj-main' }, [el('h3', { text: String(p.name || 'Untitled') })]);
+    if (p.description) main.appendChild(el('p', { text: String(p.description) }));
+    const tags = (Array.isArray(p.tags) ? p.tags : []).slice(0, 4);
+    if (tags.length) main.appendChild(el('div', { class: 'pj-tags' }, tags.map(t => el('span', { text: String(t) }))));
+    const side = el('div', { class: 'pj-side' }, [projectTrack(p.status), el('span', { class: 'pj-badge', text: s.short })]);
+    if (p.date) side.appendChild(el('time', { datetime: String(p.date), text: fmtDate(String(p.date)) }));
+    return el('article', { class: 'pj-row reveal-me st-' + p.status }, [main, side]);
+  };
+
+  const draw = () => {
+    stageBtns.forEach((b, i) => {
+      const on = filter === PROJECT_STAGES[i].key;
+      b.classList.toggle('on', on);
+      b.classList.toggle('dim', !!filter && !on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    const words = query.split(/\s+/).filter(Boolean);
+    const hits = projects.filter(p => (!filter || p.status === filter) && words.every(w => (String(p.name || '') + ' ' + String(p.description || '') + ' ' + (p.tags || []).join(' ')).toLowerCase().includes(w)));
+    list.replaceChildren();
+    PROJECT_ORDER.forEach(key => {
+      const items = hits.filter(p => p.status === key);
+      if (!items.length) return;
+      const s = PROJECT_STAGES.find(x => x.key === key);
+      const group = el('section', { class: 'pj-group st-' + key }, [
+        el('h2', { class: 'pj-group-h' }, [el('span', { class: 'pj-dot' }), s.group, el('small', { text: String(items.length) })])
+      ]);
+      items.forEach(p => group.appendChild(row(p)));
+      list.appendChild(group);
+    });
+    if (!hits.length) list.appendChild(el('p', { class: 'pj-none', text: projects.length ? 'Nothing matches that.' : 'No projects have been added yet.' }));
+    const label = filter ? PROJECT_STAGES.find(s => s.key === filter).title.toLowerCase() : '';
+    status.textContent = hits.length + ' of ' + projects.length + ' projects' + (label ? ' · ' + label : '') + (query ? ' · "' + search.value.trim() + '"' : '');
+    clear.hidden = !filter && !query;
+    reveal(list);
+  };
+
+  root.replaceChildren(el('div', { class: 'pj' }, [el('div', { class: 'pj-overview' }, [pipe, bar]), tools, list]));
+  draw();
+}
 const INTENT_STOP = new Set(['the', 'a', 'an', 'to', 'of', 'how', 'do', 'i', 'can', 'my', 'me', 'someone', 'somebody', 'in', 'on', 'for', 'with', 'is', 'it', 'and', 'or', 'what', 'who', 'want', 'need', 'that', 'this', 'you', 'your', 'we', 'our', 'please', 'from', 'up']);
 
 function intentWords(text) {
