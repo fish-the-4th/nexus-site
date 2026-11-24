@@ -1,21 +1,3 @@
 {
-  "posts": [
-    {
-      "slug": "this-is-a-test-page",
-      "title": "This is a test page",
-      "excerpt": "this page is to test the blog function",
-      "category": "Community",
-      "date": "2026-11-24",
-      "authors": [
-        {
-          "name": "Fish The 4th",
-          "avatar": "Avatars/fish.the.4th.avatar.webp"
-        },
-        {
-          "name": "Somebody",
-          "avatar": "Avatars/somebody.avatar.webp"
-        }
-      ]
-    }
-  ]
+  "posts": []
 }
