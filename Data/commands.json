@@ -222,12 +222,32 @@
   {
     "id": "automod",
     "name": "AutoMod",
-    "intro": "Automatic protection against spam, scam links and raids.",
+    "intro": "Automatic protection against spam, scam links, raids, emoji spam and links to sites you block.",
     "commands": [
       {
         "usage": "-automod setup [type] [level]",
         "perms": "Manage Server",
-        "desc": "Configure an automod type (0 to disable). Types: spam, scam, raids"
+        "desc": "Configure an automod type (0 to disable). Types: spam, scam, raids, emoji"
+      },
+      {
+        "usage": "-automod links add [site]",
+        "perms": "Manage Server",
+        "desc": "Blocks a site and all its subdomains. Use example.* for every ending, or invites for Discord invites"
+      },
+      {
+        "usage": "-automod links remove [site]",
+        "perms": "Manage Server",
+        "desc": "Unblocks a site so links to it are allowed again"
+      },
+      {
+        "usage": "-automod links list",
+        "perms": "Manage Server",
+        "desc": "Shows every blocked site"
+      },
+      {
+        "usage": "-automod links clear",
+        "perms": "Manage Server",
+        "desc": "Empties the blocked links list"
       },
       {
         "usage": "-automod logging [#channel]",
