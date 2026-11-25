@@ -880,7 +880,7 @@ function buildGeneral(main, guild, data) {
 }
 
 const ACTION_NAMES = { warn: 'Warns', mute: 'Mutes', kick: 'Kicks', ban: 'Bans' };
-const AUTOMOD_NAMES = { spam: 'Spam detection', scam: 'Scam and malicious links', raids: 'Raid protection' };
+const AUTOMOD_NAMES = { spam: 'Spam detection', scam: 'Scam and malicious links', raids: 'Raid protection', emoji: 'Emoji spam' };
 
 function buildModeration(main, guild, data) {
   const st = data.settings;
@@ -1031,7 +1031,7 @@ function buildModeration(main, guild, data) {
   const amPanel = section('a-automod', 'AutoMod', 'Each type runs from 0 (off) to 10 (strictest). Changes take effect within a few seconds.');
   if (am.lockdown) amPanel.appendChild(el('div', { class: 'callout warn', text: 'A raid lockdown is running right now. End it in Discord with -automod raidend.' }));
   const sliders = {};
-  Object.keys(AUTOMOD_NAMES).forEach(type => {
+  Object.keys(AUTOMOD_NAMES).filter(type => type in am.levels).forEach(type => {
     const value = el('b', { class: 'level-value', text: am.levels[type] ? String(am.levels[type]) : 'Off' });
     const range = el('input', { type: 'range', min: '0', max: '10', step: '1', 'aria-label': AUTOMOD_NAMES[type] });
     range.value = am.levels[type];
@@ -1044,7 +1044,7 @@ function buildModeration(main, guild, data) {
   const amSave = el('button', { class: 'btn btn-primary', type: 'button', text: 'Save AutoMod' });
   const amMsg = status();
   amSave.addEventListener('click', () => run(amSave, amMsg, () => send('PUT', guildPath(guild.id, '/automod'), {
-    levels: { spam: +sliders.spam.value, scam: +sliders.scam.value, raids: +sliders.raids.value },
+    levels: Object.fromEntries(Object.keys(sliders).map(type => [type, +sliders[type].value])),
     log_channel: logSel.value || null
   })));
   amPanel.appendChild(el('label', { class: 'field-label', text: 'Where AutoMod posts what it did' }));
@@ -1083,6 +1083,41 @@ function buildModeration(main, guild, data) {
   amPanel.appendChild(el('div', { class: 'dash-row', style: 'margin-top:10px' }, [wlRole, wlUser, wlAdd]));
   amPanel.appendChild(wlMsg);
   drawWl();
+
+  if (Array.isArray(am.links)) {
+    amPanel.appendChild(el('h4', { class: 'sub-head', text: 'Blocked links' }));
+    amPanel.appendChild(el('p', { class: 'hint', text: 'Every link is allowed unless its site is on this list. Blocking a site also blocks its subdomains and every page on it. Use example.* to block it on every ending, or invites to block Discord invites.' }));
+    const lkChips = el('div', { class: 'chips' });
+    const lkMsg = status();
+    let links = am.links.slice();
+    const lkLimit = am.links_limit || 200;
+    function drawLinks() {
+      lkChips.replaceChildren();
+      links.forEach(site => lkChips.appendChild(chip(site, () => lkChange(site, false))));
+      if (!links.length) lkChips.appendChild(el('span', { class: 'hint', text: 'Nothing is blocked. Every link is allowed.' }));
+    }
+    async function lkChange(site, on) {
+      const out = await run(null, lkMsg, () => send('PUT', guildPath(guild.id, '/automod/links'), { site: site, on: on }));
+      if (!out) return false;
+      links = Array.isArray(out.links) ? out.links : links;
+      drawLinks();
+      return true;
+    }
+    const lkInput = textInput('', { placeholder: 'example.com', maxlength: '120', 'aria-label': 'Site to block' });
+    const lkAdd = el('button', { class: 'btn btn-outline', type: 'button', text: 'Block site' });
+    async function addSite() {
+      const site = lkInput.value.trim();
+      if (!site) return;
+      if (links.length >= lkLimit) { lkMsg.set('The list can hold ' + lkLimit + ' sites. Remove some first.', 'bad'); return; }
+      if (await lkChange(site, true)) lkInput.value = '';
+    }
+    lkAdd.addEventListener('click', addSite);
+    lkInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addSite(); } });
+    amPanel.appendChild(lkChips);
+    amPanel.appendChild(el('div', { class: 'dash-row', style: 'margin-top:10px' }, [lkInput, lkAdd]));
+    amPanel.appendChild(lkMsg);
+    drawLinks();
+  }
   main.appendChild(amPanel);
 }
 
