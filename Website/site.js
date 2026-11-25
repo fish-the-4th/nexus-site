@@ -1356,19 +1356,19 @@ function initTabs() {
 }
 
 const PROJECT_STAGES = [
-  { key: 'consideration', short: 'Idea', title: 'Ideas', hint: 'Being weighed up. Nothing is promised yet.', group: 'Still an idea' },
-  { key: 'planned', short: 'Planned', title: 'Planned', hint: 'Decided on and lined up for later.', group: 'Lined up next' },
-  { key: 'development', short: 'Building', title: 'Building', hint: 'Being worked on right now.', group: 'Being built right now' },
-  { key: 'launched', short: 'Live', title: 'Live', hint: 'Shipped and ready to use.', group: 'Already live' }
+  { key: 'consideration', title: 'In Consideration', hint: 'Being weighed up. Nothing is promised yet.' },
+  { key: 'planned', title: 'Planned', hint: 'Decided on and lined up for later.' },
+  { key: 'development', title: 'In Development', hint: 'Being worked on right now.' },
+  { key: 'launched', title: 'Launched', hint: 'Shipped and ready to use.' }
 ];
-const PROJECT_ORDER = ['development', 'planned', 'consideration', 'launched'];
+const PROJECT_ORDER = ['consideration', 'planned', 'development', 'launched'];
 
 function projectTrack(stage) {
   const at = PROJECT_STAGES.findIndex(s => s.key === stage);
   const track = el('div', { class: 'pj-track', 'aria-hidden': 'true' });
   PROJECT_STAGES.forEach((s, i) => {
     if (i) track.appendChild(el('i', { class: 'pj-link' + (i <= at ? ' on' : '') }));
-    track.appendChild(el('span', { class: 'pj-node' + (i < at ? ' done' : '') + (i === at ? ' now' : ''), title: s.short }));
+    track.appendChild(el('span', { class: 'pj-node' + (i < at ? ' done' : '') + (i === at ? ' now' : ''), title: s.title }));
   });
   return track;
 }
@@ -1409,17 +1409,15 @@ async function initProjects() {
   search.addEventListener('input', () => { query = search.value.trim().toLowerCase(); draw(); });
   const clear = el('button', { type: 'button', class: 'pj-clear', text: 'Show everything' });
   clear.addEventListener('click', () => { filter = ''; query = ''; search.value = ''; draw(); });
-  const status = el('p', { class: 'pj-status' });
-  const tools = el('div', { class: 'pj-tools' }, [status, clear, search]);
+  const tools = el('div', { class: 'pj-tools' }, [clear, search]);
   const list = el('div', { class: 'pj-list' });
 
   const row = p => {
-    const s = PROJECT_STAGES.find(x => x.key === p.status);
     const main = el('div', { class: 'pj-main' }, [el('h3', { text: String(p.name || 'Untitled') })]);
     if (p.description) main.appendChild(el('p', { text: String(p.description) }));
     const tags = (Array.isArray(p.tags) ? p.tags : []).slice(0, 4);
     if (tags.length) main.appendChild(el('div', { class: 'pj-tags' }, tags.map(t => el('span', { text: String(t) }))));
-    const side = el('div', { class: 'pj-side' }, [projectTrack(p.status), el('span', { class: 'pj-badge', text: s.short })]);
+    const side = el('div', { class: 'pj-side' }, [projectTrack(p.status)]);
     if (p.date) side.appendChild(el('time', { datetime: String(p.date), text: fmtDate(String(p.date)) }));
     return el('article', { class: 'pj-row reveal-me st-' + p.status }, [main, side]);
   };
@@ -1439,14 +1437,12 @@ async function initProjects() {
       if (!items.length) return;
       const s = PROJECT_STAGES.find(x => x.key === key);
       const group = el('section', { class: 'pj-group st-' + key }, [
-        el('h2', { class: 'pj-group-h' }, [el('span', { class: 'pj-dot' }), s.group, el('small', { text: String(items.length) })])
+        el('h2', { class: 'pj-group-h' }, [el('span', { class: 'pj-dot' }), s.title, el('small', { text: String(items.length) })])
       ]);
       items.forEach(p => group.appendChild(row(p)));
       list.appendChild(group);
     });
     if (!hits.length) list.appendChild(el('p', { class: 'pj-none', text: projects.length ? 'Nothing matches that.' : 'No projects have been added yet.' }));
-    const label = filter ? PROJECT_STAGES.find(s => s.key === filter).title.toLowerCase() : '';
-    status.textContent = hits.length + ' of ' + projects.length + ' projects' + (label ? ' · ' + label : '') + (query ? ' · "' + search.value.trim() + '"' : '');
     clear.hidden = !filter && !query;
     reveal(list);
   };
