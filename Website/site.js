@@ -125,7 +125,8 @@ const NAV = [
     ['staff', 'staff.html', 'Staff team', 'The people behind the bot.'],
     ['support', 'support.html', 'Support', 'Quick fixes, and where to get help.'],
     ['projects', 'projects.html', 'Projects', 'What has launched and what is coming.'],
-    ['blog', 'Blog/blog.html', 'Blog', 'Announcements and longer write-ups.']
+    ['blog', 'Blog/blog.html', 'Blog', 'Announcements and longer write-ups.'],
+    ['leaderboard', 'leaderboard.html', 'Leaderboard', 'Coming soon.']
   ] },
   { id: 'premium', label: 'Premium', icon: 'star', items: [
     ['premium', 'premium.html', 'Premium Plans', 'Coming soon.'],
@@ -340,7 +341,7 @@ function buildChrome() {
         ]),
         col('Information', [['about.html', 'About Nexus'], ['status.html', 'Status'], ['changelog.html', 'Changelog'], ['tools.html', 'Tools'], ['features.html', 'Features']]),
         col('Docs', [['docs.html', 'Documentation'], ['docs.html#/getting-started', 'Getting started'], ['docs.html#/troubleshooting', 'Troubleshooting'], ['docs.html#/commands', 'Command list'], ['docs.html#/privacy', 'Privacy']]),
-        col('Community', [['staff.html', 'Staff team'], ['support.html', 'Support'], ['projects.html', 'Projects'], ['Blog/blog.html', 'Blog']]),
+        col('Community', [['staff.html', 'Staff team'], ['support.html', 'Support'], ['projects.html', 'Projects'], ['Blog/blog.html', 'Blog'], ['leaderboard.html', 'Leaderboard']]),
         col('Premium', [['premium.html', 'Premium Plans'], ['custombots.html', 'Custom Bots']])
       ]),
       el('div', { class: 'footer-bottom' }, [
