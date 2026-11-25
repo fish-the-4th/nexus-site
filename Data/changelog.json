@@ -52,5 +52,11 @@
     "type": "new",
     "date": "2026-11-23",
     "text": "- New games: Word scramble, Minesweeper, and care battle\n- Stats now have an option to choose the timeframe: 7d, 14d, 30d, 60d, 90d (d=Days)"
+  },
+  {
+    "title": "Version 1.4.3",
+    "type": "new",
+    "date": "2026-11-25",
+    "text": "- New AutoMod types: Emoji`s & Links.\n- Errors that are logged in the dashboard are given an ID in the format of XXXX-XXXX, if you have questions about an error you have you can give an error code to support.\n  - Timed roles command now show the time remaining on selected users timed roles."
   }
 ]
