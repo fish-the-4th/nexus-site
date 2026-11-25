@@ -821,7 +821,7 @@ B4TH-61DE-ZK9P · Mute · by Jordan · Arguing in #general after a warning</div>
   <h1>AutoMod</h1>
   <p class="lead">AutoMod protects your server without anyone having to be online. This page explains how each protection works and how to manage it. For a step-by-step setup, read <a class="inline" href="#/guide-protect">Protect your server</a>.</p>
 
-  <h2>The three protections</h2>
+  <h2>The protections</h2>
   <div class="table-wrap">
   <table class="ref">
     <thead><tr><th>Type</th><th>Catches</th><th>What Nexus does</th></tr></thead>
@@ -829,9 +829,34 @@ B4TH-61DE-ZK9P · Mute · by Jordan · Arguing in #general after a warning</div>
       <tr><td><code>spam</code></td><td>One person sending too many messages too fast</td><td>Deletes the burst and says "slow down"</td></tr>
       <tr><td><code>scam</code></td><td>Links to known scam and look-alike sites</td><td>Deletes the message and warns the sender</td></tr>
       <tr><td><code>raids</code></td><td>Many accounts joining at once</td><td>Locks the server down and turns away new joiners</td></tr>
+      <tr><td><code>emoji</code></td><td>Messages packed with emojis</td><td>Deletes the message and warns the sender</td></tr>
     </tbody>
   </table>
   </div>
+
+  <h2>Emoji spam levels</h2>
+  <p>Custom and normal emojis both count. A message with more than this many is removed.</p>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Level</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead>
+    <tbody>
+      <tr><td>Emojis allowed</td><td>30</td><td>25</td><td>20</td><td>16</td><td>12</td><td>10</td><td>8</td><td>6</td><td>5</td><td>4</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Blocked links</h2>
+  <p>Every link is allowed until you block its site. Blocking a site also blocks all of its subdomains and every page on it, so <code>example.com</code> covers <code>www.example.com</code>, <code>shop.example.com</code> and <code>example.com/anything</code>.</p>
+  <div class="chat">
+    <div class="line you"><span class="who">You</span><div>-automod links add example.com</div></div>
+  </div>
+  <ul>
+    <li><code>example.*</code> blocks the site on every ending, like <code>.com</code>, <code>.net</code> and <code>.co.uk</code>.</li>
+    <li><code>invites</code> blocks Discord server invites.</li>
+    <li>A page works too: <code>example.com/shop</code> blocks that page and everything under it.</li>
+    <li><code>-automod links list</code> shows the list, <code>-automod links remove [site]</code> takes one off, and <code>-automod links clear</code> empties it.</li>
+  </ul>
+  <p>You can also manage the list from the dashboard. Whitelisted people and roles can still post blocked links.</p>
 
   <h2>Turning a type on</h2>
   <div class="chat">
