@@ -130,7 +130,9 @@ const NAV = [
   ] },
   { id: 'premium', label: 'Premium', icon: 'star', items: [
     ['premium', 'premium.html', 'Premium Plans', 'Coming soon.'],
-    ['custombots', 'custombots.html', 'Custom Bots', 'Coming soon.']
+    ['custombots', 'custombots.html', 'Custom Bots', 'Coming soon.'],
+    ['donations', 'donations.html', 'Donations', 'Coming soon.'],
+    ['purchases', 'purchases.html', 'My Purchases', 'Coming soon.']
   ] }
 ];
 
@@ -342,7 +344,7 @@ function buildChrome() {
         col('Information', [['about.html', 'About Nexus'], ['status.html', 'Status'], ['changelog.html', 'Changelog'], ['tools.html', 'Tools'], ['features.html', 'Features']]),
         col('Docs', [['docs.html', 'Documentation'], ['docs.html#/getting-started', 'Getting started'], ['docs.html#/troubleshooting', 'Troubleshooting'], ['docs.html#/commands', 'Command list'], ['docs.html#/privacy', 'Privacy']]),
         col('Community', [['staff.html', 'Staff team'], ['support.html', 'Support'], ['projects.html', 'Projects'], ['Blog/blog.html', 'Blog'], ['leaderboard.html', 'Leaderboard']]),
-        col('Premium', [['premium.html', 'Premium Plans'], ['custombots.html', 'Custom Bots']])
+        col('Premium', [['premium.html', 'Premium Plans'], ['custombots.html', 'Custom Bots'], ['donations.html', 'Donations'], ['purchases.html', 'My Purchases']])
       ]),
       el('div', { class: 'footer-bottom' }, [
         el('span', { text: 'Nexus is an independent project and is not affiliated with Discord Inc.' }),
