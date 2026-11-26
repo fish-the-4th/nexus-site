@@ -453,11 +453,6 @@
     "intro": "Everything that does not fit elsewhere: notes, translation, starboard and more. Giveaways are run from the dashboard.",
     "commands": [
       {
-        "usage": "-say [channel] [message]",
-        "perms": "Manage Messages",
-        "desc": "Makes the bot say something in a channel"
-      },
-      {
         "usage": "-ping",
         "perms": "None",
         "desc": "Shows the bot's latency (works in DMs)"
