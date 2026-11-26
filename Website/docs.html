@@ -452,6 +452,18 @@ I will remind you: in 2 hours</div></div>
   </div>
   <p>Every channel goes back to exactly how it was, including channels that had custom settings for <code>@everyone</code>.</p>
 
+  <h2>Honeypot</h2>
+  <p>A honeypot is a channel your members are told to stay out of. Spam bots and hacked accounts post in every channel they can see, so anyone who posts there is almost always one of them. Set it up in the dashboard under <strong>Server admin → AutoMod → Honeypot</strong>.</p>
+  <ul>
+    <li><strong>Channel:</strong> pick a channel nobody needs. A new one near the top of the list works best.</li>
+    <li><strong>Action:</strong> ban, timeout, kick or warn. Their message is always deleted, and the action is saved as a case like any other.</li>
+    <li><strong>Message cleanup:</strong> when banning, Nexus can also delete their messages from the last 1 to 7 days.</li>
+    <li><strong>Warning message:</strong> Nexus can post and pin a short note in the channel telling people not to type there.</li>
+    <li><strong>Roles to skip:</strong> staff and moderators you pick are ignored. Bots are ignored unless you turn that off, and the server owner and anyone with Administrator are always ignored.</li>
+    <li><strong>Log channel:</strong> where Nexus reports what it did. If you leave it empty, it uses the AutoMod log.</li>
+  </ul>
+  <p>Nexus needs View Channel, Read Message History and Manage Messages in the honeypot channel, plus Ban Members, Timeout Members or Kick Members for the action you pick. The dashboard tells you if anything is missing.</p>
+
   <h2>Who AutoMod ignores</h2>
   <p>Bots and people on the whitelist are skipped. You can whitelist a single user or a whole role.</p>
   <div class="chat">
