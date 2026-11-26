@@ -107,9 +107,9 @@ function showLogin(message, isError) {
   const root = dashClear();
   if (message) root.appendChild(el('div', { class: 'callout' + (isError ? ' warn' : ''), text: message }));
   const perks = [
-    ['📊', 'Your stats', 'Messages, voice time and rank in every server you share with Nexus.'],
-    ['🧾', 'Your history', 'Your own moderation record, reminders, giveaways and game stats.'],
-    ['⚙️', 'Server settings', 'Owners and admins can manage Nexus without typing commands.']
+    ['📊', 'Your dashboard', 'Your stats, games and history across every server you share with Nexus.'],
+    ['🧾', 'Your record', 'Your own moderation history, reminders, giveaways and command access.'],
+    ['⚙️', 'Server settings', 'Members with Administrator can manage Nexus without typing commands.']
   ];
   root.appendChild(el('div', { class: 'login-card' }, [
     el('div', { class: 'login-glow', 'aria-hidden': 'true' }),
@@ -190,6 +190,11 @@ const DASH_ICONS = {
   starb: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>',
   card: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg>',
   server: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="7" rx="2"/><rect x="4" y="13" width="16" height="7" rx="2"/><path d="M8 7.5h.01M8 16.5h.01"/></svg>',
+  grid: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>',
+  game: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8h10a4 4 0 0 1 4 4v1.5a3 3 0 0 1-5.4 1.8L14.5 14h-5l-1.1 1.3A3 3 0 0 1 3 13.5V12a4 4 0 0 1 4-4z"/><path d="M8 10.5v3M6.5 12h3"/><path d="M15.5 11h.01M17.5 13h.01"/></svg>',
+  bell: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg>',
+  key: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="14" r="4"/><path d="M11 11l8-8M16 6l2.5 2.5M14 8l2 2"/></svg>',
+  bot: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="8" width="15" height="11" rx="3"/><path d="M12 8V4.5M12 4.5h.01M9 13h.01M15 13h.01M9.5 16h5"/></svg>',
   ticket2: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8a2 2 0 0 0 2-2h12a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H6a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14 6v12" stroke-dasharray="2 2"/></svg>'
 };
 
@@ -238,7 +243,6 @@ function serverSwitch(user, guild) {
     if (!shown.length) list.appendChild(el('p', { class: 'srv-empty', text: servers.length ? 'No server matches that.' : 'No servers found.' }));
     shown.forEach(g => {
       const kids = [guildIcon(g), el('span', { class: 'srv-item-name', text: g.name })];
-      if (g.admin) kids.push(el('span', { class: 'gtag', text: 'Admin' }));
       const b = el('button', { class: 'srv-item' + (guild && g.id === guild.id ? ' on' : ''), type: 'button' }, kids);
       b.addEventListener('click', () => { set(false); if (!guild || g.id !== guild.id) showChooser(user, g); });
       list.appendChild(b);
@@ -278,37 +282,25 @@ function userMenu(user) {
   return el('div', { class: 'app-user' }, kids);
 }
 
-function openSection(user, guild, key) {
-  if (key === 'me') return showProfile(user, guild);
-  if (key === 'stats') return showStats(user, guild);
-  return showAdmin(user, guild, key);
-}
-
-const PERSONAL_PAGES = [
-  { key: 'me', label: 'My dashboard', icon: 'user' },
-  { key: 'stats', label: 'My stats', icon: 'chart' }
-];
+const ME_PAGES = {
+  overview: { title: 'Overview', icon: 'grid', filter: true, lead: 'A quick look at everything in your dashboard. Open any card for the full details.' },
+  stats: { title: 'Stats', icon: 'chart', filter: true, lead: 'Your messages and voice time over the last 30 days.' },
+  games: { title: 'Games', icon: 'game', filter: false, lead: 'Every game you have played with Nexus: wins, streaks and best scores.' },
+  moderation: { title: 'Moderation', icon: 'shield', filter: true, lead: 'Your own warnings, timeouts, kicks and bans. Only you can see this page.' },
+  reminders: { title: 'Reminders', icon: 'bell', filter: true, lead: 'Reminders you set that have not gone off yet.' },
+  giveaways: { title: 'Giveaways', icon: 'gift', filter: true, lead: 'Giveaways running in your servers, the ones you have entered, and the ones you won.' },
+  access: { title: 'Command access', icon: 'key', filter: true, lead: 'Which Nexus commands you can use, and in which servers.' },
+  privacy: { title: 'Privacy', icon: 'lock', local: true }
+};
+const ME_BOTTOM = ['privacy'];
 const BOTTOM_PAGES = ['subscriptions', 'privacy'];
 
-function modeSwitch(user, guild, mode, cls) {
-  const wrap = el('div', { class: 'mode ' + cls, role: 'tablist', 'aria-label': 'Dashboard view', 'data-mode': mode });
-  wrap.appendChild(el('span', { class: 'mode-thumb', 'aria-hidden': 'true' }));
-  [['personal', 'Personal', 'user'], ['admin', 'Server admin', 'server']].forEach(o => {
-    const on = o[0] === mode;
-    const b = el('button', { class: 'mode-opt' + (on ? ' on' : ''), type: 'button', role: 'tab', 'aria-selected': on ? 'true' : 'false' }, [dIcon(o[2]), el('span', { text: o[1] })]);
-    if (!on) b.addEventListener('click', () => {
-      document.querySelectorAll('.mode').forEach(m => m.setAttribute('data-mode', o[0]));
-      setTimeout(() => (o[0] === 'admin' ? showAdmin(user, guild, 'general') : showProfile(user, guild)), REDUCED ? 0 : 220);
-    });
-    wrap.appendChild(b);
-  });
-  return wrap;
-}
-
-function appFrame(user, guild, active) {
+function appFrame(user, ctx, active) {
   setHero(false);
+  const guild = ctx && ctx.server ? ctx.server : null;
+  const personal = !!(ctx && ctx.personal);
   const root = dashClear();
-  const app = el('div', { class: 'app' + (guild ? '' : ' no-side') });
+  const app = el('div', { class: 'app' + (guild || personal ? '' : ' no-side') });
   const page = el('div', { class: 'app-page' });
   const scroller = el('main', { class: 'app-main' }, [page]);
   const frame = { page: page, sub: null };
@@ -317,10 +309,15 @@ function appFrame(user, guild, active) {
   const brand = el('a', { class: 'app-brand', href: 'index.html', 'aria-label': 'Nexus home' }, [
     el('img', { src: ROOT + 'Assets/Logo/logo.png', alt: '', width: '28', height: '28' }), el('span', { text: 'Nexus' })
   ]);
-  const mode = active === 'me' || active === 'stats' ? 'personal' : 'admin';
-  const topKids = [menuBtn, brand, serverSwitch(user, guild), el('span', { class: 'app-grow' })];
-  if (guild && guild.admin) topKids.push(modeSwitch(user, guild, mode, 'mode-top'), el('span', { class: 'app-grow' }));
-  topKids.push(userMenu(user));
+  const topKids = [menuBtn, brand];
+  if (personal) topKids.push(el('span', { class: 'app-place' }, [dIcon('user'), el('span', { text: 'My dashboard' })]));
+  else topKids.push(serverSwitch(user, guild));
+  topKids.push(el('span', { class: 'app-grow' }));
+  const jump = el('button', { class: 'app-jump', type: 'button' }, personal
+    ? [dIcon('server'), el('span', { text: 'Server dashboards' })]
+    : [dIcon('user'), el('span', { text: 'My dashboard' })]);
+  jump.addEventListener('click', () => (personal ? showGuilds(user) : showMe(user, 'overview')));
+  topKids.push(jump, userMenu(user));
   app.appendChild(el('header', { class: 'app-top' }, topKids));
 
   const body = el('div', { class: 'app-body' });
@@ -331,7 +328,7 @@ function appFrame(user, guild, active) {
     menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
 
-  if (guild) {
+  if (guild || personal) {
     const side = el('nav', { class: 'app-side', 'aria-label': 'Dashboard sections' });
     const node = item => {
       const on = item.key === active;
@@ -340,21 +337,15 @@ function appFrame(user, guild, active) {
       const b = el('button', attrs, [dIcon(item.icon), el('span', { text: item.label })]);
       const sub = el('div', { class: 'side-sub' });
       if (on) frame.sub = sub;
-      else b.addEventListener('click', () => openSection(user, guild, item.key));
+      else b.addEventListener('click', () => (personal ? showMe(user, item.key) : showAdmin(user, guild, item.key)));
       return el('div', { class: 'side-node' }, [b, sub]);
     };
-    if (guild.admin) side.appendChild(modeSwitch(user, guild, mode, 'mode-side'));
-    if (mode === 'personal' || !guild.admin) {
-      side.appendChild(el('p', { class: 'side-label', text: 'You' }));
-      PERSONAL_PAGES.forEach(p => side.appendChild(node(p)));
-    } else {
-      side.appendChild(el('p', { class: 'side-label', text: 'Server' }));
-      Object.keys(ADMIN_PAGES).filter(k => BOTTOM_PAGES.indexOf(k) < 0).forEach(k => {
-        side.appendChild(node({ key: k, label: ADMIN_PAGES[k].title, icon: ADMIN_PAGES[k].icon }));
-      });
-      side.appendChild(el('div', { class: 'side-grow' }));
-      side.appendChild(el('div', { class: 'side-bottom' }, BOTTOM_PAGES.map(k => node({ key: k, label: ADMIN_PAGES[k].title, icon: ADMIN_PAGES[k].icon }))));
-    }
+    const pages = personal ? ME_PAGES : ADMIN_PAGES;
+    const bottom = personal ? ME_BOTTOM : BOTTOM_PAGES;
+    side.appendChild(el('p', { class: 'side-label', text: personal ? 'You' : 'Server' }));
+    Object.keys(pages).filter(k => bottom.indexOf(k) < 0).forEach(k => side.appendChild(node({ key: k, label: pages[k].title, icon: pages[k].icon })));
+    side.appendChild(el('div', { class: 'side-grow' }));
+    side.appendChild(el('div', { class: 'side-bottom' }, bottom.map(k => node({ key: k, label: pages[k].title, icon: pages[k].icon }))));
     body.appendChild(side);
   }
   const scrim = el('div', { class: 'app-scrim' });
@@ -365,7 +356,7 @@ function appFrame(user, guild, active) {
 
   frame.head = (title, sub, lead) => {
     const h = el('div', { class: 'page-head' });
-    if (sub) h.appendChild(el('p', { class: 'eyebrow' }, [el('b', { text: mode === 'admin' && guild ? 'Server admin' : 'Personal' }), ' · ' + sub]));
+    if (sub) h.appendChild(el('p', { class: 'eyebrow' }, [el('b', { text: personal ? 'Personal' : 'Server admin' }), ' · ' + sub]));
     h.appendChild(el('h1', { text: title }));
     if (lead) h.appendChild(el('p', { class: 'hint', text: lead }));
     page.appendChild(h);
@@ -432,26 +423,36 @@ function textInput(value, attrs) {
 async function showGuilds(user) {
   const frame = appFrame(user, null, null);
   const page = frame.page;
-  const head = frame.head('Choose a server', null, 'Pick a server to see your own stats there, or to manage Nexus if you are an admin.');
+  const head = frame.head('Choose a server', null, 'Pick a server you manage, or open your own dashboard to see your stats and history across every server.');
+  const pic = safeIcon(user.avatar);
+  const cta = el('button', { class: 'me-cta', type: 'button' }, [
+    pic ? el('img', { class: 'me-cta-pic', src: pic, alt: '' }) : el('span', { class: 'me-cta-pic' }, [dIcon('user')]),
+    el('span', { class: 'me-cta-text' }, [
+      el('b', { text: 'My dashboard' }),
+      el('small', { text: 'Your stats, games, moderation history, reminders, giveaways and command access, across all your servers.' })
+    ]),
+    el('span', { class: 'me-cta-go', text: 'Open →' })
+  ]);
+  cta.addEventListener('click', () => showMe(user, 'overview'));
+  page.appendChild(cta);
+  page.appendChild(el('h2', { class: 'list-head', text: 'Servers you manage' }));
   const wait = loading(page, 'Loading your servers...');
   let guilds;
   try {
     guilds = await loadGuilds(true);
   } catch (e) {
-    return failInto(page, e, [head]);
+    return failInto(page, e, [head, cta]);
   }
   wait.remove();
   if (!guilds.length) {
-    page.appendChild(el('div', { class: 'callout', text: 'No servers found. You need to be in a server that has Nexus.' }));
+    page.appendChild(el('div', { class: 'callout', text: 'You are not an admin in any server with Nexus. Server dashboards are only for members with the Administrator permission. Your own dashboard above still works.' }));
     return;
   }
   const list = el('div', { class: 'guild-list' });
   guilds.forEach((g, i) => {
-    const meta = el('span', { class: 'gmeta', text: g.members + ' members' });
-    if (g.admin) meta.appendChild(el('span', { class: 'gtag', text: 'Admin' }));
     const card = el('button', { class: 'guild-card', type: 'button', style: '--i:' + i }, [
       guildIcon(g),
-      el('span', { class: 'gtext' }, [el('span', { class: 'gname', text: g.name }), meta])
+      el('span', { class: 'gtext' }, [el('span', { class: 'gname', text: g.name }), el('span', { class: 'gmeta', text: g.members + ' members' })])
     ]);
     card.addEventListener('click', () => showChooser(user, g));
     list.appendChild(card);
@@ -460,7 +461,7 @@ async function showGuilds(user) {
 }
 
 function showChooser(user, guild) {
-  return guild.admin ? showAdmin(user, guild, 'general') : showProfile(user, guild);
+  return showAdmin(user, guild, 'general');
 }
 
 function statTile(value, label) {
@@ -491,189 +492,6 @@ function caseRow(c, detailed, showModerator) {
   return row;
 }
 
-const USER_SECTIONS = [
-  { id: 'u-profile', label: 'Profile' },
-  { id: 'u-stats', label: 'Stats' },
-  { id: 'u-cases', label: 'Moderation history' },
-  { id: 'u-reminders', label: 'Reminders' },
-  { id: 'u-giveaways', label: 'Giveaways' },
-  { id: 'u-access', label: 'Command access' },
-  { id: 'u-games', label: 'Game stats' }
-];
-
-async function showProfile(user, guild) {
-  const frame = appFrame(user, guild, 'me');
-  const main = frame.page;
-  const head = frame.head('My dashboard', guild.name);
-  const wait = loading(main, 'Loading your dashboard...');
-  let data;
-  try {
-    data = await dashFetch(guildPath(guild.id, '/me'));
-  } catch (e) {
-    return failInto(main, e, [head]);
-  }
-  wait.remove();
-  const m = data.member;
-  const s = data.stats;
-
-  const pic = safeIcon(m.avatar);
-  const badges = el('div', { class: 'profile-badges' });
-  if (m.is_owner) badges.appendChild(el('span', { class: 'gtag', text: 'Owner' }));
-  else if (m.is_admin) badges.appendChild(el('span', { class: 'gtag', text: 'Admin' }));
-  const profile = el('section', { class: 'dash-panel dash-section profile', id: 'u-profile' }, [
-    pic ? el('img', { class: 'profile-pic', src: pic, alt: '' }) : el('span', { class: 'profile-pic' }),
-    el('div', { class: 'profile-main' }, [
-      el('h2', { text: m.display_name }),
-      el('p', { class: 'hint', text: '@' + m.username }),
-      badges,
-      el('dl', { class: 'profile-facts' }, [
-        el('dt', { text: 'Discord ID' }), el('dd', {}, [el('code', { text: m.id })]),
-        el('dt', { text: 'Joined this server' }), el('dd', { text: fmtDay(m.joined_at) }),
-        el('dt', { text: 'Time in the server' }), el('dd', { text: fmtSince(m.joined_at) }),
-        el('dt', { text: 'Account created' }), el('dd', { text: fmtDay(m.created_at) })
-      ])
-    ])
-  ]);
-  main.appendChild(profile);
-
-  const more = el('button', { class: 'btn btn-primary', type: 'button', text: 'See all my stats' });
-  more.addEventListener('click', () => showStats(user, guild));
-  main.appendChild(section('u-stats', 'Your stats', 'Activity from the last 30 days. Nexus counts messages, it never saves what they say.', [
-    el('div', { class: 'stat-grid' }, [
-      statTile(s.messages_7d, 'messages this week'),
-      statTile(s.messages_30d, 'messages in 30 days'),
-      statTile(fmtMinutes(s.voice_minutes_30d), 'in voice, 30 days'),
-      statTile(s.rank ? '#' + s.rank : '-', s.rank ? 'of ' + s.ranked_members + ' by messages' : 'no messages yet')
-    ]),
-    el('div', { style: 'margin-top:14px' }, [more])
-  ]));
-
-  main.appendChild(caseSection(guild, data.cases));
-
-  const reminders = section('u-reminders', 'Active reminders', 'Reminders you set in this server that have not gone off yet.');
-  const giveaways = section('u-giveaways', 'Giveaways', 'Giveaways running in this server right now, and whether you have entered.');
-  const access = section('u-access', 'Command access', 'What you can use in this server, based on your roles and any changes the admins made.');
-  const games = section('u-games', 'Game stats', 'Your results across every server. Games are not tied to one server.');
-  [reminders, giveaways, access, games].forEach(x => { x.appendChild(el('p', { class: 'empty', text: 'Loading...' })); main.appendChild(x); });
-  frame.sections(USER_SECTIONS);
-
-  dashFetch(guildPath(guild.id, '/me/extras')).then(extra => {
-    fillReminders(reminders, extra.reminders);
-    fillAccess(access, extra.access);
-    fillGames(games, extra.games);
-  }).catch(e => {
-    if (e.loggedOut) return showLogin(e.message, true);
-    [reminders, access, games].forEach(x => { x.lastChild.replaceWith(el('p', { class: 'dash-msg bad', text: e.message })); });
-  });
-  dashFetch(guildPath(guild.id, '/me/giveaways')).then(g => fillGiveaways(giveaways, g.giveaways)).catch(e => {
-    if (e.loggedOut) return;
-    giveaways.lastChild.replaceWith(el('p', { class: 'dash-msg bad', text: e.message }));
-  });
-}
-
-function caseSection(guild, c) {
-  const panel = section('u-cases', 'Your moderation history');
-  if (!c.total) {
-    panel.appendChild(el('p', { class: 'hint', text: 'Nothing on record. Nice and clean.' }));
-    return panel;
-  }
-  panel.appendChild(el('p', { class: 'hint', text: c.total + (c.total === 1 ? ' case' : ' cases') + ' on record in this server.' }));
-  const chips = el('div', { class: 'case-chips' });
-  Object.keys(c.types).forEach(t => chips.appendChild(el('span', { class: 'gtag', text: t + ' × ' + c.types[t] })));
-  panel.appendChild(chips);
-  const list = el('div', { class: 'case-list' });
-  c.latest.forEach(x => list.appendChild(caseRow(x, false)));
-  panel.appendChild(list);
-  const btn = el('button', { class: 'btn btn-outline', type: 'button', text: 'Show all details' });
-  const msg = status();
-  let open = false;
-  btn.addEventListener('click', async () => {
-    if (open) {
-      list.replaceChildren();
-      c.latest.forEach(x => list.appendChild(caseRow(x, false)));
-      btn.textContent = 'Show all details';
-      open = false;
-      return;
-    }
-    const full = await run(btn, msg, () => dashFetch(guildPath(guild.id, '/me/cases')), ' ');
-    if (!full) return;
-    msg.set('');
-    list.replaceChildren();
-    full.cases.forEach(x => list.appendChild(caseRow(x, true)));
-    btn.textContent = 'Hide details';
-    open = true;
-  });
-  panel.appendChild(el('div', { style: 'margin-top:14px' }, [btn, msg]));
-  return panel;
-}
-
-function fillReminders(panel, items) {
-  panel.lastChild.remove();
-  if (!items.length) { panel.appendChild(el('p', { class: 'hint', text: 'No active reminders. Set one with -reminder create.' })); return; }
-  const list = el('div', { class: 'case-list' });
-  items.forEach(r => list.appendChild(el('div', { class: 'case-row' }, [
-    el('div', { class: 'case-head' }, [el('span', { class: 'case-type', text: fmtIn(r.time) }), el('span', { class: 'case-when', text: fmtWhen(r.time) })]),
-    el('p', { text: r.text }),
-    r.channel ? el('p', { class: 'case-dur', text: 'In ' + r.channel }) : el('span')
-  ])));
-  panel.appendChild(list);
-}
-
-function fillGiveaways(panel, items) {
-  panel.lastChild.remove();
-  if (!items.length) { panel.appendChild(el('p', { class: 'hint', text: 'No giveaways are running right now.' })); return; }
-  const list = el('div', { class: 'case-list' });
-  items.forEach(g => {
-    const state = g.entered === true ? el('span', { class: 'gtag ok', text: "You're in" })
-      : g.entered === false ? el('span', { class: 'gtag', text: 'Not entered' })
-      : el('span', { class: 'gtag', text: 'Could not check' });
-    list.appendChild(el('div', { class: 'case-row' }, [
-      el('div', { class: 'case-head' }, [el('span', { class: 'case-type', text: g.prize }), state, el('span', { class: 'case-when', text: g.paused ? 'Paused' : 'Ends ' + fmtIn(g.ends) })]),
-      el('p', { class: 'case-dur', text: g.winners + (g.winners === 1 ? ' winner' : ' winners') + ' · ' + g.channel }),
-      safeDiscordUrl(g.link) ? el('a', { class: 'inline-link', href: safeDiscordUrl(g.link), target: '_blank', rel: 'noopener noreferrer', text: g.entered ? 'Open in Discord' : 'Open in Discord to enter' }) : el('span')
-    ]));
-  });
-  panel.appendChild(list);
-}
-
-function fillAccess(panel, items) {
-  panel.lastChild.remove();
-  const search = textInput('', { placeholder: 'Search commands', 'aria-label': 'Search commands' });
-  const onlyMine = toggle('Only show what I can use', false);
-  const list = el('div', { class: 'access-list' });
-  function draw() {
-    const q = search.value.trim().toLowerCase();
-    list.replaceChildren();
-    let shown = 0;
-    items.forEach(c => {
-      if (onlyMine.input.checked && c.allowed !== true) return;
-      if (q && (c.name + ' ' + c.desc + ' ' + c.category).toLowerCase().indexOf(q) < 0) return;
-      shown++;
-      const tag = c.allowed === true ? el('span', { class: 'gtag ok', text: 'Yes' })
-        : c.allowed === false ? el('span', { class: 'gtag no', text: 'No' })
-        : el('span', { class: 'gtag', text: 'Depends' });
-      list.appendChild(el('div', { class: 'access-row' }, [el('code', { text: c.usage }), el('span', { class: 'access-desc', text: c.desc }), tag]));
-    });
-    if (!shown) list.appendChild(el('p', { class: 'hint', text: 'Nothing matches.' }));
-  }
-  search.addEventListener('input', draw);
-  onlyMine.input.addEventListener('change', draw);
-  panel.appendChild(el('div', { class: 'dash-row', style: 'margin-bottom:10px' }, [search, onlyMine]));
-  panel.appendChild(list);
-  draw();
-}
-
-function fillGames(panel, items) {
-  panel.lastChild.remove();
-  if (!items.length) { panel.appendChild(el('p', { class: 'hint', text: 'No games played yet. Try -games.' })); return; }
-  const table = el('table', { class: 'ref' });
-  table.appendChild(el('thead', {}, [el('tr', {}, ['Game', 'Wins', 'Losses', 'Draws', 'Streak', 'Best streak', 'Best score'].map(h => el('th', { text: h })))]));
-  const body = el('tbody');
-  items.forEach(g => body.appendChild(el('tr', {}, [g.game, g.wins, g.losses, g.draws, g.streak, g.best_streak, g.best_score || '-'].map(v => el('td', { text: String(v) })))));
-  table.appendChild(body);
-  panel.appendChild(el('div', { class: 'table-wrap' }, [table]));
-}
-
 function barChart(values, now, format) {
   const max = Math.max.apply(null, values.concat([1]));
   const chart = el('div', { class: 'bars', role: 'img' });
@@ -694,47 +512,327 @@ function topList(items, format, emptyText) {
   return list;
 }
 
-async function showStats(user, guild) {
-  const frame = appFrame(user, guild, 'stats');
-  const root = frame.page;
-  const head = frame.head('My stats', guild.name);
-  const wait = loading(root, 'Loading your stats...');
+let ME_FILTER = 'all';
+let ME_SERVERS = null;
+function loadMyServers(force) {
+  if (force || !ME_SERVERS) {
+    const p = dashFetch('/api/me/servers').then(d => d.servers || []);
+    p.catch(() => { if (ME_SERVERS === p) ME_SERVERS = null; });
+    ME_SERVERS = p;
+  }
+  return ME_SERVERS;
+}
+
+function filterBar(servers, onChange) {
+  const sel = el('select', { class: 'search dash-select', 'aria-label': 'Show data from' });
+  sel.appendChild(el('option', { value: 'all', text: 'All servers (' + servers.length + ')' }));
+  servers.forEach(s => sel.appendChild(el('option', { value: s.id, text: s.name })));
+  sel.value = ME_FILTER;
+  sel.addEventListener('change', () => { ME_FILTER = sel.value; onChange(); });
+  return el('div', { class: 'me-filter' }, [el('span', { class: 'field-label', text: 'Server' }), sel]);
+}
+
+const ME_BUILDERS = {
+  overview: (b, u, d, s) => buildMeOverview(b, u, d, s),
+  stats: (b, u, d, s) => buildMeStats(b, u, d, s),
+  games: (b, u, d) => buildMeGames(b, d),
+  moderation: (b, u, d) => buildMeModeration(b, d),
+  reminders: (b, u, d) => buildMeReminders(b, d),
+  giveaways: (b, u, d) => buildMeGiveaways(b, d),
+  access: (b, u, d) => buildMeAccess(b, d),
+  privacy: b => buildMePrivacy(b)
+};
+
+async function showMe(user, page) {
+  if (!ME_PAGES[page]) page = 'overview';
+  const frame = appFrame(user, { personal: true }, page);
+  const main = frame.page;
+  const def = ME_PAGES[page];
+  const head = frame.head(def.title, 'Your dashboard', def.lead);
+  if (def.local) return ME_BUILDERS[page](main, user);
+  let servers;
+  try {
+    servers = await loadMyServers();
+  } catch (e) {
+    return failInto(main, e, [head]);
+  }
+  if (ME_FILTER !== 'all' && !servers.some(s => s.id === ME_FILTER)) ME_FILTER = 'all';
+  if (def.filter) head.appendChild(filterBar(servers, () => showMe(user, page)));
+  else head.appendChild(el('p', { class: 'hint small', text: 'Games are not tied to one server, so these count everywhere you play.' }));
+  const body = el('div', { class: 'me-body' });
+  main.appendChild(body);
+  const wait = loading(body, 'Loading...');
   let data;
   try {
-    data = await dashFetch(guildPath(guild.id, '/me/stats'));
+    data = await dashFetch('/api/me/' + page + (def.filter ? '?guild=' + encodeURIComponent(ME_FILTER) : ''));
   } catch (e) {
-    return failInto(root, e, [head]);
+    return failInto(body, e, []);
   }
   wait.remove();
-  const s = data.summary;
-  root.appendChild(el('div', { class: 'stat-grid', style: 'margin-bottom:16px' }, [
-    statTile(s.messages_7d, 'messages this week'),
-    statTile(s.messages_30d, 'messages in 30 days'),
-    statTile(fmtMinutes(s.voice_minutes_7d), 'in voice this week'),
-    statTile(fmtMinutes(s.voice_minutes_30d), 'in voice, 30 days'),
-    statTile(s.invites_30d, 'people joined with your invites'),
-    statTile(s.rank ? '#' + s.rank : '-', s.rank ? 'of ' + s.ranked_members + ' by messages' : 'not ranked yet')
-  ]));
+  ME_BUILDERS[page](body, user, data, servers);
+}
 
-  root.appendChild(el('div', { class: 'dash-panel' }, [
-    el('h3', { text: 'Messages per day' }),
-    barChart(data.daily_messages, data.now, v => v + (v === 1 ? ' message' : ' messages'))
-  ]));
-  root.appendChild(el('div', { class: 'dash-panel' }, [
-    el('h3', { text: 'Voice time per day' }),
-    barChart(data.daily_voice_minutes, data.now, fmtMinutes)
-  ]));
-  root.appendChild(el('div', { class: 'dash-cols' }, [
-    el('div', { class: 'dash-panel' }, [
-      el('h3', { text: 'Where you chat most' }),
-      topList(data.top_text, x => String(x.count), 'No messages in the last 30 days.')
-    ]),
-    el('div', { class: 'dash-panel' }, [
-      el('h3', { text: 'Where you talk most' }),
-      topList(data.top_voice, x => fmtMinutes(x.minutes), 'No voice time in the last 30 days.')
+function serverName(servers) {
+  const s = servers.find(x => x.id === ME_FILTER);
+  return s ? s.name : null;
+}
+
+function ovCard(user, key, big, label, lines) {
+  const page = ME_PAGES[key];
+  const card = el('button', { class: 'ov-card', type: 'button' }, [
+    el('span', { class: 'ov-top' }, [dIcon(page.icon), el('span', { text: page.title })]),
+    el('b', { class: 'ov-big', text: String(big) }),
+    el('span', { class: 'ov-label', text: label }),
+    el('span', { class: 'ov-lines' }, lines.filter(Boolean).map(t => el('span', { text: t }))),
+    el('span', { class: 'ov-go', text: 'See all →' })
+  ]);
+  card.addEventListener('click', () => showMe(user, key));
+  return card;
+}
+
+function buildMeOverview(main, user, d, servers) {
+  const pic = safeIcon(user.avatar);
+  const where = serverName(servers);
+  main.appendChild(el('section', { class: 'dash-panel profile me-hello' }, [
+    pic ? el('img', { class: 'profile-pic', src: pic, alt: '' }) : el('span', { class: 'profile-pic' }),
+    el('div', { class: 'profile-main' }, [
+      el('h2', { text: user.name }),
+      el('p', { class: 'hint', text: where ? 'Showing ' + where + ' only.' : 'You share ' + plural(d.servers, 'server') + ' with Nexus.' })
     ])
   ]));
-  root.appendChild(el('p', { class: 'hint', text: 'This page shows the last 30 days. Nexus keeps up to 90 days of activity and deletes anything older automatically.' }));
+  const g = d.games;
+  const c = d.cases;
+  const r = d.reminders;
+  const gv = d.giveaways;
+  const a = d.access;
+  main.appendChild(el('div', { class: 'ov-grid' }, [
+    ovCard(user, 'stats', d.messages_30d, 'messages in 30 days', [
+      d.messages_7d + ' this week', fmtMinutes(d.voice_minutes_30d) + ' in voice',
+      d.top_server && !where ? 'Most active in ' + d.top_server : null
+    ]),
+    ovCard(user, 'games', g.played, g.played === 1 ? 'game played' : 'games played', [
+      plural(g.wins, 'win'), g.best_streak ? 'Best streak ' + g.best_streak : null
+    ]),
+    ovCard(user, 'moderation', c.total, c.total === 1 ? 'case on record' : 'cases on record', [
+      c.latest ? 'Latest: ' + c.latest.type + ', ' + fmtDay(c.latest.time) : 'A clean record'
+    ]),
+    ovCard(user, 'reminders', r.count, r.count === 1 ? 'active reminder' : 'active reminders', [
+      r.next ? 'Next ' + fmtIn(r.next.time) : 'Nothing coming up'
+    ]),
+    ovCard(user, 'giveaways', gv.entered, 'entered right now', [
+      plural(gv.active, 'giveaway') + ' running', gv.won ? 'You won ' + plural(gv.won, 'time') : null
+    ]),
+    ovCard(user, 'access', a.usable, 'commands you can use', [
+      a.servers ? 'Counted across ' + plural(a.servers, 'server') : 'No servers yet'
+    ])
+  ]));
+}
+
+function buildMeStats(main, user, d, servers) {
+  const one = d.single;
+  const tiles = [
+    statTile(d.messages_7d, 'messages this week'),
+    statTile(d.messages_30d, 'messages in 30 days'),
+    statTile(fmtMinutes(d.voice_minutes_7d), 'in voice this week'),
+    statTile(fmtMinutes(d.voice_minutes_30d), 'in voice, 30 days')
+  ];
+  if (one) {
+    tiles.push(statTile(one.rank ? '#' + one.rank : '-', one.rank ? 'of ' + one.ranked + ' by messages' : 'not ranked yet'));
+    tiles.push(statTile(one.invites_30d, 'people joined with your invites'));
+    if (one.joined_at) tiles.push(statTile(fmtSince(one.joined_at), 'in this server'));
+  }
+  main.appendChild(el('div', { class: 'stat-grid', style: 'margin-bottom:16px' }, tiles));
+  main.appendChild(el('div', { class: 'dash-panel' }, [el('h3', { text: 'Messages per day' }), barChart(d.daily_messages, d.now, v => plural(v, 'message'))]));
+  main.appendChild(el('div', { class: 'dash-panel' }, [el('h3', { text: 'Voice time per day' }), barChart(d.daily_voice_minutes, d.now, fmtMinutes)]));
+  if (one) {
+    main.appendChild(el('div', { class: 'dash-cols' }, [
+      el('div', { class: 'dash-panel' }, [el('h3', { text: 'Where you chat most' }), topList(one.top_text, x => String(x.count), 'No messages in the last 30 days.')]),
+      el('div', { class: 'dash-panel' }, [el('h3', { text: 'Where you talk most' }), topList(one.top_voice, x => fmtMinutes(x.minutes), 'No voice time in the last 30 days.')])
+    ]));
+  } else {
+    main.appendChild(el('div', { class: 'dash-cols' }, [
+      el('div', { class: 'dash-panel' }, [el('h3', { text: 'Servers you chat in most' }), topList(d.servers.filter(s => s.messages), x => String(x.messages), 'No messages in the last 30 days.')]),
+      el('div', { class: 'dash-panel' }, [el('h3', { text: 'Servers you talk in most' }), topList(d.servers.filter(s => s.minutes).sort((a, b) => b.minutes - a.minutes), x => fmtMinutes(x.minutes), 'No voice time in the last 30 days.')])
+    ]));
+  }
+  main.appendChild(el('p', { class: 'hint', text: 'Nexus counts messages, it never saves what they say. It keeps up to 90 days of activity and deletes anything older automatically.' }));
+}
+
+function buildMeGames(main, d) {
+  const games = d.games.slice().sort((a, b) => b.played - a.played);
+  if (!games.length) { main.appendChild(el('div', { class: 'empty-card', text: 'No games played yet. Try -games in any server with Nexus.' })); return; }
+  const played = games.reduce((n, g) => n + g.played, 0);
+  const wins = games.reduce((n, g) => n + g.wins, 0);
+  const best = games.reduce((n, g) => Math.max(n, g.best_streak), 0);
+  const hot = games.filter(g => g.streak > 0).sort((a, b) => b.streak - a.streak)[0];
+  main.appendChild(el('div', { class: 'stat-grid', style: 'margin-bottom:16px' }, [
+    statTile(played, 'games played'),
+    statTile(wins, 'wins'),
+    statTile(played ? Math.round(wins / played * 100) + '%' : '-', 'win rate'),
+    statTile(best, 'best win streak'),
+    statTile(hot ? hot.streak : 0, hot ? 'streak going in ' + hot.game : 'no streak going')
+  ]));
+  const table = el('table', { class: 'ref' });
+  table.appendChild(el('thead', {}, [el('tr', {}, ['Game', 'Played', 'Wins', 'Losses', 'Draws', 'Win rate', 'Streak', 'Best streak', 'Best score'].map(h => el('th', { text: h })))]));
+  const body = el('tbody');
+  games.forEach(g => body.appendChild(el('tr', {}, [
+    g.game, g.played, g.wins, g.losses, g.draws, g.played ? Math.round(g.wins / g.played * 100) + '%' : '-',
+    g.streak, g.best_streak, g.best_score || '-'
+  ].map(v => el('td', { text: String(v) })))));
+  table.appendChild(body);
+  main.appendChild(el('div', { class: 'dash-panel' }, [el('h3', { text: 'Every game' }), el('div', { class: 'table-wrap' }, [table])]));
+}
+
+function buildMeModeration(main, d) {
+  const cases = d.cases;
+  if (!cases.length) { main.appendChild(el('div', { class: 'empty-card', text: 'Nothing on record. Nice and clean.' })); return; }
+  const counts = {};
+  cases.forEach(c => { counts[c.type] = (counts[c.type] || 0) + 1; });
+  const types = Object.keys(counts);
+  main.appendChild(el('div', { class: 'stat-grid', style: 'margin-bottom:16px' },
+    [statTile(cases.length, cases.length === 1 ? 'case in total' : 'cases in total')].concat(types.map(t => statTile(counts[t], t + (counts[t] === 1 ? '' : 's'))))));
+  const filter = segmented([['all', 'All']].concat(types.map(t => [t, t])), 'all', 'Filter by type');
+  const list = el('div', { class: 'case-list' });
+  function draw() {
+    list.replaceChildren();
+    cases.filter(c => filter.value === 'all' || c.type === filter.value).forEach(c => {
+      const row = el('div', { class: 'case-row' }, [
+        el('div', { class: 'case-head' }, [el('span', { class: 'case-type', text: c.type }), el('code', { text: c.case }), el('span', { class: 'gtag', text: c.server }), el('span', { class: 'case-when', text: fmtWhen(c.time) })]),
+        el('p', { text: 'Reason: ' + c.reason })
+      ]);
+      if (c.duration) row.appendChild(el('p', { class: 'case-dur', text: 'Duration: ' + c.duration }));
+      list.appendChild(row);
+    });
+  }
+  filter.onpick = draw;
+  draw();
+  main.appendChild(el('section', { class: 'dash-panel' }, [
+    el('h3', { text: 'Your record' }),
+    el('p', { class: 'hint', text: 'Newest first. If you think something here is wrong, talk to that server\'s staff.' }),
+    filter, list
+  ]));
+}
+
+function buildMeReminders(main, d) {
+  const items = d.reminders;
+  if (!items.length) { main.appendChild(el('div', { class: 'empty-card', text: 'No active reminders. Set one with -reminder create.' })); return; }
+  const list = el('div', { class: 'case-list' });
+  items.forEach(r => list.appendChild(el('div', { class: 'case-row' }, [
+    el('div', { class: 'case-head' }, [el('span', { class: 'case-type', text: fmtIn(r.time) }), r.server ? el('span', { class: 'gtag', text: r.server }) : el('span', { class: 'gtag', text: 'DM' }), el('span', { class: 'case-when', text: fmtWhen(r.time) })]),
+    el('p', { text: r.text }),
+    el('p', { class: 'case-dur', text: r.where })
+  ])));
+  main.appendChild(el('section', { class: 'dash-panel' }, [el('h3', { text: plural(items.length, 'reminder') + ' coming up' }), el('p', { class: 'hint', text: 'Soonest first.' }), list]));
+}
+
+function buildMeGiveaways(main, d) {
+  const running = el('section', { class: 'dash-panel' }, [el('h3', { text: 'Running now' }), el('p', { class: 'hint', text: 'Giveaways in channels you can see. Enter or leave by reacting with 🎉 in Discord.' })]);
+  if (!d.active.length) running.appendChild(el('div', { class: 'empty-card', text: 'No giveaways are running right now.' }));
+  else {
+    const filter = segmented([['all', 'All (' + d.active.length + ')'], ['in', 'Entered (' + d.active.filter(g => g.entered).length + ')'], ['out', 'Not entered']], 'all', 'Filter giveaways');
+    const list = el('div', { class: 'gw-list' });
+    const draw = () => {
+      list.replaceChildren();
+      const shown = d.active.filter(g => filter.value === 'all' || (filter.value === 'in' ? g.entered === true : g.entered !== true));
+      if (!shown.length) list.appendChild(el('div', { class: 'empty-card', text: 'Nothing here.' }));
+      shown.forEach((g, i) => {
+        const state = g.entered === true ? el('span', { class: 'pill run', text: "You're in" })
+          : g.entered === false ? el('span', { class: 'pill', text: 'Not entered' })
+          : el('span', { class: 'pill', text: 'Could not check' });
+        const link = safeDiscordUrl(g.link);
+        list.appendChild(el('div', { class: 'gw-card', style: '--i:' + i }, [
+          el('div', { class: 'gw-head' }, [
+            el('span', { class: 'gw-ico', 'aria-hidden': 'true', text: '🎁' }),
+            el('div', { class: 'gw-title' }, [el('b', { text: g.prize }), el('small', { text: g.paused ? 'Paused with ' + fmtLeft(g.paused_left) + ' left' : 'Ends ' + fmtIn(g.ends) + ' · ' + fmtWhen(g.ends) })]),
+            state
+          ]),
+          el('p', { class: 'gw-facts', text: [g.server, g.channel, plural(g.winners, 'winner')].join(' · ') }),
+          link ? el('div', { class: 'gw-actions' }, [discordLink(link, g.entered ? 'Open in Discord' : 'Open in Discord to enter')]) : el('span')
+        ]));
+      });
+    };
+    filter.onpick = draw;
+    draw();
+    running.append(filter, list);
+  }
+  main.appendChild(running);
+  const won = el('section', { class: 'dash-panel' }, [el('h3', { text: 'Giveaways you won' })]);
+  if (!d.won.length) won.appendChild(el('p', { class: 'hint', text: 'No wins yet. Good luck!' }));
+  else {
+    const list = el('div', { class: 'case-list' });
+    d.won.forEach(g => list.appendChild(el('div', { class: 'case-row' }, [
+      el('div', { class: 'case-head' }, [el('span', { class: 'case-type', text: '🏆 ' + g.prize }), el('span', { class: 'gtag', text: g.server }), el('span', { class: 'case-when', text: g.ended ? fmtDay(g.ended) : '' })]),
+      safeDiscordUrl(g.link) ? discordLink(g.link) : el('span')
+    ])));
+    won.appendChild(list);
+  }
+  main.appendChild(won);
+}
+
+function buildMeAccess(main, d) {
+  const single = d.servers.length === 1 && ME_FILTER !== 'all';
+  const names = {};
+  d.servers.forEach(s => { names[s.id] = s.name; });
+  const search = textInput('', { placeholder: 'Search commands', 'aria-label': 'Search commands' });
+  const onlyMine = toggle(single ? 'Only show what I can use' : 'Only show what I can use somewhere', false);
+  const list = el('div', { class: 'access-list' });
+  let openName = null;
+  function tagFor(c) {
+    if (single) {
+      return c.yes.length ? el('span', { class: 'gtag ok', text: 'Yes' }) : c.no.length ? el('span', { class: 'gtag no', text: 'No' }) : el('span', { class: 'gtag', text: 'Depends' });
+    }
+    const total = c.yes.length + c.no.length + c.maybe.length;
+    if (c.yes.length === total) return el('span', { class: 'gtag ok', text: 'Everywhere' });
+    if (!c.yes.length) return el('span', { class: 'gtag no', text: 'Nowhere' });
+    return el('span', { class: 'gtag', text: c.yes.length + ' of ' + total + ' servers' });
+  }
+  function draw() {
+    const q = search.value.trim().toLowerCase();
+    list.replaceChildren();
+    let shown = 0;
+    d.commands.forEach(c => {
+      if (onlyMine.input.checked && !c.yes.length) return;
+      if (q && (c.name + ' ' + c.desc + ' ' + c.category).toLowerCase().indexOf(q) < 0) return;
+      shown++;
+      if (single) {
+        list.appendChild(el('div', { class: 'access-row' }, [el('code', { text: c.usage }), el('span', { class: 'access-desc', text: c.desc }), tagFor(c)]));
+        return;
+      }
+      const open = openName === c.name;
+      const head = el('button', { class: 'access-head', type: 'button', 'aria-expanded': open ? 'true' : 'false' }, [
+        el('code', { text: c.usage }), el('span', { class: 'access-desc', text: c.desc }), el('span', { class: 'access-tags' }, [tagFor(c)])
+      ]);
+      head.addEventListener('click', () => { openName = open ? null : c.name; draw(); });
+      const item = el('div', { class: 'access-item' + (open ? ' open' : '') }, [head]);
+      if (open) {
+        const where = (label, ids, cls) => ids.length ? el('div', { class: 'where' }, [el('b', { text: label }), el('div', { class: 'chips' }, ids.map(id => el('span', { class: 'gtag ' + cls, text: names[id] || 'A server' })))]) : null;
+        item.appendChild(el('div', { class: 'access-edit' }, [
+          where('You can use it in', c.yes, 'ok'), where('You can\'t use it in', c.no, 'no'), where('Depends on the channel in', c.maybe, '')
+        ].filter(Boolean)));
+      }
+      list.appendChild(item);
+    });
+    if (!shown) list.appendChild(el('p', { class: 'hint', style: 'padding:12px 14px;margin:0', text: 'Nothing matches.' }));
+  }
+  search.addEventListener('input', draw);
+  onlyMine.input.addEventListener('change', draw);
+  const panel = el('section', { class: 'dash-panel' }, [
+    el('h3', { text: single ? 'Commands in ' + d.servers[0].name : 'Commands across your servers' }),
+    el('p', { class: 'hint', text: single ? 'Based on your roles there and any changes the admins made.' : 'Click a command to see which servers let you use it. Based on your roles and any changes each server\'s admins made.' }),
+    el('div', { class: 'dash-row', style: 'margin-bottom:10px' }, [search, onlyMine]), list
+  ]);
+  if (d.capped) panel.appendChild(el('p', { class: 'hint small', text: 'Showing your first 25 servers. Pick a server above to check any other one.' }));
+  main.appendChild(panel);
+  draw();
+}
+
+function buildMePrivacy(main) {
+  main.appendChild(el('section', { class: 'dash-panel soon-card' }, [
+    el('span', { class: 'soon-badge', text: 'Coming soon' }),
+    el('h3', { text: 'Privacy' }),
+    el('p', { text: 'Soon you will be able to see and manage the data Nexus keeps about you from here.' }),
+    el('div', { class: 'actions' }, [el('a', { class: 'btn btn-outline', href: 'privacy.html', text: 'Read the privacy policy' })])
+  ]));
 }
 
 const ADMIN_PAGES = {
@@ -747,8 +845,13 @@ const ADMIN_PAGES = {
     { id: 'a-modsettings', label: 'Settings' },
     { id: 'a-immunity', label: 'Immune roles' },
     { id: 'a-cases', label: 'Case search' },
-    { id: 'a-notes', label: 'Notes' },
-    { id: 'a-automod', label: 'AutoMod' }
+    { id: 'a-notes', label: 'Notes' }
+  ] },
+  automod: { title: 'AutoMod', icon: 'bot', items: [
+    { id: 'a-am-filters', label: 'Filters' },
+    { id: 'a-honeypot', label: 'Honeypot' },
+    { id: 'a-am-whitelist', label: 'Whitelist' },
+    { id: 'a-am-links', label: 'Blocked links' }
   ] },
   tickets: { title: 'Tickets', icon: 'ticket', items: [
     { id: 'a-ticket-setup', label: 'Setup' },
@@ -780,6 +883,7 @@ const ADMIN_PAGES = {
 const ADMIN_BUILDERS = {
   general: (m, g, d) => buildGeneral(m, g, d),
   moderation: (m, g, d) => buildModeration(m, g, d),
+  automod: (m, g, d) => buildAutomod(m, g, d),
   tickets: (m, g, d) => buildTickets(m, g, d),
   logging: (m, g, d) => buildLogging(m, g, d),
   roles: (m, g, d) => buildRoles(m, g, d),
@@ -791,7 +895,7 @@ const ADMIN_BUILDERS = {
 
 async function showAdmin(user, guild, page) {
   if (!ADMIN_PAGES[page]) page = 'general';
-  const frame = appFrame(user, guild, page);
+  const frame = appFrame(user, { server: guild }, page);
   const main = frame.page;
   const head = frame.head(ADMIN_PAGES[page].title, guild.name);
   main.reload = () => showAdmin(user, guild, page);
@@ -1068,21 +1172,32 @@ function buildModeration(main, guild, data) {
   main.appendChild(notesPanel);
   loadNotes();
 
-  const am = data.automod;
-  const amPanel = section('a-automod', 'AutoMod', 'Each type runs from 0 (off) to 10 (strictest). Changes take effect within a few seconds.');
-  if (am.lockdown) amPanel.appendChild(el('div', { class: 'callout warn', text: 'A raid lockdown is running right now. End it in Discord with -automod raidend.' }));
+}
+
+const HP_ACTIONS = [['ban', 'Ban'], ['timeout', 'Timeout'], ['kick', 'Kick'], ['warn', 'Warn']];
+const HP_DONE = { ban: 'banned', timeout: 'timed out', kick: 'kicked', warn: 'warned' };
+
+function minutesLabel(m) {
+  if (m % 1440 === 0) return plural(m / 1440, 'day');
+  if (m % 60 === 0) return plural(m / 60, 'hour');
+  return m + ' minutes';
+}
+
+function buildAutomod(main, guild, data) {
+  const amPanel = section('a-am-filters', 'Filters', 'Each filter runs from 0 (off) to 10 (strictest). Changes take effect within a few seconds.');
+  if (data.lockdown) amPanel.appendChild(el('div', { class: 'callout warn', text: 'A raid lockdown is running right now. End it in Discord with -automod raidend.' }));
   const sliders = {};
-  Object.keys(AUTOMOD_NAMES).filter(type => type in am.levels).forEach(type => {
-    const value = el('b', { class: 'level-value', text: am.levels[type] ? String(am.levels[type]) : 'Off' });
+  Object.keys(AUTOMOD_NAMES).filter(type => type in data.levels).forEach(type => {
+    const value = el('b', { class: 'level-value', text: data.levels[type] ? String(data.levels[type]) : 'Off' });
     const range = el('input', { type: 'range', min: '0', max: '10', step: '1', 'aria-label': AUTOMOD_NAMES[type] });
-    range.value = am.levels[type];
+    range.value = data.levels[type];
     range.addEventListener('input', () => { value.textContent = range.value === '0' ? 'Off' : range.value; });
     sliders[type] = range;
     amPanel.appendChild(el('div', { class: 'level-row' }, [el('span', { text: AUTOMOD_NAMES[type] }), range, value]));
   });
-  const logSel = select(data.channels.map(c => ({ id: c.id, name: '#' + c.name })), 'No log channel');
-  logSel.value = am.log_channel || '';
-  const amSave = el('button', { class: 'btn btn-primary', type: 'button', text: 'Save AutoMod' });
+  const logSel = select(chanOptions(data.channels), 'No log channel');
+  logSel.value = data.log_channel || '';
+  const amSave = el('button', { class: 'btn btn-primary', type: 'button', text: 'Save filters' });
   const amMsg = status();
   amSave.addEventListener('click', () => run(amSave, amMsg, () => send('PUT', guildPath(guild.id, '/automod'), {
     levels: Object.fromEntries(Object.keys(sliders).map(type => [type, +sliders[type].value])),
@@ -1092,12 +1207,14 @@ function buildModeration(main, guild, data) {
   amPanel.appendChild(logSel);
   amPanel.appendChild(el('div', { style: 'margin-top:14px' }, [amSave]));
   amPanel.appendChild(amMsg);
+  main.appendChild(amPanel);
 
-  amPanel.appendChild(el('h4', { class: 'sub-head', text: 'Whitelist' }));
-  amPanel.appendChild(el('p', { class: 'hint', text: 'AutoMod ignores these roles and members completely.' }));
+  buildHoneypot(main, guild, data);
+
+  const wlPanel = section('a-am-whitelist', 'Whitelist', 'AutoMod filters ignore these roles and members completely. The honeypot has its own list above.');
   const wlChips = el('div', { class: 'chips' });
   const wlMsg = status();
-  let wl = am.whitelist.slice();
+  let wl = data.whitelist.slice();
   async function wlChange(id, kind, on, name) {
     const out = await run(null, wlMsg, () => send('PUT', guildPath(guild.id, '/automod/whitelist'), { id: id, kind: kind, on: on }));
     if (!out) return;
@@ -1120,46 +1237,138 @@ function buildModeration(main, guild, data) {
     if (r) wlChange(r.id, 'role', true, r.name);
   });
   wlAdd.addEventListener('click', () => { if (wlUser.value.trim()) { wlChange(wlUser.value.trim(), 'member', true); wlUser.value = ''; } });
-  amPanel.appendChild(wlChips);
-  amPanel.appendChild(el('div', { class: 'dash-row', style: 'margin-top:10px' }, [wlRole, wlUser, wlAdd]));
-  amPanel.appendChild(wlMsg);
+  wlPanel.appendChild(wlChips);
+  wlPanel.appendChild(el('div', { class: 'dash-row', style: 'margin-top:10px' }, [wlRole, wlUser, wlAdd]));
+  wlPanel.appendChild(wlMsg);
   drawWl();
+  main.appendChild(wlPanel);
 
-  if (Array.isArray(am.links)) {
-    amPanel.appendChild(el('h4', { class: 'sub-head', text: 'Blocked links' }));
-    amPanel.appendChild(el('p', { class: 'hint', text: 'Every link is allowed unless its site is on this list. Blocking a site also blocks its subdomains and every page on it. Use example.* to block it on every ending, or invites to block Discord invites.' }));
-    const lkChips = el('div', { class: 'chips' });
-    const lkMsg = status();
-    let links = am.links.slice();
-    const lkLimit = am.links_limit || 200;
-    function drawLinks() {
-      lkChips.replaceChildren();
-      links.forEach(site => lkChips.appendChild(chip(site, () => lkChange(site, false))));
-      if (!links.length) lkChips.appendChild(el('span', { class: 'hint', text: 'Nothing is blocked. Every link is allowed.' }));
-    }
-    async function lkChange(site, on) {
-      const out = await run(null, lkMsg, () => send('PUT', guildPath(guild.id, '/automod/links'), { site: site, on: on }));
-      if (!out) return false;
-      links = Array.isArray(out.links) ? out.links : links;
-      drawLinks();
-      return true;
-    }
-    const lkInput = textInput('', { placeholder: 'example.com', maxlength: '120', 'aria-label': 'Site to block' });
-    const lkAdd = el('button', { class: 'btn btn-outline', type: 'button', text: 'Block site' });
-    async function addSite() {
-      const site = lkInput.value.trim();
-      if (!site) return;
-      if (links.length >= lkLimit) { lkMsg.set('The list can hold ' + lkLimit + ' sites. Remove some first.', 'bad'); return; }
-      if (await lkChange(site, true)) lkInput.value = '';
-    }
-    lkAdd.addEventListener('click', addSite);
-    lkInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addSite(); } });
-    amPanel.appendChild(lkChips);
-    amPanel.appendChild(el('div', { class: 'dash-row', style: 'margin-top:10px' }, [lkInput, lkAdd]));
-    amPanel.appendChild(lkMsg);
-    drawLinks();
+  const lkPanel = section('a-am-links', 'Blocked links', 'Every link is allowed unless its site is on this list. Blocking a site also blocks its subdomains and every page on it. Use example.* to block it on every ending, or invites to block Discord invites.');
+  const lkChips = el('div', { class: 'chips' });
+  const lkMsg = status();
+  let links = (data.links || []).slice();
+  const lkLimit = data.links_limit || 200;
+  function drawLinks() {
+    lkChips.replaceChildren();
+    links.forEach(site => lkChips.appendChild(chip(site, () => lkChange(site, false))));
+    if (!links.length) lkChips.appendChild(el('span', { class: 'hint', text: 'Nothing is blocked. Every link is allowed.' }));
   }
-  main.appendChild(amPanel);
+  async function lkChange(site, on) {
+    const out = await run(null, lkMsg, () => send('PUT', guildPath(guild.id, '/automod/links'), { site: site, on: on }));
+    if (!out) return false;
+    links = Array.isArray(out.links) ? out.links : links;
+    drawLinks();
+    return true;
+  }
+  const lkInput = textInput('', { placeholder: 'example.com', maxlength: '120', 'aria-label': 'Site to block' });
+  const lkAdd = el('button', { class: 'btn btn-outline', type: 'button', text: 'Block site' });
+  async function addSite() {
+    const site = lkInput.value.trim();
+    if (!site) return;
+    if (links.length >= lkLimit) { lkMsg.set('The list can hold ' + lkLimit + ' sites. Remove some first.', 'bad'); return; }
+    if (await lkChange(site, true)) lkInput.value = '';
+  }
+  lkAdd.addEventListener('click', addSite);
+  lkInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addSite(); } });
+  lkPanel.appendChild(lkChips);
+  lkPanel.appendChild(el('div', { class: 'dash-row', style: 'margin-top:10px' }, [lkInput, lkAdd]));
+  lkPanel.appendChild(lkMsg);
+  drawLinks();
+  main.appendChild(lkPanel);
+}
+
+function buildHoneypot(main, guild, data) {
+  let hp = data.honeypot;
+  const L = data.honeypot_limits;
+  const roles = data.roles.filter(r => !r.managed);
+  const panel = section('a-honeypot', 'Honeypot', 'A channel real members are told to stay out of. Spam bots and hacked accounts post everywhere, so anyone who posts here is almost always one of them. Nexus deletes the message and deals with them straight away.');
+  const state = el('span', { class: 'pill' });
+  const warn = el('div', { class: 'callout warn', hidden: '' });
+  panel.appendChild(el('div', { class: 'hp-state' }, [state]));
+  panel.appendChild(warn);
+
+  const chan = select(chanOptions(data.channels), 'Off (no honeypot)');
+  chan.value = hp.channel || '';
+  const action = segmented(HP_ACTIONS, hp.action, 'What happens to them');
+  const length = select(L.timeouts.map(m => ({ id: String(m), name: minutesLabel(m) })));
+  length.value = String(hp.timeout_minutes);
+  const lengthField = field('Timeout length', length);
+  const cleanup = select([{ id: '0', name: 'Only the honeypot message' }, { id: '1', name: 'The last 24 hours' }]
+    .concat([2, 3, 4, 5, 6, 7].map(d => ({ id: String(d), name: 'The last ' + d + ' days' }))));
+  cleanup.value = String(hp.delete_days);
+  const cleanupField = field('When they are banned, also delete their messages from', cleanup);
+  const notice = toggle('Post a pinned warning in the channel telling people not to type there', hp.notice);
+  const bots = toggle('Ignore other bots', hp.ignore_bots);
+  const exempt = rolePicker(roles, L.max_roles, 'Add a role to skip...', null, hp.exempt_roles);
+  const log = select(chanOptions(data.channels), 'Use the AutoMod log channel');
+  log.value = hp.log_channel || '';
+  const save = el('button', { class: 'btn btn-primary', type: 'button', text: 'Save honeypot' });
+  const msg = status();
+
+  const preview = el('div', { class: 'preview-box', 'aria-live': 'polite' });
+  function chanName(id) { const c = data.channels.find(x => x.id === id); return c ? '#' + c.name : null; }
+  function refresh() {
+    const a = action.value;
+    lengthField.hidden = a !== 'timeout';
+    cleanupField.hidden = a !== 'ban';
+    const word = HP_DONE[a] + (a === 'timeout' ? ' for ' + minutesLabel(+length.value) : '');
+    const steps = ['Their message is deleted.', 'They get ' + word + (a === 'ban' && +cleanup.value ? ', and their messages from ' + (cleanup.value === '1' ? 'the last day' : 'the last ' + cleanup.value + ' days') + ' are removed' : '') + '.'];
+    if (a === 'warn') steps.push('Nexus tells them the channel is off limits.');
+    const logTo = chanName(log.value) || chanName(data.log_channel);
+    steps.push(logTo ? 'It is logged in ' + logTo + '.' : 'Pick a log channel to keep a record.');
+    const kids = [el('p', { class: 'preview-label', text: 'Preview' })];
+    if (notice.input.checked) {
+      kids.push(el('div', { class: 'pv-embed pin' }, [
+        el('small', { class: 'pv-pinned', text: '📌 Pinned message' }),
+        el('p', {}, [el('strong', { text: "⚠️ Please don't post in this channel." })]),
+        el('p', { text: "It's here to catch spam bots. Anyone who sends a message here gets " + HP_DONE[a] + ' automatically.' })
+      ]));
+    }
+    kids.push(el('p', { class: 'pv-sub', text: 'When someone posts there' }));
+    kids.push(el('ol', { class: 'hp-steps' }, steps.map(t => el('li', { text: t }))));
+    preview.replaceChildren.apply(preview, kids);
+  }
+  function drawState() {
+    const on = !!hp.channel && !hp.channel_gone;
+    state.className = 'pill' + (on ? ' run' : '');
+    state.textContent = on ? 'On in ' + (chanName(hp.channel) || 'a channel') : 'Off';
+    const notes = [];
+    if (hp.channel_gone) notes.push('The honeypot channel was deleted, so the honeypot is off. Pick a new channel.');
+    if (hp.missing && hp.missing.length) notes.push('Nexus is missing ' + hp.missing.join(', ') + ' for the honeypot. Until that is fixed it may not work.');
+    warn.hidden = !notes.length;
+    warn.textContent = notes.join(' ');
+  }
+  action.onpick = refresh;
+  [length, cleanup, log, chan].forEach(i => i.addEventListener('change', refresh));
+  notice.input.addEventListener('change', refresh);
+  refresh();
+  drawState();
+
+  save.addEventListener('click', async () => {
+    if (chan.value && chan.value === log.value) return msg.set('Pick a different channel for the log.', 'bad');
+    const out = await run(save, msg, () => send('PUT', guildPath(guild.id, '/automod/honeypot'), {
+      channel: chan.value || null, action: action.value, timeout_minutes: +length.value, delete_days: +cleanup.value,
+      notice: notice.input.checked, ignore_bots: bots.input.checked, exempt_roles: exempt.get(), log_channel: log.value || null
+    }), chan.value ? 'Saved. The honeypot is on.' : 'Saved. The honeypot is off.');
+    if (!out) return;
+    hp = out.honeypot;
+    drawState();
+    if (out.note) msg.set('Saved, but ' + out.note.charAt(0).toLowerCase() + out.note.slice(1), 'bad');
+  });
+
+  panel.appendChild(el('div', { class: 'split' }, [
+    el('div', { class: 'form-col' }, [
+      el('div', { class: 'dash-grid' }, [field('Honeypot channel', chan), field('Log channel', log)]),
+      el('div', { class: 'dash-field' }, [el('span', { class: 'field-label', text: 'What happens to them' }), action]),
+      el('div', { class: 'dash-grid' }, [lengthField, cleanupField]),
+      el('div', { class: 'hp-toggles' }, [notice, bots]),
+      field('Roles to skip, like staff and moderators', exempt),
+      el('p', { class: 'hint small', text: 'The server owner and members with Administrator are always skipped. Pick a channel nobody needs, ideally a new one near the top of the list.' }),
+      el('div', { class: 'form-actions' }, [save]), msg
+    ]),
+    preview
+  ]));
+  main.appendChild(panel);
 }
 
 function emptyRow(text) {
@@ -1419,8 +1628,8 @@ function segmented(options, value, label) {
   return wrap;
 }
 
-function rolePicker(roles, max, placeholder, onChange) {
-  let picked = [];
+function rolePicker(roles, max, placeholder, onChange, initial) {
+  let picked = (initial || []).map(r => ({ id: r.id, name: r.name }));
   const chips = el('div', { class: 'chips' });
   const sel = select([], placeholder);
   const box = el('div', { class: 'picker' }, [chips, sel]);
