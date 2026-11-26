@@ -58,5 +58,11 @@
     "type": "new",
     "date": "2026-11-25",
     "text": "- New AutoMod types: Emoji`s & Links.\n- Errors that are logged in the dashboard are given an ID in the format of XXXX-XXXX, if you have questions about an error you have you can give an error code to support.\n  - Timed roles command now show the time remaining on selected users timed roles."
+  },
+  {
+    "title": "Version 1.5",
+    "type": "new",
+    "date": "2026-11-26",
+    "text": "- Removed all giveaway commands.\n- Giveaways are now completely expanded.\n  - Giveaways can only be setup up in the dashboard, full command support is now removed.\n  - Setup entry requirements, such as: required roles, days in the server, days since account creation, and messages sent.\n  - Choose to ping a role when your giveaway starts.\n  - You may start a giveaway immediately or schedule when to start one.\n- Maximum of 5 active giveaways at a time."
   }
 ]
