@@ -377,7 +377,6 @@ function reveal(scope) {
     counts.set(parent, k + 1);
     n.style.setProperty('--d', Math.min(k, 8) * 70 + 'ms');
     n.classList.add('reveal');
-    if (n.matches('.tile, .card, .member, .component, .project, .app-card')) n.classList.add('spot');
   });
   if (REDUCED || !('IntersectionObserver' in window)) { nodes.forEach(n => n.classList.add('in')); return; }
   if (!revealObserver) {
@@ -388,16 +387,6 @@ function reveal(scope) {
     }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
   }
   nodes.forEach(n => revealObserver.observe(n));
-}
-
-function initSpotlight() {
-  document.addEventListener('pointermove', e => {
-    const t = e.target.closest && e.target.closest('.spot');
-    if (!t) return;
-    const r = t.getBoundingClientRect();
-    t.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-    t.style.setProperty('--my', (e.clientY - r.top) + 'px');
-  }, { passive: true });
 }
 
 function animateNumber(node, to) {
@@ -1616,7 +1605,6 @@ async function initCommands() {
 
 document.addEventListener('DOMContentLoaded', () => {
   buildChrome();
-  initSpotlight();
   initTabs();
   initTeam();
   initStatusPill();
