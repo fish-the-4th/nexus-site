@@ -512,19 +512,6 @@
   },
   {
     "commands": [
-      "-say"
-    ],
-    "phrases": [
-      "make the bot talk",
-      "send a message as the bot",
-      "announcement",
-      "post as the bot",
-      "bot says something",
-      "speak as the bot"
-    ]
-  },
-  {
-    "commands": [
       "-ping"
     ],
     "phrases": [
