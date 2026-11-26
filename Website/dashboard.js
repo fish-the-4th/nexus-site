@@ -185,7 +185,12 @@ const DASH_ICONS = {
   tag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.2"/></svg>',
   lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
   menu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>',
-  logout: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/></svg>'
+  logout: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/></svg>',
+  gift: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="8" width="17" height="4" rx="1"/><path d="M5 12v8h14v-8M12 8v12M12 8c-1.5-3-5-3.5-5-1.2C7 8 9.5 8 12 8zM12 8c1.5-3 5-3.5 5-1.2C17 8 14.5 8 12 8z"/></svg>',
+  starb: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>',
+  card: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg>',
+  server: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="7" rx="2"/><rect x="4" y="13" width="16" height="7" rx="2"/><path d="M8 7.5h.01M8 16.5h.01"/></svg>',
+  ticket2: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8a2 2 0 0 0 2-2h12a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H6a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14 6v12" stroke-dasharray="2 2"/></svg>'
 };
 
 function dIcon(name, cls) {
@@ -279,6 +284,27 @@ function openSection(user, guild, key) {
   return showAdmin(user, guild, key);
 }
 
+const PERSONAL_PAGES = [
+  { key: 'me', label: 'My dashboard', icon: 'user' },
+  { key: 'stats', label: 'My stats', icon: 'chart' }
+];
+const BOTTOM_PAGES = ['subscriptions', 'privacy'];
+
+function modeSwitch(user, guild, mode, cls) {
+  const wrap = el('div', { class: 'mode ' + cls, role: 'tablist', 'aria-label': 'Dashboard view', 'data-mode': mode });
+  wrap.appendChild(el('span', { class: 'mode-thumb', 'aria-hidden': 'true' }));
+  [['personal', 'Personal', 'user'], ['admin', 'Server admin', 'server']].forEach(o => {
+    const on = o[0] === mode;
+    const b = el('button', { class: 'mode-opt' + (on ? ' on' : ''), type: 'button', role: 'tab', 'aria-selected': on ? 'true' : 'false' }, [dIcon(o[2]), el('span', { text: o[1] })]);
+    if (!on) b.addEventListener('click', () => {
+      document.querySelectorAll('.mode').forEach(m => m.setAttribute('data-mode', o[0]));
+      setTimeout(() => (o[0] === 'admin' ? showAdmin(user, guild, 'general') : showProfile(user, guild)), REDUCED ? 0 : 220);
+    });
+    wrap.appendChild(b);
+  });
+  return wrap;
+}
+
 function appFrame(user, guild, active) {
   setHero(false);
   const root = dashClear();
@@ -291,7 +317,11 @@ function appFrame(user, guild, active) {
   const brand = el('a', { class: 'app-brand', href: 'index.html', 'aria-label': 'Nexus home' }, [
     el('img', { src: ROOT + 'Assets/Logo/logo.png', alt: '', width: '28', height: '28' }), el('span', { text: 'Nexus' })
   ]);
-  app.appendChild(el('header', { class: 'app-top' }, [menuBtn, brand, serverSwitch(user, guild), el('span', { class: 'app-grow' }), userMenu(user)]));
+  const mode = active === 'me' || active === 'stats' ? 'personal' : 'admin';
+  const topKids = [menuBtn, brand, serverSwitch(user, guild), el('span', { class: 'app-grow' })];
+  if (guild && guild.admin) topKids.push(modeSwitch(user, guild, mode, 'mode-top'), el('span', { class: 'app-grow' }));
+  topKids.push(userMenu(user));
+  app.appendChild(el('header', { class: 'app-top' }, topKids));
 
   const body = el('div', { class: 'app-body' });
   const closeNav = () => { app.classList.remove('nav-open'); menuBtn.setAttribute('aria-expanded', 'false'); };
@@ -313,16 +343,17 @@ function appFrame(user, guild, active) {
       else b.addEventListener('click', () => openSection(user, guild, item.key));
       return el('div', { class: 'side-node' }, [b, sub]);
     };
-    side.appendChild(el('p', { class: 'side-label', text: 'You' }));
-    side.appendChild(node({ key: 'me', label: 'My dashboard', icon: 'user' }));
-    side.appendChild(node({ key: 'stats', label: 'My stats', icon: 'chart' }));
-    if (guild.admin) {
+    if (guild.admin) side.appendChild(modeSwitch(user, guild, mode, 'mode-side'));
+    if (mode === 'personal' || !guild.admin) {
+      side.appendChild(el('p', { class: 'side-label', text: 'You' }));
+      PERSONAL_PAGES.forEach(p => side.appendChild(node(p)));
+    } else {
       side.appendChild(el('p', { class: 'side-label', text: 'Server' }));
-      Object.keys(ADMIN_PAGES).filter(k => k !== 'privacy').forEach(k => {
+      Object.keys(ADMIN_PAGES).filter(k => BOTTOM_PAGES.indexOf(k) < 0).forEach(k => {
         side.appendChild(node({ key: k, label: ADMIN_PAGES[k].title, icon: ADMIN_PAGES[k].icon }));
       });
       side.appendChild(el('div', { class: 'side-grow' }));
-      side.appendChild(el('div', { class: 'side-bottom' }, [node({ key: 'privacy', label: ADMIN_PAGES.privacy.title, icon: ADMIN_PAGES.privacy.icon })]));
+      side.appendChild(el('div', { class: 'side-bottom' }, BOTTOM_PAGES.map(k => node({ key: k, label: ADMIN_PAGES[k].title, icon: ADMIN_PAGES[k].icon }))));
     }
     body.appendChild(side);
   }
@@ -332,9 +363,11 @@ function appFrame(user, guild, active) {
   app.appendChild(body);
   root.appendChild(app);
 
-  frame.head = (title, sub) => {
-    const h = el('div', { class: 'page-head' }, [el('h1', { text: title })]);
-    if (sub) h.appendChild(el('p', { class: 'hint', text: sub }));
+  frame.head = (title, sub, lead) => {
+    const h = el('div', { class: 'page-head' });
+    if (sub) h.appendChild(el('p', { class: 'eyebrow' }, [el('b', { text: mode === 'admin' && guild ? 'Server admin' : 'Personal' }), ' · ' + sub]));
+    h.appendChild(el('h1', { text: title }));
+    if (lead) h.appendChild(el('p', { class: 'hint', text: lead }));
     page.appendChild(h);
     return h;
   };
@@ -399,7 +432,7 @@ function textInput(value, attrs) {
 async function showGuilds(user) {
   const frame = appFrame(user, null, null);
   const page = frame.page;
-  const head = frame.head('Choose a server', 'Pick a server to see your own stats there, or to manage Nexus if you are an admin.');
+  const head = frame.head('Choose a server', null, 'Pick a server to see your own stats there, or to manage Nexus if you are an admin.');
   const wait = loading(page, 'Loading your servers...');
   let guilds;
   try {
@@ -595,7 +628,7 @@ function fillGiveaways(panel, items) {
       : g.entered === false ? el('span', { class: 'gtag', text: 'Not entered' })
       : el('span', { class: 'gtag', text: 'Could not check' });
     list.appendChild(el('div', { class: 'case-row' }, [
-      el('div', { class: 'case-head' }, [el('span', { class: 'case-type', text: g.prize }), state, el('span', { class: 'case-when', text: 'Ends ' + fmtIn(g.ends) })]),
+      el('div', { class: 'case-head' }, [el('span', { class: 'case-type', text: g.prize }), state, el('span', { class: 'case-when', text: g.paused ? 'Paused' : 'Ends ' + fmtIn(g.ends) })]),
       el('p', { class: 'case-dur', text: g.winners + (g.winners === 1 ? ' winner' : ' winners') + ' · ' + g.channel }),
       safeDiscordUrl(g.link) ? el('a', { class: 'inline-link', href: safeDiscordUrl(g.link), target: '_blank', rel: 'noopener noreferrer', text: g.entered ? 'Open in Discord' : 'Open in Discord to enter' }) : el('span')
     ]));
@@ -731,11 +764,14 @@ const ADMIN_PAGES = {
     { id: 'a-persist', label: 'Persistent roles' },
     { id: 'a-timed', label: 'Timed roles' }
   ] },
-  community: { title: 'Starboard & giveaways', icon: 'star', items: [
-    { id: 'a-starboard', label: 'Starboard' },
-    { id: 'a-gw-new', label: 'New giveaway' },
-    { id: 'a-gw-list', label: 'Giveaways' }
+  starboard: { title: 'Starboard', icon: 'starb', items: [
+    { id: 'a-starboard', label: 'Starboard' }
   ] },
+  giveaways: { title: 'Giveaways', icon: 'gift', items: [
+    { id: 'a-gw-new', label: 'New giveaway' },
+    { id: 'a-gw-list', label: 'All giveaways' }
+  ] },
+  subscriptions: { title: 'Subscriptions', icon: 'card', local: true, items: [] },
   privacy: { title: 'Privacy', icon: 'lock', items: [
     { id: 'a-listing', label: 'Website listing' },
     { id: 'a-wipe', label: 'Data wipe' }
@@ -747,14 +783,19 @@ const ADMIN_BUILDERS = {
   tickets: (m, g, d) => buildTickets(m, g, d),
   logging: (m, g, d) => buildLogging(m, g, d),
   roles: (m, g, d) => buildRoles(m, g, d),
-  community: (m, g, d) => buildCommunity(m, g, d),
+  starboard: (m, g, d) => buildStarboard(m, g, d),
+  giveaways: (m, g, d) => buildGiveaways(m, g, d),
+  subscriptions: (m, g, d) => buildSubscriptions(m, g, d),
   privacy: (m, g, d) => buildPrivacy(m, g, d)
 };
 
 async function showAdmin(user, guild, page) {
+  if (!ADMIN_PAGES[page]) page = 'general';
   const frame = appFrame(user, guild, page);
   const main = frame.page;
   const head = frame.head(ADMIN_PAGES[page].title, guild.name);
+  main.reload = () => showAdmin(user, guild, page);
+  if (ADMIN_PAGES[page].local) return ADMIN_BUILDERS[page](main, guild, null);
   const wait = loading(main, 'Loading settings...');
   let data;
   try {
@@ -1301,68 +1342,327 @@ function buildRoles(main, guild, data) {
   main.appendChild(timedPanel);
 }
 
-function buildCommunity(main, guild, data) {
+function buildStarboard(main, guild, data) {
   const sb = data.starboard;
-  const emoji = textInput(sb.emoji, { maxlength: '100', 'aria-label': 'Starboard emoji', style: 'max-width:180px' });
+  const emoji = textInput(sb.emoji, { maxlength: '100', 'aria-label': 'Starboard emoji' });
   const chan = select(chanOptions(data.channels), 'Pick a channel...');
   chan.value = sb.channel || '';
   const save = el('button', { class: 'btn btn-primary', type: 'button', text: 'Save starboard' });
   const msg = status();
+  const sample = el('span', { class: 'star-count', text: (sb.emoji || '⭐') + ' 5' });
+  emoji.addEventListener('input', () => { sample.textContent = (emoji.value.trim() || '⭐') + ' 5'; });
   save.addEventListener('click', async () => {
     const out = await run(save, msg, () => send('PUT', guildPath(guild.id, '/starboard'), { emoji: emoji.value, channel: chan.value }));
-    if (out) emoji.value = out.emoji;
+    if (out) { emoji.value = out.emoji; sample.textContent = out.emoji + ' 5'; }
   });
   main.appendChild(section('a-starboard', 'Starboard', 'When a message gets this reaction, Nexus reposts it to the starboard channel. Use a normal emoji like ⭐, or a server emoji written as <:name:id>. This is the same as -starboard setup.', [
     sb.set_up ? null : el('div', { class: 'callout', text: 'The starboard is not set up yet.' }),
-    el('div', { class: 'dash-grid' }, [field('Emoji', emoji), field('Starboard channel', chan)]),
-    el('div', { style: 'margin-top:14px' }, [save]), msg
+    el('div', { class: 'split' }, [
+      el('div', {}, [
+        el('div', { class: 'dash-grid' }, [field('Emoji', emoji), field('Starboard channel', chan)]),
+        el('div', { class: 'form-actions' }, [save]), msg
+      ]),
+      el('div', { class: 'preview-box', 'aria-hidden': 'true' }, [
+        el('p', { class: 'preview-label', text: 'Preview' }),
+        el('div', { class: 'pv-embed star' }, [
+          el('b', { text: 'A member' }),
+          el('p', { text: 'A message people loved enough to star.' }),
+          el('small', { text: 'Jump to message' })
+        ]),
+        el('div', { class: 'pv-reacts' }, [sample])
+      ])
+    ])
   ].filter(Boolean)));
+}
 
+function numInput(value, min, max, label) {
+  const i = el('input', { class: 'search num', type: 'number', min: String(min), max: String(max), step: '1', inputmode: 'numeric', 'aria-label': label || '' });
+  i.value = String(value);
+  return i;
+}
+
+function wholeOf(input, fallback) {
+  const n = parseInt(input.value, 10);
+  return isFinite(n) ? n : fallback;
+}
+
+function localInput(d) {
+  const p = n => String(n).padStart(2, '0');
+  return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + 'T' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+
+function fmtLeft(s) {
+  s = Math.max(0, Math.round(s || 0));
+  const d = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600), m = Math.floor((s % 3600) / 60);
+  const parts = [];
+  if (d) parts.push(d + 'd');
+  if (h) parts.push(h + 'h');
+  if (m || !parts.length) parts.push(m + 'm');
+  return parts.join(' ');
+}
+
+function segmented(options, value, label) {
+  const wrap = el('div', { class: 'seg', role: 'radiogroup', 'aria-label': label || '' });
+  const btns = options.map(o => {
+    const b = el('button', { type: 'button', class: 'seg-opt', role: 'radio', text: o[1] });
+    b.addEventListener('click', () => set(o[0], true));
+    wrap.appendChild(b);
+    return [o[0], b];
+  });
+  function set(v, fire) {
+    wrap.value = v;
+    btns.forEach(x => { x[1].classList.toggle('on', x[0] === v); x[1].setAttribute('aria-checked', x[0] === v ? 'true' : 'false'); });
+    if (fire && wrap.onpick) wrap.onpick(v);
+  }
+  set(value, false);
+  wrap.set = set;
+  return wrap;
+}
+
+function rolePicker(roles, max, placeholder, onChange) {
+  let picked = [];
+  const chips = el('div', { class: 'chips' });
+  const sel = select([], placeholder);
+  const box = el('div', { class: 'picker' }, [chips, sel]);
+  function draw() {
+    chips.replaceChildren();
+    picked.forEach(r => chips.appendChild(chip('@' + r.name, () => { picked = picked.filter(x => x.id !== r.id); draw(); if (onChange) onChange(); })));
+    if (!picked.length) chips.appendChild(el('span', { class: 'chip-none', text: 'None' }));
+    sel.replaceChildren(el('option', { value: '', text: picked.length >= max ? 'Up to ' + max + ' roles' : placeholder }));
+    sel.disabled = picked.length >= max;
+    roles.filter(r => !picked.some(x => x.id === r.id)).forEach(r => sel.appendChild(el('option', { value: r.id, text: r.name })));
+  }
+  sel.addEventListener('change', () => {
+    const r = roles.find(x => x.id === sel.value);
+    if (r && picked.length < max) { picked.push({ id: r.id, name: r.name }); draw(); if (onChange) onChange(); }
+  });
+  draw();
+  box.get = () => picked.map(r => r.id);
+  box.names = () => picked.map(r => r.name);
+  return box;
+}
+
+function plural(n, one, many) { return n + ' ' + (n === 1 ? one : (many || one + 's')); }
+
+function requirementText(g) {
+  const out = [];
+  const names = list => list.map(r => '@' + (r.name || r)).join(', ');
+  if (g.req_roles && g.req_roles.length) out.push((g.req_roles.length === 1 ? 'Needs ' : 'Needs all of ') + names(g.req_roles));
+  if (g.block_roles && g.block_roles.length) out.push('No ' + names(g.block_roles));
+  if (g.min_account_days) out.push('Account ' + plural(g.min_account_days, 'day') + '+ old');
+  if (g.min_server_days) out.push('In the server ' + plural(g.min_server_days, 'day') + '+');
+  if (g.min_messages) out.push(plural(g.min_messages, 'message') + ' in ' + plural(g.message_days || 7, 'day'));
+  return out;
+}
+
+const GW_STATUS = {
+  running: ['Running', 'run'],
+  paused: ['Paused', 'pause'],
+  scheduled: ['Scheduled', 'sched'],
+  ended: ['Ended', 'end']
+};
+
+function buildGiveaways(main, guild, data) {
   const L = data.limits;
-  const prize = textInput('', { maxlength: String(L.max_prize), placeholder: 'For example: Discord Nitro' });
-  const gwChan = select(chanOptions(data.channels), 'Pick a channel...');
-  const dur = textInput('1d', { maxlength: '30', placeholder: '1h, 2d, 1h30m' });
-  const winners = el('input', { class: 'search', type: 'number', min: '1', max: String(L.max_winners), value: '1' });
-  const start = el('button', { class: 'btn btn-primary', type: 'button', text: '🎉 Start giveaway' });
-  const gmsg = status();
-  start.addEventListener('click', async () => {
-    if (!gwChan.value) return gmsg.set('Pick a channel first.', 'bad');
-    const out = await run(start, gmsg, () => send('POST', guildPath(guild.id, '/giveaways'), {
-      prize: prize.value, channel: gwChan.value, duration: dur.value, winners: parseInt(winners.value, 10)
-    }), 'Giveaway started.');
+  const full = data.active >= L.max_active;
+  const roles = data.roles.filter(r => !r.managed);
+
+  const meter = el('div', { class: 'meter-card' }, [
+    el('div', { class: 'meter-top' }, [
+      el('span', {}, [el('b', { text: String(data.active) }), ' of ' + L.max_active + ' active']),
+      el('span', { class: 'hint', text: 'Running, paused and scheduled giveaways all count.' })
+    ]),
+    el('div', { class: 'meter' }, [el('i', { style: 'width:' + Math.min(100, Math.round(data.active / L.max_active * 100)) + '%' })])
+  ]);
+  main.appendChild(meter);
+
+  const prize = textInput('', { maxlength: String(L.max_prize), placeholder: 'For example: Discord Nitro', 'aria-label': 'Prize' });
+  const chan = select(chanOptions(data.channels), 'Pick a channel...');
+  const dur = textInput('1d', { maxlength: '30', placeholder: '1h, 2d, 1h30m', 'aria-label': 'Length' });
+  const winners = numInput(1, 1, L.max_winners, 'Winners');
+  const ping = select(roles, 'Do not ping anyone');
+  const when = segmented([['now', 'Start now'], ['later', 'Schedule for later']], 'now', 'When to start');
+  const startAt = el('input', { class: 'search', type: 'datetime-local', 'aria-label': 'Start time' });
+  startAt.min = localInput(new Date(Date.now() + 2 * 60000));
+  startAt.max = localInput(new Date(Date.now() + L.max_schedule_days * 86400000));
+  startAt.value = localInput(new Date(Date.now() + 3600000));
+  const startField = field('Start time (your time zone)', startAt);
+  startField.hidden = true;
+
+  const req = rolePicker(roles, L.max_roles, 'Add a required role...', refresh);
+  const block = rolePicker(roles, L.max_roles, 'Add a blocked role...', refresh);
+  const acc = numInput(0, 0, L.max_account_days, 'Minimum account age in days');
+  const srv = numInput(0, 0, L.max_server_days, 'Minimum days in the server');
+  const msgs = numInput(0, 0, L.max_messages, 'Minimum messages');
+  const mdays = numInput(7, 1, L.max_message_days, 'Count messages over this many days');
+
+  const go = el('button', { class: 'btn btn-primary', type: 'button', text: '🎉 Start giveaway' });
+  const msg = status();
+  if (full) { go.disabled = true; msg.set('This server already has ' + L.max_active + ' active giveaways. End or cancel one to start another.', 'bad'); }
+
+  const preview = el('div', { class: 'preview-box', 'aria-live': 'polite' });
+  function current() {
+    return {
+      prize: prize.value.trim(), winners: wholeOf(winners, 1),
+      req_roles: req.names(), block_roles: block.names(),
+      min_account_days: wholeOf(acc, 0), min_server_days: wholeOf(srv, 0),
+      min_messages: wholeOf(msgs, 0), message_days: wholeOf(mdays, 7)
+    };
+  }
+  function refresh() {
+    const c = current();
+    const pingRole = roles.find(r => r.id === ping.value);
+    const reqs = requirementText(c);
+    const lines = [
+      el('b', { text: '🎉 Giveaway!' }),
+      el('p', {}, [el('strong', { text: 'Prize: ' }), c.prize || 'Your prize']),
+      el('p', {}, [el('strong', { text: 'Winners: ' }), String(c.winners)]),
+      el('p', {}, [el('strong', { text: when.value === 'later' ? 'Starts: ' : 'Ends: ' }), when.value === 'later' ? (startAt.value ? new Date(startAt.value).toLocaleString() : 'Pick a time') : 'in ' + (dur.value.trim() || '?')])
+    ];
+    if (reqs.length) {
+      lines.push(el('p', { class: 'pv-sub', text: 'To enter, you need to:' }));
+      lines.push(el('ul', {}, reqs.map(r => el('li', { text: r }))));
+    }
+    lines.push(el('p', { class: 'pv-foot', text: 'React with 🎉 to enter. Remove your reaction to leave.' }));
+    preview.replaceChildren(
+      el('p', { class: 'preview-label', text: 'Preview' }),
+      pingRole ? el('p', { class: 'pv-ping', text: '@' + pingRole.name }) : el('span'),
+      el('div', { class: 'pv-embed' }, lines),
+      el('div', { class: 'pv-reacts' }, [el('span', { class: 'star-count', text: '🎉 1' })])
+    );
+  }
+  [prize, dur, winners, acc, srv, msgs, mdays, startAt].forEach(i => i.addEventListener('input', refresh));
+  ping.addEventListener('change', refresh);
+  when.onpick = v => {
+    startField.hidden = v !== 'later';
+    go.textContent = v === 'later' ? '🗓️ Schedule giveaway' : '🎉 Start giveaway';
+    refresh();
+  };
+  refresh();
+
+  go.addEventListener('click', async () => {
+    if (!prize.value.trim()) return msg.set('Give the prize a name first.', 'bad');
+    if (!chan.value) return msg.set('Pick a channel first.', 'bad');
+    let start = null;
+    if (when.value === 'later') {
+      if (!startAt.value) return msg.set('Pick a start time.', 'bad');
+      start = Math.floor(new Date(startAt.value).getTime() / 1000);
+      if (!isFinite(start)) return msg.set('That start time does not look right.', 'bad');
+    }
+    const overlap = req.get().filter(id => block.get().indexOf(id) >= 0);
+    if (overlap.length) return msg.set('A role cannot be both required and blocked.', 'bad');
+    const out = await run(go, msg, () => send('POST', guildPath(guild.id, '/giveaways'), {
+      prize: prize.value, channel: chan.value, duration: dur.value, winners: wholeOf(winners, 0),
+      ping_role: ping.value || null, start_at: start,
+      req_roles: req.get(), block_roles: block.get(),
+      min_account_days: wholeOf(acc, 0), min_server_days: wholeOf(srv, 0),
+      min_messages: wholeOf(msgs, 0), message_days: wholeOf(mdays, 7)
+    }), start ? 'Scheduled. Nexus will post it at that time.' : 'Giveaway started.');
     if (out) setTimeout(() => main.reload(), 900);
   });
-  main.appendChild(section('a-gw-new', 'New giveaway', 'Posts a giveaway that members enter by reacting with 🎉. Winners are picked at random when it ends, up to ' + L.max_days + ' days from now.', [
-    el('div', { class: 'dash-grid' }, [field('Prize', prize), field('Channel', gwChan), field('Length', dur), field('Winners (1 to ' + L.max_winners + ')', winners)]),
-    el('div', { style: 'margin-top:14px' }, [start]), gmsg
+
+  const who = el('details', { class: 'fold' }, [
+    el('summary', {}, [el('span', { text: 'Who can join' }), el('small', { text: 'Optional. Members who do not qualify have their 🎉 removed and get a short note telling them why.' })]),
+    el('div', { class: 'fold-body' }, [
+      el('div', { class: 'dash-grid' }, [
+        field('Required roles (they need all of them)', req),
+        field('Blocked roles (any of them stops entry)', block)
+      ]),
+      el('div', { class: 'dash-grid four' }, [
+        field('Account age, at least (days)', acc),
+        field('Time in this server, at least (days)', srv),
+        field('Messages sent, at least', msgs),
+        field('Counted over the last (days)', mdays)
+      ]),
+      el('p', { class: 'hint small', text: 'Messages are counted from Nexus stats, which keep up to ' + L.max_message_days + ' days. 0 means no limit.' })
+    ])
+  ]);
+
+  main.appendChild(section('a-gw-new', 'New giveaway', 'Members enter by reacting with 🎉 and leave by removing it. Winners are picked at random from people who still qualify when it ends. Up to ' + L.max_days + ' days long.', [
+    el('div', { class: 'split' }, [
+      el('div', { class: 'form-col' }, [
+        el('div', { class: 'dash-grid' }, [field('Prize', prize), field('Channel', chan), field('Length', dur), field('Winners (1 to ' + L.max_winners + ')', winners)]),
+        el('div', { class: 'dash-grid' }, [field('Ping a role when it starts', ping), el('div', { class: 'dash-field' }, [el('span', { class: 'field-label', text: 'When' }), when])]),
+        startField,
+        who,
+        el('div', { class: 'form-actions' }, [go]), msg
+      ]),
+      preview
+    ])
   ]));
 
-  const listPanel = section('a-gw-list', 'Giveaways', 'Running giveaways first, then recent finished ones. Reroll a finished giveaway in Discord with -giveaway reroll.');
-  const list = el('div', { class: 'case-list' });
-  const items = data.giveaways.slice().sort((a, b) => (b.running - a.running) || (b.running ? a.ends - b.ends : b.ends - a.ends));
-  if (!items.length) list.appendChild(emptyRow('No giveaways yet.'));
-  items.forEach(g => {
-    const m = status();
-    const tags = el('span', { class: 'gtag' + (g.running ? ' ok' : ''), text: g.running ? 'Running' : 'Ended' });
-    const actions = el('div', { class: 'dash-row', style: 'margin-top:6px' }, [discordLink(g.link)]);
-    if (g.running) {
-      const end = smallBtn('End now', 'danger');
-      end.addEventListener('click', async () => {
-        if (!confirm('End "' + g.prize + '" now and pick the winners?')) return;
-        const out = await run(end, m, () => send('POST', guildPath(guild.id, '/giveaways/' + g.id + '/end')), 'Ended. Winners were announced in Discord.');
-        if (out) { tags.textContent = 'Ended'; tags.classList.remove('ok'); end.remove(); }
-      });
-      actions.appendChild(end);
-    }
-    list.appendChild(el('div', { class: 'case-row' }, [
-      el('div', { class: 'case-head' }, [el('span', { class: 'case-type', text: g.prize }), tags, el('span', { class: 'case-when', text: (g.running ? 'Ends ' + fmtIn(g.ends) : 'Ended ' + fmtDay(g.ends)) })]),
-      el('p', { text: g.winners + (g.winners === 1 ? ' winner' : ' winners') + ' · #' + g.channel + ' · Hosted by ' + g.host }),
-      actions, m
-    ]));
-  });
-  listPanel.appendChild(list);
+  const listPanel = section('a-gw-list', 'All giveaways', 'Pause a running giveaway to stop new entries and freeze its timer. Ended giveaways can be rerolled to pick new winners.');
+  const counts = { active: 0, scheduled: 0, ended: 0, all: data.giveaways.length };
+  data.giveaways.forEach(g => { if (g.status === 'running' || g.status === 'paused') counts.active++; else if (g.status === 'scheduled') counts.scheduled++; else counts.ended++; });
+  const filter = segmented([
+    ['active', 'Active (' + counts.active + ')'], ['scheduled', 'Scheduled (' + counts.scheduled + ')'],
+    ['ended', 'Ended (' + counts.ended + ')'], ['all', 'All']
+  ], counts.active ? 'active' : (counts.scheduled ? 'scheduled' : 'all'), 'Filter giveaways');
+  const list = el('div', { class: 'gw-list' });
+  function drawList() {
+    list.replaceChildren();
+    const f = filter.value;
+    const shown = data.giveaways.filter(g => f === 'all' || (f === 'active' ? (g.status === 'running' || g.status === 'paused') : g.status === f));
+    if (!shown.length) list.appendChild(el('div', { class: 'empty-card', text: f === 'all' ? 'No giveaways yet. Start one above.' : 'Nothing here.' }));
+    shown.forEach((g, i) => list.appendChild(giveawayCard(main, guild, g, i)));
+  }
+  filter.onpick = drawList;
+  drawList();
+  listPanel.append(filter, list);
   main.appendChild(listPanel);
 }
+
+function giveawayCard(main, guild, g, i) {
+  const st = GW_STATUS[g.status] || [g.status, 'end'];
+  let when;
+  if (g.status === 'running') when = 'Ends ' + fmtIn(g.ends) + ' · ' + fmtWhen(g.ends);
+  else if (g.status === 'paused') when = 'Paused with ' + fmtLeft(g.paused_left) + ' left';
+  else if (g.status === 'scheduled') when = 'Starts ' + fmtWhen(g.start_at) + ' · runs ' + fmtLeft(g.duration);
+  else when = 'Ended ' + fmtDay(g.ends || g.created);
+  const msg = status();
+  const actions = el('div', { class: 'gw-actions' });
+  if (g.link) actions.appendChild(discordLink(g.link));
+  function action(label, path, cls, ask, ok) {
+    const b = smallBtn(label, cls);
+    b.addEventListener('click', async () => {
+      if (ask && !confirm(ask)) return;
+      const out = await run(b, msg, () => send('POST', guildPath(guild.id, '/giveaways/' + g.id + '/' + path)), ok);
+      if (out) setTimeout(() => main.reload(), 700);
+    });
+    actions.appendChild(b);
+  }
+  if (g.status === 'running') action('Pause', 'pause', '', null, 'Paused. New entries are closed.');
+  if (g.status === 'paused') action('Resume', 'resume', 'go', null, 'Resumed. The timer is running again.');
+  if (g.status === 'running' || g.status === 'paused') action('End now', 'end', 'danger', 'End "' + g.prize + '" now and pick the winners?', 'Ended. Winners were announced in Discord.');
+  if (g.status === 'ended') action('Reroll', 'reroll', '', 'Pick new winners for "' + g.prize + '"?', 'Rerolled. New winners were announced in Discord.');
+  if (g.status === 'scheduled') action('Cancel', 'cancel', 'danger', 'Cancel "' + g.prize + '"? It has not been posted yet.', 'Cancelled.');
+
+  const facts = [plural(g.winners, 'winner'), '#' + g.channel, 'Hosted by ' + g.host];
+  if (g.ping_role) facts.push('Pings @' + g.ping_role.name);
+  const reqs = requirementText(g);
+  const kids = [
+    el('div', { class: 'gw-head' }, [
+      el('span', { class: 'gw-ico', 'aria-hidden': 'true', text: '🎁' }),
+      el('div', { class: 'gw-title' }, [el('b', { text: g.prize }), el('small', { text: when })]),
+      el('span', { class: 'pill ' + st[1], text: st[0] })
+    ]),
+    el('p', { class: 'gw-facts', text: facts.join(' · ') })
+  ];
+  if (reqs.length) kids.push(el('div', { class: 'chips' }, reqs.map(r => el('span', { class: 'gtag', text: r }))));
+  if (g.status === 'ended') kids.push(el('p', { class: 'gw-win', text: g.winner_names.length ? '🏆 ' + g.winner_names.join(', ') : 'No winners' }));
+  kids.push(actions, msg);
+  return el('div', { class: 'gw-card', style: '--i:' + i }, kids);
+}
+
+function buildSubscriptions(main, guild) {
+  main.appendChild(el('section', { class: 'dash-panel soon-card' }, [
+    el('span', { class: 'soon-badge', text: 'Coming soon' }),
+    el('h3', { text: 'Subscriptions' }),
+    el('p', { text: 'Premium plans for ' + guild.name + ' will be managed here: what you have, when it renews, and your receipts.' }),
+    el('div', { class: 'actions' }, [el('a', { class: 'btn btn-outline', href: 'premium.html', text: 'See premium plans' })])
+  ]));
+}
+
 
 function buildPrivacy(main, guild, data) {
   const listed = toggle('Show this server on the Nexus website', data.listed);
