@@ -182,7 +182,7 @@
       <tr><td>Manage Roles</td><td>Join roles, persistent roles, timed roles, <code>-role</code> commands, and changing channel permissions for <code>-lock</code>, tickets and raid lockdown</td></tr>
       <tr><td>Manage Server</td><td>Reading invites for <code>-stats invite</code> and invite logs</td></tr>
       <tr><td>View Audit Log</td><td>Telling kicks and bans apart in logs</td></tr>
-      <tr><td>Add Reactions, Read Message History</td><td>Giveaways and the starboard</td></tr>
+      <tr><td>Add Reactions, Read Message History</td><td>Giveaways and the starboard. Giveaways also need Manage Messages to remove reactions from people who can't enter</td></tr>
     </tbody>
   </table>
   </div>
@@ -275,7 +275,7 @@
       <tr><td><code>-ban</code></td><td>Seconds, minutes, hours and days. The length is optional.</td><td>Leave it out for a permanent ban</td></tr>
       <tr><td><code>-mute</code></td><td>A plain number of <strong>minutes</strong>, not a unit</td><td>1 minute to 28 days (40320 minutes)</td></tr>
       <tr><td><code>-reminder create</code></td><td>Seconds up to weeks</td><td>Up to 1 year</td></tr>
-      <tr><td><code>-giveaway start</code></td><td>Seconds up to weeks</td><td>Up to 30 days</td></tr>
+      <tr><td>Giveaway length (dashboard)</td><td>Minutes up to weeks</td><td>Up to 30 days</td></tr>
       <tr><td><code>-timed role add</code></td><td>Every unit, including months and years</td><td>Up to 5 years</td></tr>
     </tbody>
   </table>
@@ -573,7 +573,7 @@ I will remind you: in 2 hours</div></div>
 
   <h2>What you'll use</h2>
   <div class="grid three">
-    <div class="card"><h4>Giveaways</h4><p>Entries by reaction, automatic winners, rerolls.</p></div>
+    <div class="card"><h4>Giveaways</h4><p>Run from the dashboard, with entry rules, scheduling and pausing.</p></div>
     <div class="card"><h4>Starboard</h4><p>Reposts the best messages from the event.</p></div>
     <div class="card"><h4>Games</h4><p>Twelve games members can play against each other.</p></div>
     <div class="card"><h4>Timed roles</h4><p>An event role that removes itself when it's over.</p></div>
@@ -584,16 +584,16 @@ I will remind you: in 2 hours</div></div>
   <h2>Running a giveaway</h2>
   <div class="steps">
     <div class="step"><div><h4>Write the rules first</h4><p>Say who can enter, any requirements, and how the winner will be contacted. Post it with <code>-say #announcements [message]</code> so it comes from the bot and is recorded in the logs.</p></div></div>
-    <div class="step"><div><h4>Start it in the right channel</h4><p>Run the command in the channel where people should enter, for example <code>-giveaway start 2d 1 Discord Nitro</code>. It takes a length, the number of winners and the prize.</p></div></div>
-    <div class="step"><div><h4>Let it run</h4><p>Members enter by pressing the 🎉 reaction. Nexus checks the giveaway every 30 seconds and picks winners when time is up. Winners must still be in the server.</p></div></div>
-    <div class="step"><div><h4>Ending early or rerolling</h4><p><code>-giveaway end [message ID]</code> ends one now. <code>-giveaway reroll [message ID]</code> picks fresh winners if someone doesn't respond. Copy the message ID by right-clicking the giveaway message with Developer Mode on.</p></div></div>
+    <div class="step"><div><h4>Set it up on the dashboard</h4><p>Open <strong>Giveaways</strong> on the <a class="inline" href="dashboard.html">dashboard</a>. Pick the prize, channel, length and winners, a role to ping, and who can join. Start it now or schedule it to start at the same time as your event.</p></div></div>
+    <div class="step"><div><h4>Let it run</h4><p>Members enter by pressing the 🎉 reaction and leave by removing it. Anyone who doesn't meet the requirements has their reaction removed and is told why. Pause it any time to close entries and stop the timer.</p></div></div>
+    <div class="step"><div><h4>Ending early or rerolling</h4><p>Use <strong>End now</strong> or <strong>Reroll</strong> in the dashboard's giveaway list. A reroll skips the previous winners when it can.</p></div></div>
     <div class="step"><div><h4>Deliver the prize</h4><p>Nexus announces and pings the winners. Handing over the prize is up to you.</p></div></div>
   </div>
   <p>The full details, including limits, are on the <a class="inline" href="#/giveaways">Giveaways</a> page.</p>
 
   <h2>Keeping entries fair</h2>
   <ul>
-    <li>Giveaways only count the 🎉 reaction. If you need entry requirements like a certain role, state them in the rules and check the winners before announcing the prize.</li>
+    <li>Use the giveaway's entry requirements, like a required role, a minimum account age or a message count, instead of checking winners by hand.</li>
     <li>Bots and people who left the server don't count as entries.</li>
     <li>If a winner is unreachable or doesn't qualify, use a reroll instead of picking someone by hand.</li>
   </ul>
@@ -1219,13 +1219,12 @@ Roles that can always use it: @Helpers</div></div>
   <h2>Writing the command name</h2>
   <ul>
     <li>Leave off the prefix. Write <code>ban</code>, not <code>-ban</code>.</li>
-    <li>Use the <strong>full name</strong> for commands with parts. Access is set per part, so write <code>giveaway start</code>, <code>role add</code> or <code>ticket close</code>, and set each part you want to open up.</li>
+    <li>Use the <strong>full name</strong> for commands with parts. Access is set per part, so write <code>role add</code> or <code>ticket close</code>, and set each part you want to open up.</li>
     <li>A permission can be written many ways. <code>Moderate Members</code>, <code>moderate_members</code> and <code>moderate-members</code> all work, and <code>Manage Server</code> works for Manage Guild.</li>
   </ul>
   <div class="chat">
-    <div class="line you"><span class="who">You</span><div>-permission giveaway start @Events</div></div>
-    <div class="line you"><span class="who">You</span><div>-permission giveaway end @Events</div></div>
-    <div class="line you"><span class="who">You</span><div>-permission giveaway reroll @Events</div></div>
+    <div class="line you"><span class="who">You</span><div>-permission ticket close @Helpers</div></div>
+    <div class="line you"><span class="who">You</span><div>-permission role add @Events</div></div>
   </div>
 
   <h2>What access does and doesn't change</h2>
@@ -1249,7 +1248,7 @@ Roles that can always use it: @Helpers</div></div>
     <thead><tr><th>Goal</th><th>Run</th></tr></thead>
     <tbody>
       <tr><td>Helpers can warn without Kick Members</td><td><code>-permission warn @Helpers</code></td></tr>
-      <tr><td>Event hosts can run giveaways</td><td><code>-permission giveaway start @Events</code> and the same for <code>end</code> and <code>reroll</code></td></tr>
+      <tr><td>Event hosts can give roles</td><td><code>-permission role add @Events</code></td></tr>
       <tr><td>Only people who can manage messages may mute</td><td><code>-permission mute Manage Messages</code></td></tr>
       <tr><td>Let one trusted person post as the bot</td><td><code>-permission say @Sam</code></td></tr>
       <tr><td>Undo any of the above</td><td>Run the same command again</td></tr>
@@ -1261,7 +1260,7 @@ Roles that can always use it: @Helpers</div></div>
   <ul>
     <li><strong>"I couldn't find a command called..."</strong> You probably included the prefix, or the name is wrong. Use <code>-commands</code> to check it.</li>
     <li><strong>"I couldn't tell if X is a role, a member or a permission."</strong> Mention the role or person, or write the permission's name.</li>
-    <li><strong>It still says "you do not have permission".</strong> Check you set it on the full command name, like <code>giveaway start</code>, and that the person has the role.</li>
+    <li><strong>It still says "you do not have permission".</strong> Check you set it on the full command name, like <code>role add</code>, and that the person has the role.</li>
   </ul>
 </article>
 
@@ -1319,87 +1318,89 @@ Roles that can always use it: @Helpers</div></div>
 <article class="doc-page" data-doc="giveaways" data-title="Giveaways">
   <div class="doc-crumb">Server tools</div>
   <h1>Giveaways</h1>
-  <p class="lead">Run a giveaway in one command. Nexus posts it, counts the entries, picks the winners when time is up, and announces them. This page covers everything from starting one to rerolling a winner.</p>
+  <p class="lead">Giveaways are run from the <a class="inline" href="dashboard.html">dashboard</a>. Nexus posts them, checks who can enter, picks the winners when time is up, and announces them. Start one now or schedule it for later, set who can join, ping a role, and pause it whenever you need to.</p>
 
   <h2>Starting a giveaway</h2>
-  <p>You need the Manage Server permission. Run the command in the channel where people should enter.</p>
+  <p>Open the dashboard, pick your server, switch to <strong>Server admin</strong> and open <strong>Giveaways</strong>. You need to be the server owner or have the Administrator permission. Fill in:</p>
+  <div class="table-wrap">
+  <table class="ref">
+    <thead><tr><th>Setting</th><th>What it does</th><th>Limit</th></tr></thead>
+    <tbody>
+      <tr><td>Prize</td><td>What the winners get</td><td>Up to 200 characters</td></tr>
+      <tr><td>Channel</td><td>Where the giveaway is posted</td><td>A text channel</td></tr>
+      <tr><td>Length</td><td>A time like <code>30m</code>, <code>2h</code>, <code>1d</code> or <code>1h30m</code>. See <a class="inline" href="#/time-formats">Time formats</a>.</td><td>1 minute to 30 days</td></tr>
+      <tr><td>Winners</td><td>How many people win</td><td>1 to 20</td></tr>
+      <tr><td>Ping a role</td><td>Optional. Pings this role when the giveaway is posted</td><td>One role</td></tr>
+      <tr><td>When</td><td>Start now, or schedule a start time</td><td>Up to 30 days ahead</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The dashboard shows a live preview of the post as you type. A server can have <strong>up to 5 giveaways</strong> running, paused or scheduled at once.</p>
   <div class="chat">
-    <div class="line you"><span class="who">You</span><div>-giveaway start 2d 1 Discord Nitro</div></div>
-    <div class="line bot"><span class="who">Nexus</span><div>🎉 Giveaway!
+    <div class="line bot"><span class="who">Nexus</span><div>@Giveaway Pings
+🎉 Giveaway!
 Prize: Discord Nitro
 Winners: 1
 Ends: in 2 days (Fri, Nov 20, 2026 4:12 PM)
 
-React with 🎉 to enter!
+To enter, you need to:
+• Have the role @Level 10
+• Have sent at least 20 messages here in the last 7 days
+
+React with 🎉 to enter. Remove your reaction to leave.
 Hosted by Alex</div></div>
   </div>
-  <p>The command takes three things, in this order:</p>
+
+  <h2>Who can join</h2>
+  <p>Each giveaway can have any mix of these. Leave them empty, or at 0, for no limit.</p>
   <div class="table-wrap">
   <table class="ref">
-    <thead><tr><th>Part</th><th>What to write</th><th>Limit</th></tr></thead>
+    <thead><tr><th>Requirement</th><th>How it works</th></tr></thead>
     <tbody>
-      <tr><td>Length</td><td>A time like <code>30m</code>, <code>2h</code>, <code>1d</code> or <code>1h30m</code>. See <a class="inline" href="#/time-formats">Time formats</a>.</td><td>Up to 30 days</td></tr>
-      <tr><td>Winners</td><td>A whole number</td><td>1 to 20</td></tr>
-      <tr><td>Prize</td><td>Anything after the winners, spaces included</td><td>Up to 200 characters</td></tr>
+      <tr><td>Required roles</td><td>Members need every role on the list. Up to 10.</td></tr>
+      <tr><td>Blocked roles</td><td>Having any role on the list stops entry. Up to 10.</td></tr>
+      <tr><td>Account age</td><td>The Discord account must be at least this many days old.</td></tr>
+      <tr><td>Time in the server</td><td>They must have joined at least this many days ago.</td></tr>
+      <tr><td>Messages</td><td>They must have sent at least this many messages in the server over the last 1 to 90 days, counted from Nexus stats.</td></tr>
     </tbody>
   </table>
   </div>
-  <p>Nexus deletes the message you typed so the channel stays tidy, posts the giveaway, and adds the 🎉 reaction itself. If it can't add the reaction, it says so, since people can't enter without it. Check that Nexus has Add Reactions there.</p>
+  <p>When someone who doesn't qualify reacts, Nexus removes their 🎉 and posts a short note in the channel that mentions them and says exactly what they're missing. The note deletes itself after a few seconds. Requirements are checked again when winners are picked, so someone who lost a required role since entering can't win.</p>
 
-  <h2>How people enter</h2>
-  <p>By pressing the 🎉 reaction on the giveaway message. There's nothing else to do. The embed shows the time left, and Discord shows it in each person's own time zone.</p>
+  <h2>How people enter and leave</h2>
+  <p>Members press the 🎉 reaction on the giveaway message. Removing the reaction takes them out of the giveaway. The embed shows the time left in each person's own time zone.</p>
+
+  <h2>Scheduling</h2>
+  <p>Pick <strong>Schedule for later</strong> and choose a start time in your own time zone. The giveaway waits in the <strong>Scheduled</strong> list and Nexus posts it at that time, pinging the role if you chose one. Its length starts counting when it's posted. You can cancel a scheduled giveaway before it starts.</p>
+
+  <h2>Pausing</h2>
+  <p>Pause a running giveaway from the <strong>All giveaways</strong> list. While it's paused:</p>
+  <ul>
+    <li>the timer stops, and the post shows how much time is left</li>
+    <li>new entries are closed. Nexus removes new 🎉 reactions and tells the person it's paused</li>
+    <li>people who already entered stay in, and can still leave by removing their reaction</li>
+  </ul>
+  <p>Press <strong>Resume</strong> to carry on. The timer picks up where it stopped.</p>
 
   <h2>Picking winners</h2>
-  <p>When the time is up, Nexus draws the winners at random from everyone who reacted, except:</p>
-  <ul>
-    <li>bots</li>
-    <li>people who are no longer in the server</li>
-  </ul>
-  <p>It then posts an announcement that pings the winners, and edits the original message to show the giveaway has ended and who won. If nobody entered, it says so instead.</p>
-  <p>Nexus checks for finished giveaways every 30 seconds, so the announcement can arrive up to half a minute after the end time. Giveaways are saved, so they survive a restart. If Nexus was offline when one ended, it finishes it as soon as it's back.</p>
+  <p>When the time is up, Nexus draws the winners at random from everyone who still has a 🎉 on the message, except bots, people who have left the server, and people who no longer meet the requirements. It replies to the giveaway with an announcement that pings the winners, and edits the original post to show who won. If nobody entered, or nobody qualified, it says so instead.</p>
+  <p>Nexus checks giveaways about every 20 seconds. Giveaways are saved, so they survive a restart, and one that ended while Nexus was offline finishes as soon as it's back.</p>
 
-  <h2>Ending early</h2>
-  <div class="chat">
-    <div class="line you"><span class="who">You</span><div>-giveaway end 1234567890123456789</div></div>
-    <div class="line bot"><span class="who">Nexus</span><div>Giveaway ended early.</div></div>
-  </div>
-  <p>Use the ID of the giveaway message. To copy it, turn on <strong>Developer Mode</strong> in Discord's settings under Advanced, then right-click the giveaway message and choose <strong>Copy Message ID</strong>.</p>
+  <h2>Ending early and rerolling</h2>
+  <p>Press <strong>End now</strong> on a running or paused giveaway to pick the winners straight away. Press <strong>Reroll</strong> on an ended giveaway to draw new winners. A reroll skips the previous winners when there are enough other people who qualify. A reroll needs the original giveaway message to still exist.</p>
 
-  <h2>Rerolling</h2>
-  <p>If a winner doesn't respond or isn't eligible, reroll after the giveaway has ended.</p>
-  <div class="chat">
-    <div class="line you"><span class="who">You</span><div>-giveaway reroll 1234567890123456789</div></div>
-    <div class="line bot"><span class="who">Nexus</span><div>🎉 Giveaway reroll!
-Prize: Discord Nitro
-New winner(s): @Jordan</div></div>
-  </div>
-  <div class="callout warn"><strong>A reroll draws a whole new set of winners.</strong> It picks again from everyone eligible, using the original number of winners, so the same person can be picked again. For a giveaway with several winners, it replaces all of them, not just one.</div>
-  <p>A reroll needs the original giveaway message to still exist. If that message was deleted, Nexus tells you it can't reroll.</p>
+  <h2>What Nexus needs</h2>
+  <p>In the giveaway channel, Nexus needs View Channel, Send Messages, Embed Links, Add Reactions, Read Message History and Manage Messages. Manage Messages lets it remove reactions from people who can't enter. To ping a role, the role must allow anyone to mention it, or Nexus needs the Mention @everyone permission in that channel. The dashboard tells you if anything is missing.</p>
 
   <h2>Running it fairly</h2>
   <ul>
-    <li>Post the rules first with <code>-say</code>, including who can enter and how winners are contacted.</li>
-    <li>Giveaways only count the 🎉 reaction. For extra requirements, like a certain role, check the winners before handing over the prize and reroll if they don't qualify.</li>
+    <li>Use the requirements instead of checking winners by hand.</li>
+    <li>Post any extra rules first with <code>-say</code>, including how winners are contacted.</li>
     <li>Nexus pings the winners but doesn't deliver the prize. That part is yours.</li>
   </ul>
 
-  <h2>If something goes wrong</h2>
-  <div class="table-wrap">
-  <table class="ref">
-    <thead><tr><th>Nexus says</th><th>What it means</th></tr></thead>
-    <tbody>
-      <tr><td>I couldn't read that length</td><td>Use a number and a unit with no spaces, like <code>2h</code>. The limit is 30 days.</td></tr>
-      <tr><td>Winners have to be between 1 and 20</td><td>Pick a number in that range.</td></tr>
-      <tr><td>I can't find a giveaway with that message ID</td><td>Copy the ID of the giveaway message itself, not the channel or your own message.</td></tr>
-      <tr><td>That giveaway hasn't ended yet</td><td>You can only reroll after it ends. Use <code>-giveaway end</code> first if you want it over now.</td></tr>
-      <tr><td>There are no eligible entries to reroll from</td><td>Everyone who entered is a bot or has left.</td></tr>
-    </tbody>
-  </table>
-  </div>
-  <p>If the giveaway message or its channel is deleted, Nexus closes the giveaway quietly, since there's nothing left to update.</p>
-
   <h2>What giveaways don't do</h2>
-  <p>There are no role requirements, no entry limits, and no separate prizes per winner. Each giveaway has one prize and a number of winners who share it. For several different prizes, run one giveaway per prize.</p>
+  <p>There are no separate prizes per winner and no paid entries. Each giveaway has one prize and a number of winners who share it. For several different prizes, run one giveaway per prize.</p>
 </article>
 
 <article class="doc-page" data-doc="games" data-title="Games">
@@ -1845,8 +1846,8 @@ Translated with Google Translate</div></div>
     <li><strong>The ticket button does nothing.</strong> Make sure setup was done with <code>-ticket setup</code> and that Nexus has Manage Channels and Manage Roles. See <a class="inline" href="#/tickets">Tickets</a>.</li>
     <li><strong>A role can't be given.</strong> The role is above Nexus's role, above yours, or managed by an integration. See <a class="inline" href="#/roles">Roles and autoroles</a>.</li>
     <li><strong>A timed role lasted a bit longer.</strong> Expiry is checked once a minute.</li>
-    <li><strong>The giveaway has no 🎉.</strong> Nexus needs Add Reactions in that channel. Start it again after fixing it.</li>
-    <li><strong>The giveaway or reminder came late.</strong> Both are checked about every 30 seconds.</li>
+    <li><strong>The giveaway has no 🎉, or people who can't enter keep their reaction.</strong> Nexus needs Add Reactions and Manage Messages in that channel. The dashboard checks this before posting.</li>
+    <li><strong>The giveaway or reminder came late.</strong> Both are checked about every 20 to 30 seconds.</li>
     <li><strong>Starboard isn't posting.</strong> Check <code>-starboard</code> for the emoji and channel, and that Nexus can send embeds there.</li>
   </ul>
 
