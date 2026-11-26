@@ -518,7 +518,7 @@
       {
         "usage": "-help",
         "perms": "None",
-        "desc": "Shows helpful tips and support options (works in DMs)"
+        "desc": "Shows helpful tips, with links to the support server and dashboard (works in DMs)"
       }
     ]
   },
