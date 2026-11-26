@@ -542,7 +542,7 @@ I will remind you: in 2 hours</div></div>
   <h2>Use the logs to keep each other honest</h2>
   <ul>
     <li>The <strong>moderation</strong> log records every action, including warnings, mutes and deleted cases.</li>
-    <li>The <strong>messages</strong> log records deleted and edited messages, and every time someone uses <code>-say</code>.</li>
+    <li>The <strong>messages</strong> log records deleted and edited messages.</li>
     <li>The <strong>users</strong> log shows role changes, so you can see who was given what.</li>
   </ul>
 
@@ -583,7 +583,7 @@ I will remind you: in 2 hours</div></div>
 
   <h2>Running a giveaway</h2>
   <div class="steps">
-    <div class="step"><div><h4>Write the rules first</h4><p>Say who can enter, any requirements, and how the winner will be contacted. Post it with <code>-say #announcements [message]</code> so it comes from the bot and is recorded in the logs.</p></div></div>
+    <div class="step"><div><h4>Write the rules first</h4><p>Say who can enter, any requirements, and how the winner will be contacted. Post it in your announcements channel so everyone sees it before the giveaway starts.</p></div></div>
     <div class="step"><div><h4>Set it up on the dashboard</h4><p>Open <strong>Giveaways</strong> on the <a class="inline" href="dashboard.html">dashboard</a>. Pick the prize, channel, length and winners, a role to ping, and who can join. Start it now or schedule it to start at the same time as your event.</p></div></div>
     <div class="step"><div><h4>Let it run</h4><p>Members enter by pressing the 🎉 reaction and leave by removing it. Anyone who doesn't meet the requirements has their reaction removed and is told why. Pause it any time to close entries and stop the timer.</p></div></div>
     <div class="step"><div><h4>Ending early or rerolling</h4><p>Use <strong>End now</strong> or <strong>Reroll</strong> in the dashboard's giveaway list. A reroll skips the previous winners when it can.</p></div></div>
@@ -903,7 +903,7 @@ B4TH-61DE-ZK9P · Mute · by Jordan · Arguing in #general after a warning</div>
   <table class="ref">
     <thead><tr><th>Type</th><th>What it records</th></tr></thead>
     <tbody>
-      <tr><td><code>messages</code></td><td>Deleted messages, edited messages (before and after), bulk deletions, and every use of <code>-say</code></td></tr>
+      <tr><td><code>messages</code></td><td>Deleted messages, edited messages (before and after), and bulk deletions</td></tr>
       <tr><td><code>users</code></td><td>Members joining and leaving, nickname, username and display name changes, avatar changes, and roles added or removed</td></tr>
       <tr><td><code>expressions</code></td><td>Emoji and stickers added, removed, renamed or updated</td></tr>
       <tr><td><code>channels</code></td><td>Channels created, deleted or changed</td></tr>
@@ -1395,7 +1395,7 @@ Hosted by Alex</div></div>
   <h2>Running it fairly</h2>
   <ul>
     <li>Use the requirements instead of checking winners by hand.</li>
-    <li>Post any extra rules first with <code>-say</code>, including how winners are contacted.</li>
+    <li>Post any extra rules first, including how winners are contacted.</li>
     <li>Nexus pings the winners but doesn't deliver the prize. That part is yours.</li>
   </ul>
 
@@ -1748,20 +1748,6 @@ Translated (Spanish): ¿Dónde está la biblioteca?
 Translated with Google Translate</div></div>
   </div>
   <p>The order is the language you're translating <em>from</em>, the language you want, then the text. The text can be up to 1,000 characters, and Nexus tells you if it's too long. If a language name isn't recognised, Nexus asks you to check both names.</p>
-
-  <h2>Say</h2>
-  <p><code>-say [channel] [message]</code> posts a message as Nexus in another channel. It needs <strong>Manage Messages</strong>, and it's useful for announcements, rules and giveaway notes.</p>
-  <div class="chat">
-    <div class="line you"><span class="who">You</span><div>-say #rules Rules updated, please have a read!</div></div>
-    <div class="line bot"><span class="who">Nexus</span><div>(posts in #rules and removes your command)</div></div>
-  </div>
-  <ul>
-    <li>Messages can be up to 2,000 characters, which is Discord's own limit.</li>
-    <li>It can mention people, but <strong>never</strong> <code>@everyone</code>, <code>@here</code> or roles, so it can't be used to mass-ping.</li>
-    <li>Nexus deletes your command message afterwards so only the bot's message is left.</li>
-    <li>If logging is on, each use is recorded with who ran it. See <a class="inline" href="#/logging">Logging</a>.</li>
-    <li>Nexus needs permission to send messages in the destination channel, and tells you if it can't.</li>
-  </ul>
 
   <h2>Prefix</h2>
   <p>The prefix is the character you type before a command. It starts as <code>-</code>, and you can always mention Nexus instead (<code>@Nexus ping</code>).</p>
