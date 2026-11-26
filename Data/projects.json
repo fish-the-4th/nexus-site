@@ -3,7 +3,7 @@
     {
       "name": "Leveling & EXP System",
       "description": "A leveling system with exponential level as you progress. Server admins will be able to make level roles, you may also check the leaderboard for the top 10 users of the server in terms of EXP. Levels are not global across all servers.",
-      "status": "planned"
+      "status": "development"
     },
     {
       "name": "Welcome & Goodbye Messages",
@@ -38,11 +38,26 @@
     {
       "name": "Social Notifications",
       "description": "Send a video in a selected channel whenever your favorite content creators post online.",
-      "status": "consideration"
+      "status": "planned"
     },
     {
       "name": "Social Media",
       "description": "Create a Official social media account to post promotional videos or videos covering what is in updates. Mostly likely a YouTube account",
+      "status": "consideration"
+    },
+    {
+      "name": "AutoMod Revamp",
+      "description": "A complete revamp and redesign of how AutoMod works, currently working towards a more customizable setting.",
+      "status": "development"
+    },
+    {
+      "name": "Music",
+      "description": "A full on music player that can play any eligible music with a simple link, music plays though a VC.",
+      "status": "consideration"
+    },
+    {
+      "name": "Partner Manager",
+      "description": "Make Nexus manage all your partnerships for you, Nexus will supervise and make sure your partner agrees to your terms.",
       "status": "consideration"
     }
   ]
