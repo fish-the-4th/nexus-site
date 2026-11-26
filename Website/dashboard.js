@@ -169,7 +169,7 @@ async function run(button, msg, work, okText) {
 }
 
 function section(id, title, hint, kids) {
-  const s = el('section', { class: 'dash-panel dash-section spot', id: id });
+  const s = el('section', { class: 'dash-panel dash-section', id: id });
   s.appendChild(el('h3', { text: title }));
   if (hint) s.appendChild(el('p', { class: 'hint', text: hint }));
   (kids || []).forEach(k => s.appendChild(k));
@@ -449,7 +449,7 @@ async function showGuilds(user) {
   guilds.forEach((g, i) => {
     const meta = el('span', { class: 'gmeta', text: g.members + ' members' });
     if (g.admin) meta.appendChild(el('span', { class: 'gtag', text: 'Admin' }));
-    const card = el('button', { class: 'guild-card spot', type: 'button', style: '--i:' + i }, [
+    const card = el('button', { class: 'guild-card', type: 'button', style: '--i:' + i }, [
       guildIcon(g),
       el('span', { class: 'gtext' }, [el('span', { class: 'gname', text: g.name }), meta])
     ]);
@@ -469,7 +469,7 @@ function statTile(value, label) {
     num.textContent = '0';
     requestAnimationFrame(() => animateNumber(num, value));
   }
-  return el('div', { class: 'stat-tile spot' }, [num, el('span', { text: label })]);
+  return el('div', { class: 'stat-tile' }, [num, el('span', { text: label })]);
 }
 
 function caseRow(c, detailed, showModerator) {
