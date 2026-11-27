@@ -3,70 +3,107 @@
     {
       "name": "Leveling & EXP System",
       "description": "A leveling system with exponential level as you progress. Server admins will be able to make level roles, you may also check the leaderboard for the top 10 users of the server in terms of EXP. Levels are not global across all servers.",
-      "status": "development"
+      "status": "development",
+      "tags": [
+        "Engagement"
+      ]
     },
     {
       "name": "Welcome & Goodbye Messages",
       "description": "Messages can be set up to send when a user joins the server, messages can also be setup for when a user leaves.",
-      "status": "consideration"
+      "status": "planned",
+      "tags": [
+        "Misc."
+      ]
     },
     {
       "name": "Slash Commands",
       "description": "Allow all commands to be supported through the in-built slash commands.",
-      "status": "launched"
+      "status": "launched",
+      "tags": [
+        "Misc"
+      ]
     },
     {
       "name": "Anti-Nuke Features",
       "description": "New features to stop corrupt or hacked moderators/admins from ruining your server.",
-      "status": "planned"
+      "status": "planned",
+      "tags": [
+        "AutoMod"
+      ]
     },
     {
       "name": "Tickets Expansion",
       "description": "An expansion on how tickets work, such as more panels, advanced permissions, transcription, more logging options, and much more.",
-      "status": "development"
+      "status": "development",
+      "tags": [
+        "Tickets"
+      ]
     },
     {
       "name": "Reaction Roles",
       "description": "Give server members quick access to roles with a simple click as a reaction, fully customizable.",
-      "status": "planned"
+      "status": "planned",
+      "tags": [
+        "Engagement",
+        "Misc"
+      ]
     },
     {
       "name": "Permission Manager",
       "description": "Change command access with a quick command that changes what permission, roles, or members have access to a selected command.",
-      "status": "launched"
+      "status": "launched",
+      "tags": [
+        "Misc"
+      ]
     },
     {
       "name": "Social Notifications",
       "description": "Send a video in a selected channel whenever your favorite content creators post online.",
-      "status": "planned"
+      "status": "planned",
+      "tags": [
+        "Media"
+      ]
     },
     {
       "name": "Social Media",
       "description": "Create an official social media account to post promotional videos or videos covering what is in updates. Most likely a YouTube account.",
-      "status": "consideration"
+      "status": "consideration",
+      "tags": [
+        "Media"
+      ]
     },
     {
       "name": "AutoMod Revamp",
       "description": "A complete revamp and redesign of how AutoMod works, currently working towards a more customizable setting.",
-      "status": "development"
+      "status": "development",
+      "tags": [
+        "AutoMod"
+      ]
     },
     {
       "name": "Music",
       "description": "A full on music player that can play any eligible music with a simple link, music plays through a VC.",
-      "status": "consideration"
+      "status": "consideration",
+      "tags": [
+        "Engagement",
+        "Music"
+      ]
     },
     {
-      "name": "Partner Manager",
+      "name": "Partnership Manager",
       "description": "Make Nexus manage all your partnerships for you, Nexus will supervise and make sure your partner agrees to your terms.",
-      "status": "consideration"
+      "status": "consideration",
+      "tags": [
+        "Misc"
+      ]
     },
     {
       "name": "Honeypot",
       "description": "A trap channel that real members are told to stay out of. Anyone who posts there is almost always a spam bot or hacked account, and Nexus bans, times out, kicks or warns them automatically.",
       "status": "launched",
       "tags": [
-        "AutoMod",
-        "Dashboard"
+        "AutoMod"
       ]
     },
     {
@@ -80,27 +117,43 @@
     {
       "name": "Join-to-Create VC",
       "description": "Join one voice channel and Nexus makes you your own temporary channel, which it deletes once everyone leaves.",
-      "status": "consideration"
+      "status": "consideration",
+      "tags": [
+        "Misx"
+      ]
     },
     {
       "name": "Achievements",
       "description": "Gain achivments for completing tasks in the server, gain badges, roles, or other perks in your server for completing these tasks.",
-      "status": "consideration"
+      "status": "consideration",
+      "tags": [
+        "Engagement"
+      ]
     },
     {
       "name": "Translation Revamp",
       "description": "New features for translate, such as live translate in chat and live VC chat. Also more supported languages.",
-      "status": "planned"
+      "status": "planned",
+      "tags": [
+        "Translation",
+        "Misc"
+      ]
     },
     {
       "name": "Appeals",
       "description": "Allow users to appeal their punishments though Nexus, staff members can review appeals and contact the user for questions about their appeal.",
-      "status": "development"
+      "status": "development",
+      "tags": [
+        "Moderation"
+      ]
     },
     {
       "name": "Polls",
       "description": "Anonymous votes, changed time limits. poll logs, voting rules, polls triggering actions. An expanded version on the in-built Discord polls feature.",
-      "status": "consideration"
+      "status": "consideration",
+      "tags": [
+        "Misc"
+      ]
     }
   ]
 }
