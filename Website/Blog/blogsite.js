@@ -142,7 +142,7 @@ const NB = (() => {
     if (!v) return '';
     if (/^(blob:|data:image\/|https:\/\/)/i.test(v)) return v;
     if (v.indexOf('/') >= 0) {
-      const parts = v.split('/').map(fileName).filter(Boolean);
+      const parts = v.split('/').map(x => x.replace(/[^A-Za-z0-9._-]+/g, '-')).filter(x => x && !/^\.+$/.test(x));
       return parts.length ? root + 'Assets/' + parts.map(encodeURIComponent).join('/') : '';
     }
     return root + 'Assets/Blog/' + encodeURIComponent(slugify(post.slug) || 'post') + '/' + encodeURIComponent(fileName(v));
