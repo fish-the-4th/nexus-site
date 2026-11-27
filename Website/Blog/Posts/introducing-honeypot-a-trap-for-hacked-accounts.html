@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https://cdn.discordapp.com data:; connect-src 'self' https://nexus-bot.wispbyte.org; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Introducing honeypot: a trap for hacked accounts - Nexus Blog</title>
+<meta name="description" content="Anyone who does is almost always a spam bot or a hacked account, and Nexus deals with them on the spot.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Introducing honeypot: a trap for hacked accounts">
+<meta property="og:description" content="Anyone who does is almost always a spam bot or a hacked account, and Nexus deals with them on the spot.">
+<link rel="icon" type="image/png" href="../../../Assets/Logo/logo.png">
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../blogstyle.css">
+</head>
+<body data-page="blog" data-up="../../">
+
+<div id="site-nav"></div>
+
+<main class="wrap blog-page">
+  <div id="post-root">
+    <h1>Introducing honeypot: a trap for hacked accounts</h1>
+    <p>Anyone who does is almost always a spam bot or a hacked account, and Nexus deals with them on the spot.</p>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script type="application/json" id="post-data">{
+ "v": 1,
+ "slug": "introducing-honeypot-a-trap-for-hacked-accounts",
+ "title": "Introducing honeypot: a trap for hacked accounts",
+ "excerpt": "Anyone who does is almost always a spam bot or a hacked account, and Nexus deals with them on the spot.",
+ "category": "Updates",
+ "date": "2026-11-26",
+ "banner": "Blog/blog_banner_1.png",
+ "authors": [
+  {
+   "name": "Fish The 4th",
+   "avatar": "Avatars/fish.the.4th.avatar.webp",
+   "role": "Founder & Developer"
+  }
+ ],
+ "blocks": [
+  {
+   "type": "text",
+   "html": "\u003cp>Spam bots and hacked accounts can be easily caught since they post in every channel they can see, as fast as they can. Real members don't. They read the channel name, see the warning, and stay out.\u003c/p>\u003cp>The new \u003cstrong>honeypot\u003c/strong> turns that habit into a trap. You pick one channel and tell everyone not to type there. Anyone who posts in it anyway gets dealt with automatically, usually before they've reached a second channel.\u003c/p>"
+  },
+  {
+   "type": "text",
+   "html": "\u003ch2>How it works\u003c/h2>\u003cp>When someone posts in the honeypot channel, Nexus:\u003c/p>\u003col>\u003cli>\u003cstrong>Deletes the message, \u003c/strong>delete all messages from 7 days ago or just the honeypot message\u003c/li>\u003cli>\u003cstrong>Takes the action you picked\u003c/strong>: ban, timeout, kick or warn.\u003c/li>\u003cli>\u003cstrong>Saves a case\u003c/strong>, just like a moderator did it.\u003c/li>\u003cli>\u003cstrong>Logs it\u003c/strong> in the channel of your choice, with who it was and what they posted.\u003c/li>\u003c/ol>"
+  },
+  {
+   "type": "numbers",
+   "items": [
+    {
+     "v": "4",
+     "l": "actions to choose from"
+    },
+    {
+     "v": "7 days",
+     "l": "of messages it can clean up"
+    },
+    {
+     "v": "0",
+     "l": "commands to set it up"
+    }
+   ]
+  },
+  {
+   "type": "text",
+   "html": "\u003ch2>Choose what happens\u003c/h2>\u003cp>Pick a response action to the message, most server choose ban.\u003c/p>"
+  },
+  {
+   "type": "table",
+   "rows": [
+    [
+     "Action",
+     "What it does",
+     "Good for"
+    ],
+    [
+     "\u003cstrong>Ban\u003c/strong>",
+     "Bans them, and can also delete their messages from the last 1 to 7 days.",
+     "Most servers. Clears out spam bots and everything they posted."
+    ],
+    [
+     "\u003cstrong>Timeout\u003c/strong>",
+     "Times them out for anywhere from 10 minutes to 28 days.",
+     "Servers that want a moderator to take a look first."
+    ],
+    [
+     "\u003cstrong>Kick\u003c/strong>",
+     "Removes them from the server, but they can join again.",
+     "A softer option if you think a ban is to serious."
+    ],
+    [
+     "\u003cstrong>Warn\u003c/strong>",
+     "Gives them a warning and tells them the channel is off limits.",
+     "Trying it out, or for very friendly communities."
+    ]
+   ]
+  },
+  {
+   "type": "text",
+   "w": 50,
+   "valign": "center",
+   "html": "\u003ch2>A warning people can't miss\u003c/h2>\u003cp>Nexus can post and pin a short message in the honeypot channel, so real members know to stay out:\u003c/p>\u003cblockquote>\u003cp>⚠️ Please don't post in this channel. It's here to catch spam bots. Anyone who sends a message here gets banned automatically.\u003c/p>\u003c/blockquote>\u003cp>If you change the action later, the pinned message updates to match.\u003c/p>"
+  },
+  {
+   "type": "image",
+   "valign": "center",
+   "src": "Blog/blog_image_1.png",
+   "alt": "The pinned warning message in the honeypot channel",
+   "caption": "The pinned warning in the honeypot channel.",
+   "h": 80
+  },
+  {
+   "type": "text",
+   "html": "\u003ch2>Who gets skipped\u003c/h2>\u003cp>The honeypot is built so your own team never gets caught by accident:\u003c/p>\u003cul>\u003cli>\u003cstrong>The server owner\u003c/strong> and anyone with \u003cstrong>Administrator\u003c/strong> are always skipped.\u003c/li>\u003cli>\u003cstrong>Roles you choose\u003c/strong>, any role chosen in the dashboard Nexus skips.\u003c/li>\u003cli>\u003cstrong>Other bots\u003c/strong> are ignored by default. You can turn that off if you want to catch other bots to..\u003c/li>\u003c/ul>"
+  },
+  {
+   "type": "callout",
+   "tone": "info",
+   "html": "\u003cp>Nexus can only act on members whose highest role is below its own. If someone sits above Nexus, their message is still deleted, and the log tells you it couldn't take action.\u003c/p>"
+  },
+  {
+   "type": "text",
+   "html": "\u003ch2>Set it up in a minute\u003c/h2>\u003col>\u003cli>Make a new channel near the top of your channel list. Something like \u003ccode>#dont-type-here\u003c/code>&nbsp;or \u003ccode>#honeypot\u003c/code> works.\u003c/li>\u003cli>Open the \u003cstrong>dashboard\u003c/strong>, pick your server, and go to \u003cstrong>AutoMod\u003c/strong>, then \u003cstrong>Honeypot\u003c/strong>.\u003c/li>\u003cli>Choose the channel, the action, and whether to post the pinned warning.\u003c/li>\u003cli>Add the roles to skip and pick a log channel.\u003c/li>\u003cli>Press \u003cstrong>Save honeypot\u003c/strong>.\u003c/li>\u003c/ol>\u003cp>Nexus needs View Channel, Read Message History and Manage Messages in the honeypot channel, plus Ban Members, Timeout Members or Kick Members for the action you pick. If it`s missing any permission it will tell you in the error log\u003c/p>"
+  },
+  {
+   "type": "callout",
+   "tone": "note",
+   "html": "\u003cp>\u003cstrong>Tip:\u003c/strong>&nbsp;Make sure to put some safe roles from the honeypot, especially your server staff if they are trying to put a notice about the honeypot.\u003c/p>"
+  },
+  {
+   "type": "divider",
+   "kind": "glow"
+  },
+  {
+   "type": "text",
+   "html": "\u003cp>The honeypot works alongside the rest of AutoMod: spam detection, scam links, raid protection, emoji spam and blocked links. You can check your setup any time with \u003ccode>-automods\u003c/code>.\u003c/p>"
+  },
+  {
+   "type": "button",
+   "w": 70,
+   "label": "Set up your honeypot",
+   "href": "https://fish-the-4th.github.io/nexus-site/Website/dashboard.html",
+   "kind": "primary"
+  }
+ ]
+}</script>
+<script src="../../site.js"></script>
+<script src="../blogsite.js"></script>
+</body>
+</html>
