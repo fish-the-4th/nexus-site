@@ -541,60 +541,91 @@ const NB = (() => {
     return body;
   }
 
+  function headingId(text, used) {
+    const base = slugify(text) || 'section';
+    let id = base, n = 2;
+    while (used.has(id)) id = base + '-' + n++;
+    used.add(id);
+    return id;
+  }
+
+  function contents(body) {
+    const heads = Array.from(body.querySelectorAll('.bp-rich h2, .bp-rich h3')).filter(x => (x.textContent || '').trim());
+    if (heads.length < 2) return null;
+    const used = new Set();
+    const links = heads.map(x => {
+      x.id = 'sec-' + headingId(x.textContent, used);
+      return h('a', { href: '#' + x.id, class: x.tagName === 'H3' ? 'sub' : '', text: x.textContent.trim().slice(0, 80) });
+    });
+    const nav = h('nav', { class: 'bp-toc', 'aria-label': 'On this page' }, [h('small', { text: 'On this page' })].concat(links));
+    if (window.IntersectionObserver) {
+      const spy = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+          if (en.isIntersecting) links.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + en.target.id));
+        });
+      }, { rootMargin: '0px 0px -70% 0px' });
+      heads.forEach(x => spy.observe(x));
+    }
+    return nav;
+  }
+
   function renderPost(post, ctx) {
     ctx = ctx || {};
     if (!ctx.img) ctx.img = src => assetPath(src, post, ctx.root || '');
     const art = h('article', { class: 'bp' });
-    const banner = h('div', { class: 'bp-banner' });
-    const bsrc = ctx.img(post.banner);
-    if (bsrc) banner.appendChild(h('img', { src: bsrc, alt: post.bannerAlt || '', decoding: 'async', fetchpriority: 'high' }));
-    else banner.classList.add('empty');
-    if (isColor(post.bannerBg)) banner.style.background = post.bannerBg;
-    const pos = /^(top|center|bottom)$/.test(post.bannerPos || '') ? post.bannerPos : 'center';
-    if (bsrc) banner.firstChild.style.objectPosition = 'center ' + pos;
-    const bh = num(post.bannerH, 160, 640, 0);
-    if (bh) banner.style.setProperty('--bh', bh + 'px');
+
+    const head = h('header', { class: 'bp-head' });
     const cat = h('span', { class: 'bp-cat', text: post.category || '' });
     if (!post.category && !ctx.decorate) cat.hidden = true;
-    banner.appendChild(cat);
-    if (ctx.decorate) ctx.decorate('banner', banner, post, cat);
-    art.appendChild(banner);
-
-    const side = h('aside', { class: 'bp-side' });
-    const authors = (Array.isArray(post.authors) ? post.authors : []).filter(a => a && (a.name || a.avatar));
-    const people = h('div', { class: 'bp-people' });
-    authors.forEach(a => {
-      const src = ctx.img(a.avatar);
-      const av = src ? h('img', { class: 'bp-av', src, alt: '', loading: 'lazy' }) : h('span', { class: 'bp-av bp-av-empty', text: (a.name || '?').trim().slice(0, 1).toUpperCase() });
-      const row = h('div', { class: 'bp-person' }, [av, h('div', {}, [h('b', { text: a.name || 'Someone' }), a.role ? h('small', { text: a.role }) : null])]);
-      people.appendChild(row);
-    });
-    side.appendChild(h('small', { class: 'bp-label', text: 'Written by' }));
-    side.appendChild(people);
-    if (!authors.length) people.appendChild(h('div', { class: 'bp-person' }, [h('span', { class: 'bp-av bp-av-empty', text: 'N' }), h('div', {}, [h('b', { text: 'Nexus Team' })])]));
-    side.appendChild(h('small', { class: 'bp-label', text: 'Published' }));
-    side.appendChild(h('span', { class: 'bp-date', text: formatDate(post.date) || 'Not set' }));
-    if (post.updated && post.updated !== post.date) {
-      side.appendChild(h('small', { class: 'bp-label', text: 'Updated' }));
-      side.appendChild(h('span', { class: 'bp-date', text: formatDate(post.updated) }));
-    }
-    side.appendChild(h('small', { class: 'bp-label', text: 'Reading time' }));
-    side.appendChild(h('span', { class: 'bp-date', text: readingTime(post) + ' min read' }));
-    if (ctx.decorate) ctx.decorate('side', side, post);
-
-    const main = h('div', { class: 'bp-main' });
+    head.appendChild(h('div', { class: 'bp-kicker' }, [
+      cat,
+      h('span', { class: 'bp-when', text: formatDate(post.date) || 'Date not set' }),
+      h('span', { class: 'bp-when', text: readingTime(post) + ' min read' })
+    ]));
     const title = h('h1', { class: 'bp-title', text: post.title || '' });
     if (ctx.decorate) { title.setAttribute('data-ph', 'Write a title'); ctx.decorate('title', title, post); }
-    main.appendChild(title);
+    head.appendChild(title);
     if (post.excerpt || ctx.decorate) {
       const lead = h('p', { class: 'bp-lead', text: post.excerpt || '' });
-      if (ctx.decorate) { lead.setAttribute('data-ph', 'A short summary. It shows under the title and on the blog card.'); ctx.decorate('lead', lead, post); }
-      main.appendChild(lead);
+      if (ctx.decorate) { lead.setAttribute('data-ph', 'A short summary. It shows under the title and on the blog list.'); ctx.decorate('lead', lead, post); }
+      head.appendChild(lead);
     }
+
+    const byline = h('div', { class: 'bp-byline' });
+    const authors = (Array.isArray(post.authors) ? post.authors : []).filter(a => a && (a.name || a.avatar));
+    const list = authors.length ? authors : [{ name: 'Nexus Team' }];
+    list.forEach(a => {
+      const src = ctx.img(a.avatar);
+      const av = src ? h('img', { class: 'bp-av', src, alt: '', loading: 'lazy' }) : h('span', { class: 'bp-av bp-av-empty', text: (a.name || '?').trim().slice(0, 1).toUpperCase() });
+      byline.appendChild(h('div', { class: 'bp-person' }, [av, h('div', {}, [h('b', { text: a.name || 'Someone' }), a.role ? h('small', { text: a.role }) : null])]));
+    });
+    if (post.updated && post.updated !== post.date) byline.appendChild(h('span', { class: 'bp-updated', text: 'Updated ' + formatDate(post.updated) }));
+    if (ctx.decorate) ctx.decorate('side', byline, post);
+    head.appendChild(byline);
+    art.appendChild(head);
+
+    const banner = h('div', { class: 'bp-banner' });
+    const bsrc = ctx.img(post.banner);
+    if (bsrc) {
+      const img = h('img', { src: bsrc, alt: post.bannerAlt || '', decoding: 'async', fetchpriority: 'high' });
+      const pos = /^(top|center|bottom)$/.test(post.bannerPos || '') ? post.bannerPos : 'center';
+      img.style.objectPosition = 'center ' + pos;
+      banner.appendChild(img);
+    } else banner.classList.add('empty');
+    if (isColor(post.bannerBg)) banner.style.background = post.bannerBg;
+    const bh = num(post.bannerH, 160, 640, 0);
+    if (bh) { banner.style.setProperty('--bh', bh + 'px'); banner.classList.add('fixed'); }
+    if (ctx.decorate) ctx.decorate('banner', banner, post, cat);
+    if (bsrc || ctx.decorate) art.appendChild(banner);
+
     const body = renderBody(post, ctx);
     if (ctx.decorate) ctx.decorate('body', body, post);
-    main.appendChild(body);
-    art.appendChild(h('div', { class: 'bp-grid' }, [side, main]));
+    const layout = h('div', { class: 'bp-layout' }, [h('div', { class: 'bp-main' }, [body])]);
+    if (!ctx.decorate) {
+      const toc = contents(body);
+      if (toc) { layout.appendChild(toc); layout.classList.add('has-toc'); }
+    }
+    art.appendChild(layout);
     return art;
   }
 
@@ -620,22 +651,41 @@ const NB = (() => {
     return UP_DIR + 'Blog/Posts/' + encodeURIComponent(NB.slugify(p.slug)) + '.html';
   }
 
-  function card(p, feature) {
-    const img = NB.assetPath(p.banner, p, SITE_ROOT);
+  function parts(iso) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ''));
+    if (!m) return null;
+    const d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
+    return {
+      day: String(+m[3]),
+      wd: d.toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' }),
+      month: d.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' })
+    };
+  }
+
+  function byNames(p) {
     const authors = Array.isArray(p.authors) ? p.authors.filter(a => a && a.name) : [];
-    const stack = h('span', { class: 'stack' }, authors.slice(0, 4).map(a => {
-      const src = NB.assetPath(a.avatar, p, SITE_ROOT);
-      return src ? h('img', { src, alt: '', loading: 'lazy' }) : h('span', { class: 'bp-av-empty', text: (a.name || '?').slice(0, 1).toUpperCase() });
-    }));
-    const names = authors.length === 0 ? 'Nexus Team' : authors.length === 1 ? authors[0].name : authors[0].name + ' and ' + (authors.length - 1) + ' more';
-    return h('a', { class: 'blog-card' + (feature ? ' feature' : ''), href: postHref(p) }, [
-      h('div', { class: 'blog-card-img' }, [img ? h('img', { src: img, alt: '', loading: feature ? 'eager' : 'lazy' }) : null]),
-      h('div', { class: 'blog-card-body' }, [
-        h('div', { class: 'blog-meta' }, [p.category ? h('span', { class: 'cat', text: p.category }) : null, h('span', { text: NB.formatDate(p.date) })]),
+    if (!authors.length) return 'Nexus Team';
+    if (authors.length === 1) return authors[0].name;
+    if (authors.length === 2) return authors[0].name + ' and ' + authors[1].name;
+    return authors[0].name + ' and ' + (authors.length - 1) + ' others';
+  }
+
+  function row(p, latest) {
+    const img = NB.assetPath(p.banner, p, SITE_ROOT);
+    const d = parts(p.date);
+    return h('a', { class: 'blog-row' + (latest ? ' latest' : ''), href: postHref(p) }, [
+      h('div', { class: 'blog-row-date' }, d ? [h('b', { text: d.day }), h('span', { text: d.wd })] : [h('span', { text: '—' })]),
+      h('div', { class: 'blog-row-text' }, [
+        h('div', { class: 'blog-meta' }, [
+          latest ? h('span', { class: 'new', text: 'Latest' }) : null,
+          p.category ? h('span', { class: 'cat', text: p.category }) : null,
+          h('span', { text: 'By ' + byNames(p) })
+        ]),
         h('h3', { text: p.title }),
         p.excerpt ? h('p', { text: p.excerpt }) : null,
-        h('div', { class: 'blog-by' }, [stack, h('span', { text: names })])
-      ])
+        h('span', { class: 'blog-read', text: 'Read the post →' })
+      ]),
+      img ? h('div', { class: 'blog-row-img' }, [h('img', { src: img, alt: '', loading: latest ? 'eager' : 'lazy' })]) : null
     ]);
   }
 
@@ -647,29 +697,50 @@ const NB = (() => {
     ]));
   }
 
+  function grouped(list, markLatest) {
+    const wrap = h('div', { class: 'blog-list' });
+    let month = null, group = null;
+    list.forEach((p, i) => {
+      const d = parts(p.date);
+      const m = d ? d.month : 'Undated';
+      if (m !== month) {
+        month = m;
+        group = h('div', { class: 'blog-group' });
+        wrap.appendChild(h('section', { class: 'blog-month' }, [h('h2', { text: m }), group]));
+      }
+      group.appendChild(row(p, markLatest && i === 0));
+    });
+    return wrap;
+  }
+
   async function indexPage(host) {
     const posts = await getIndex();
     if (!posts || !posts.length) { soon(host); return; }
     const cats = Array.from(new Set(posts.map(p => p.category).filter(Boolean)));
     let cat = '';
     let q = '';
-    const grid = h('div', { class: 'blog-grid' });
+    const out = h('div');
     const draw = () => {
       const words = q.toLowerCase().split(/\s+/).filter(Boolean);
       const list = posts.filter(p => (!cat || p.category === cat) && words.every(w => (p.title + ' ' + (p.excerpt || '') + ' ' + (p.category || '')).toLowerCase().includes(w)));
-      grid.replaceChildren();
-      if (!list.length) { grid.appendChild(h('p', { class: 'blog-empty', text: 'No posts match that.' })); return; }
-      list.forEach((p, i) => grid.appendChild(card(p, i === 0 && !cat && !q && list.length > 2)));
-      if (typeof reveal === 'function') reveal(grid);
+      if (!list.length) { out.replaceChildren(h('p', { class: 'blog-empty', text: 'No posts match that.' })); return; }
+      out.replaceChildren(grouped(list, !cat && !q));
+      if (typeof reveal === 'function') reveal(out);
     };
     const tools = h('div', { class: 'blog-tools' });
     if (cats.length > 1) {
-      const chips = [''].concat(cats).map(c => {
-        const b = h('button', { type: 'button', class: 'blog-chip' + (c === '' ? ' on' : ''), text: c || 'All posts' });
-        b.addEventListener('click', () => { cat = c; chips.forEach(x => x.classList.toggle('on', x === b)); draw(); });
+      const tabs = h('div', { class: 'blog-tabs', role: 'tablist', 'aria-label': 'Categories' });
+      const btns = [''].concat(cats).map(c => {
+        const b = h('button', { type: 'button', role: 'tab', class: 'blog-tab' + (c === '' ? ' on' : ''), 'aria-selected': c === '' ? 'true' : 'false', text: c || 'Everything' });
+        b.addEventListener('click', () => {
+          cat = c;
+          btns.forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+          draw();
+        });
+        tabs.appendChild(b);
         return b;
       });
-      chips.forEach(b => tools.appendChild(b));
+      tools.appendChild(tabs);
     }
     if (posts.length > 4) {
       const search = h('input', { type: 'search', class: 'blog-search', placeholder: 'Search posts', 'aria-label': 'Search posts' });
@@ -678,8 +749,40 @@ const NB = (() => {
     }
     host.replaceChildren();
     if (tools.childNodes.length) host.appendChild(tools);
-    host.appendChild(grid);
+    host.appendChild(out);
     draw();
+  }
+
+  function progressBar(art) {
+    const bar = h('div', { class: 'bp-progress', 'aria-hidden': 'true' }, [h('i')]);
+    document.body.appendChild(bar);
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const r = art.getBoundingClientRect();
+      const total = r.height - window.innerHeight;
+      const done = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 1;
+      bar.firstChild.style.transform = 'scaleX(' + done.toFixed(4) + ')';
+    };
+    window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    update();
+  }
+
+  function shareRow(post) {
+    const copy = h('button', { type: 'button', class: 'btn btn-outline bp-copy', text: 'Copy link' });
+    copy.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(location.href.split('#')[0]);
+        copy.textContent = 'Link copied';
+      } catch (e) {
+        copy.textContent = 'Could not copy';
+      }
+      setTimeout(() => { copy.textContent = 'Copy link'; }, 1800);
+    });
+    return h('div', { class: 'bp-end' }, [
+      h('p', {}, ['Thanks for reading', post.category ? h('span', { text: ' · ' + post.category }) : null]),
+      copy
+    ]);
   }
 
   async function postPage(host, dataEl) {
@@ -687,13 +790,14 @@ const NB = (() => {
     try { post = JSON.parse(dataEl.textContent); } catch (e) { post = null; }
     if (!post || typeof post !== 'object') { host.replaceChildren(h('p', { class: 'blog-empty', text: 'This post could not be loaded.' })); return; }
     const art = NB.renderPost(post, { root: SITE_ROOT });
-    host.replaceChildren(h('a', { class: 'blog-back', href: UP_DIR + 'Blog/blog.html', text: '← All posts' }), art);
+    host.replaceChildren(h('a', { class: 'blog-back', href: UP_DIR + 'Blog/blog.html', text: '← All posts' }), art, shareRow(post));
+    progressBar(art);
     const posts = await getIndex();
     if (posts && posts.length > 1) {
       const others = posts.filter(p => NB.slugify(p.slug) !== NB.slugify(post.slug));
       const same = others.filter(p => p.category && p.category === post.category);
       const pick = same.concat(others.filter(p => same.indexOf(p) < 0)).slice(0, 3);
-      if (pick.length) host.appendChild(h('section', { class: 'bp-more' }, [h('h2', { text: 'Keep reading' }), h('div', { class: 'blog-grid' }, pick.map(p => card(p, false)))]));
+      if (pick.length) host.appendChild(h('section', { class: 'bp-more' }, [h('h2', { text: 'Keep reading' }), h('div', { class: 'blog-group' }, pick.map(p => row(p, false)))]));
     }
   }
 
