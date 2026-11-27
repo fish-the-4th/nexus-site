@@ -22,7 +22,7 @@
     },
     {
       "name": "Tickets Expansion",
-      "description": "An expansion on how tickets work, such as more panels, advanced permissions, transcripting, more logging options, and much more.",
+      "description": "An expansion on how tickets work, such as more panels, advanced permissions, transcription, more logging options, and much more.",
       "status": "development"
     },
     {
@@ -80,6 +80,26 @@
     {
       "name": "Join-to-Create VC",
       "description": "Join one voice channel and Nexus makes you your own temporary channel, which it deletes once everyone leaves.",
+      "status": "consideration"
+    },
+    {
+      "name": "Achievements",
+      "description": "Gain achivments for completing tasks in the server, gain badges, roles, or other perks in your server for completing these tasks.",
+      "status": "consideration"
+    },
+    {
+      "name": "Translation Revamp",
+      "description": "New features for translate, such as live translate in chat and live VC chat. Also more supported languages.",
+      "status": "planned"
+    },
+    {
+      "name": "Appeals",
+      "description": "Allow users to appeal their punishments though Nexus, staff members can review appeals and contact the user for questions about their appeal.",
+      "status": "development"
+    },
+    {
+      "name": "Polls",
+      "description": "Anonymous votes, changed time limits. poll logs, voting rules, polls triggering actions. An expanded version on the in-built Discord polls feature.",
       "status": "consideration"
     }
   ]
