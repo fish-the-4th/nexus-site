@@ -1,3 +1,18 @@
 {
-  "posts": []
+  "posts": [
+    {
+      "slug": "introducing-honeypot-a-trap-for-hacked-accounts",
+      "title": "Introducing honeypot: a trap for hacked accounts",
+      "excerpt": "Anyone who does is almost always a spam bot or a hacked account, and Nexus deals with them on the spot.",
+      "category": "Updates",
+      "date": "2026-11-26",
+      "banner": "Blog/blog_banner_1.png",
+      "authors": [
+        {
+          "name": "Fish The 4th",
+          "avatar": "Avatars/fish.the.4th.avatar.webp"
+        }
+      ]
+    }
+  ]
 }
