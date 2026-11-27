@@ -12,7 +12,7 @@
     },
     {
       "name": "Slash Commands",
-      "description": "Allow all commands to be supported though the in-built slash commands.",
+      "description": "Allow all commands to be supported through the in-built slash commands.",
       "status": "launched"
     },
     {
@@ -22,7 +22,7 @@
     },
     {
       "name": "Tickets Expansion",
-      "description": "A expansion on how tickets work, such as more panels, advanced permissions, transcripting, more logging options, and much more.",
+      "description": "An expansion on how tickets work, such as more panels, advanced permissions, transcripting, more logging options, and much more.",
       "status": "development"
     },
     {
@@ -42,7 +42,7 @@
     },
     {
       "name": "Social Media",
-      "description": "Create a Official social media account to post promotional videos or videos covering what is in updates. Mostly likely a YouTube account",
+      "description": "Create an official social media account to post promotional videos or videos covering what is in updates. Most likely a YouTube account.",
       "status": "consideration"
     },
     {
@@ -52,12 +52,34 @@
     },
     {
       "name": "Music",
-      "description": "A full on music player that can play any eligible music with a simple link, music plays though a VC.",
+      "description": "A full on music player that can play any eligible music with a simple link, music plays through a VC.",
       "status": "consideration"
     },
     {
       "name": "Partner Manager",
       "description": "Make Nexus manage all your partnerships for you, Nexus will supervise and make sure your partner agrees to your terms.",
+      "status": "consideration"
+    },
+    {
+      "name": "Honeypot",
+      "description": "A trap channel that real members are told to stay out of. Anyone who posts there is almost always a spam bot or hacked account, and Nexus bans, times out, kicks or warns them automatically.",
+      "status": "launched",
+      "tags": [
+        "AutoMod",
+        "Dashboard"
+      ]
+    },
+    {
+      "name": "Member Verification",
+      "description": "New members press a button to verify before they can see the rest of the server, which keeps raids and bot accounts out. Members will need to do a CAPTCHA to verify",
+      "status": "planned",
+      "tags": [
+        "AutoMod"
+      ]
+    },
+    {
+      "name": "Join-to-Create VC",
+      "description": "Join one voice channel and Nexus makes you your own temporary channel, which it deletes once everyone leaves.",
       "status": "consideration"
     }
   ]
