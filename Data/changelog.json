@@ -64,5 +64,11 @@
     "type": "new",
     "date": "2026-11-26",
     "text": "- Removed all giveaway commands.\n- Giveaways are now completely expanded.\n  - Giveaways can only be setup up in the dashboard, full command support is now removed.\n  - Setup entry requirements, such as: required roles, days in the server, days since account creation, and messages sent.\n  - Choose to ping a role when your giveaway starts.\n  - You may start a giveaway immediately or schedule when to start one.\n- Maximum of 5 active giveaways at a time."
+  },
+  {
+    "title": "Version 1.6",
+    "type": "new",
+    "date": "2026-11-26",
+    "text": "- New Honeypot feature apart of Automod. If you don`t know what a honeypot is: A honeypot is meant to ban off hacked accounts due to the bots controlling them will just send messages anywhere, a honeypot is meant to track a message sent in a trap channel and flag the account as a bot.\n  - Only works in dashboard, no command support.\n  - Setup a honeypot channel where Nexus takes care of everything, do an easy setup and ban anyone who types in your channel will become banned.\n- Multiple bug fixes for tickets.\n- Dashboard changes: Personal dashboard is now in one central area with all the same dashboard tools, option to filter results to a certain server if you would like to.\n- Removed direct support, no longer a feature."
   }
 ]
